@@ -239,6 +239,7 @@
         display: inline-flex;
         align-items: center;
         gap: 11px;
+        min-height: 44px;
         min-width: 0;
         font-weight: 850;
       }
@@ -301,6 +302,9 @@
 
       .desktop-nav > a:not(.nav-cta) {
         position: relative;
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
         color: rgba(255, 255, 255, 0.74);
         font-size: 13px;
         font-weight: 650;
@@ -320,11 +324,11 @@
         transition: transform 180ms ease;
       }
 
-      .desktop-nav > a:hover {
+      .desktop-nav > a:not(.nav-cta):hover {
         color: var(--white);
       }
 
-      .desktop-nav > a:hover::after {
+      .desktop-nav > a:not(.nav-cta):hover::after {
         transform: scaleX(1);
       }
 
@@ -353,16 +357,21 @@
       }
 
       .nav-cta {
-        min-height: 40px;
+        min-height: 44px;
         color: var(--navy-deep);
         background: var(--white);
         font-size: 13px;
       }
 
+      .nav-cta:hover {
+        color: var(--navy-deep);
+        background: #e8f5fc;
+      }
+
       .menu-button {
         display: none;
-        width: 42px;
-        height: 42px;
+        width: 44px;
+        height: 44px;
         place-items: center;
         color: var(--white);
         background: transparent;
@@ -2160,7 +2169,7 @@
       }
 
       .benefit-control {
-        min-height: 42px;
+        min-height: 44px;
         padding: 0 18px;
         color: var(--muted);
         background: transparent;
@@ -2644,6 +2653,45 @@
         display: block;
       }
 
+      .form-feedback.error {
+        color: #9f241d;
+        background: #fff1f0;
+        border: 1px solid #f5c2be;
+      }
+
+      .form-honeypot {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+
+      .form-fallback {
+        display: inline-flex;
+        grid-column: 1 / -1;
+        align-items: center;
+        width: fit-content;
+        min-height: 44px;
+        color: var(--blue);
+        font-size: 11px;
+        font-weight: 750;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .form-fallback[hidden] {
+        display: none;
+      }
+
+      .lead-form .button:disabled {
+        cursor: wait;
+        opacity: 0.72;
+        transform: none;
+      }
+
       .site-footer {
         color: rgba(255, 255, 255, 0.64);
         background: var(--navy-deep);
@@ -2668,6 +2716,7 @@
         align-items: center;
         gap: 8px;
         width: fit-content;
+        min-height: 44px;
         margin-top: 20px;
         color: var(--white);
         font-size: 12px;
@@ -2692,7 +2741,10 @@
       }
 
       .footer-links a {
+        display: inline-flex;
+        align-items: center;
         width: fit-content;
+        min-height: 44px;
         font-size: 11px;
         transition: color 180ms ease;
       }
@@ -2709,6 +2761,12 @@
         min-height: 70px;
         border-top: 1px solid var(--line-dark);
         font-size: 10px;
+      }
+
+      .footer-bottom a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
       }
 
       .reveal {
@@ -2834,15 +2892,21 @@
           border-bottom: 1px solid var(--line-dark);
           box-shadow: 0 20px 40px rgba(6, 29, 49, 0.25);
           opacity: 0;
+          visibility: hidden;
           pointer-events: none;
           transform: translateY(-12px);
-          transition: opacity 180ms ease, transform 180ms ease;
+          transition:
+            opacity 180ms ease,
+            transform 180ms ease,
+            visibility 0s linear 180ms;
         }
 
         .mobile-menu.open {
           opacity: 1;
+          visibility: visible;
           pointer-events: auto;
           transform: translateY(0);
+          transition-delay: 0s;
         }
 
         .mobile-menu a {
@@ -2870,8 +2934,8 @@
         .hero-inner {
           grid-template-columns: 1fr;
           min-height: auto;
-          padding-top: calc(var(--header-height) + 70px);
-          padding-bottom: 76px;
+          padding-top: calc(var(--header-height) + 48px);
+          padding-bottom: 44px;
         }
 
         .hero-copy {
@@ -2879,9 +2943,13 @@
         }
 
         .hero-product {
-          width: 760px;
+          width: min(760px, 100%);
           justify-self: center;
-          margin-top: 22px;
+          margin-top: 10px;
+        }
+
+        .app-window {
+          height: clamp(390px, 58vw, 500px);
         }
 
         .hero-note {
@@ -3419,7 +3487,7 @@
       </div>
     </header>
 
-    <nav class="mobile-menu" id="mobileMenu" aria-label="Navegação para celular">
+    <nav class="mobile-menu" id="mobileMenu" aria-label="Navegação para celular" aria-hidden="true" inert>
       <a href="#sistema">Conheça o sistema <i data-lucide="arrow-right" aria-hidden="true"></i></a>
       <a href="#como-funciona">Como funciona <i data-lucide="arrow-right" aria-hidden="true"></i></a>
       <a href="#beneficios">Benefícios <i data-lucide="arrow-right" aria-hidden="true"></i></a>
@@ -3817,11 +3885,11 @@
             <h2 id="workflowTitle">Uma OS conduz o trabalho de ponta a ponta.</h2>
             <p>Clique nas etapas e veja como cliente, documentos, execução, cobrança e histórico permanecem conectados.</p>
             <div class="workflow-steps" role="tablist" aria-label="Etapas da ordem de serviço">
-              <button class="workflow-step active" type="button" role="tab" aria-selected="true" data-step="0"><span class="workflow-step-index">1</span><span><strong>Abrir a OS</strong><span>Cliente, veículo e serviço</span></span></button>
-              <button class="workflow-step" type="button" role="tab" aria-selected="false" data-step="1"><span class="workflow-step-index">2</span><span><strong>Receber documentos</strong><span>Checklist e anexos</span></span></button>
-              <button class="workflow-step" type="button" role="tab" aria-selected="false" data-step="2"><span class="workflow-step-index">3</span><span><strong>Executar</strong><span>Status e responsável</span></span></button>
-              <button class="workflow-step" type="button" role="tab" aria-selected="false" data-step="3"><span class="workflow-step-index">4</span><span><strong>Receber</strong><span>Pagamento e custo</span></span></button>
-              <button class="workflow-step" type="button" role="tab" aria-selected="false" data-step="4"><span class="workflow-step-index">5</span><span><strong>Finalizar</strong><span>Entrega e histórico</span></span></button>
+              <button class="workflow-step active" id="workflowTab0" type="button" role="tab" aria-selected="true" aria-controls="workflowPanel" tabindex="0" data-step="0"><span class="workflow-step-index">1</span><span><strong>Abrir a OS</strong><span>Cliente, veículo e serviço</span></span></button>
+              <button class="workflow-step" id="workflowTab1" type="button" role="tab" aria-selected="false" aria-controls="workflowPanel" tabindex="-1" data-step="1"><span class="workflow-step-index">2</span><span><strong>Receber documentos</strong><span>Checklist e anexos</span></span></button>
+              <button class="workflow-step" id="workflowTab2" type="button" role="tab" aria-selected="false" aria-controls="workflowPanel" tabindex="-1" data-step="2"><span class="workflow-step-index">3</span><span><strong>Executar</strong><span>Status e responsável</span></span></button>
+              <button class="workflow-step" id="workflowTab3" type="button" role="tab" aria-selected="false" aria-controls="workflowPanel" tabindex="-1" data-step="3"><span class="workflow-step-index">4</span><span><strong>Receber</strong><span>Pagamento e custo</span></span></button>
+              <button class="workflow-step" id="workflowTab4" type="button" role="tab" aria-selected="false" aria-controls="workflowPanel" tabindex="-1" data-step="4"><span class="workflow-step-index">5</span><span><strong>Finalizar</strong><span>Entrega e histórico</span></span></button>
             </div>
             <a class="button button-primary workflow-cta" data-cta="jornada-os" href="#contato">
               Levar uma OS real para a demonstração
@@ -3829,7 +3897,7 @@
             </a>
           </div>
 
-          <div class="workflow-stage reveal" aria-live="polite">
+          <div class="workflow-stage reveal" id="workflowPanel" role="tabpanel" aria-labelledby="workflowTab0" aria-live="polite">
             <div class="os-head">
               <div><p class="eyebrow">Ordem de serviço</p><h3>OS-0248</h3><p>Transferência de propriedade · ABC1D23</p></div>
               <div class="os-head-state"><span>Status atual</span><strong id="workflowStatus">Em análise</strong></div>
@@ -3881,12 +3949,12 @@
           </div>
 
           <div class="benefit-controls reveal" role="tablist" aria-label="Benefícios por perfil">
-            <button class="benefit-control active" type="button" role="tab" aria-selected="true" data-role="dono">Dono do escritório</button>
-            <button class="benefit-control" type="button" role="tab" aria-selected="false" data-role="equipe">Equipe operacional</button>
-            <button class="benefit-control" type="button" role="tab" aria-selected="false" data-role="financeiro">Financeiro</button>
+            <button class="benefit-control active" id="benefitTabDono" type="button" role="tab" aria-selected="true" aria-controls="benefitPanel" tabindex="0" data-role="dono">Dono do escritório</button>
+            <button class="benefit-control" id="benefitTabEquipe" type="button" role="tab" aria-selected="false" aria-controls="benefitPanel" tabindex="-1" data-role="equipe">Equipe operacional</button>
+            <button class="benefit-control" id="benefitTabFinanceiro" type="button" role="tab" aria-selected="false" aria-controls="benefitPanel" tabindex="-1" data-role="financeiro">Financeiro</button>
           </div>
 
-          <div class="benefit-stage reveal">
+          <div class="benefit-stage reveal" id="benefitPanel" role="tabpanel" aria-labelledby="benefitTabDono" aria-live="polite">
             <div class="benefit-copy-block" id="benefitCopy">
               <span class="role-label">Dono do escritório</span>
               <h3>Controle sem depender de perguntar para todo mundo.</h3>
@@ -3994,7 +4062,7 @@
             <div class="final-points"><span class="final-point"><i data-lucide="check" size="16"></i> Demonstração com fluxo de despachante</span><span class="final-point"><i data-lucide="check" size="16"></i> Diagnóstico rápido da operação atual</span><span class="final-point"><i data-lucide="check" size="16"></i> Orientação de implantação e migração</span></div>
           </div>
 
-          <form class="lead-form reveal" id="leadForm">
+          <form class="lead-form reveal" id="leadForm" action="/api/lead" method="post">
             <header><h3>Agende uma demonstração</h3><p>Conte um pouco sobre o escritório para prepararmos uma conversa útil.</p></header>
             <div class="form-grid">
               <label class="form-field">Seu nome<input name="name" type="text" autocomplete="name" placeholder="Como podemos chamar você?" required /></label>
@@ -4002,8 +4070,10 @@
               <label class="form-field">Nome do escritório<input name="company" type="text" autocomplete="organization" placeholder="Empresa ou escritório" required /></label>
               <label class="form-field">Volume mensal de OS<select name="volume" required><option value="">Selecione</option><option>Até 50 OS</option><option>De 51 a 150 OS</option><option>De 151 a 300 OS</option><option>Mais de 300 OS</option></select></label>
               <label class="form-field full">Principal dificuldade hoje<textarea name="challenge" placeholder="Ex.: documentos, status, cobrança, financeiro ou equipe"></textarea></label>
-              <p class="form-feedback" id="formFeedback" role="status">Solicitação preparada. Seu aplicativo de e-mail será aberto para concluir o envio.</p>
-              <button class="button button-primary" type="submit">Quero conhecer o DespachoCerto <i data-lucide="arrow-right" size="17" aria-hidden="true"></i></button>
+              <div class="form-honeypot" aria-hidden="true"><label>Não preencha este campo<input name="website" type="text" autocomplete="off" tabindex="-1" /></label></div>
+              <p class="form-feedback" id="formFeedback" role="status" aria-live="polite" tabindex="-1"></p>
+              <a class="form-fallback" id="formFallback" href="mailto:contato@elevstudio.com.br" hidden>Enviar a solicitação pelo aplicativo de e-mail</a>
+              <button class="button button-primary" id="leadSubmit" type="submit"><span id="leadSubmitLabel">Quero conhecer o DespachoCerto</span> <i data-lucide="arrow-right" size="17" aria-hidden="true"></i></button>
               <p class="form-note">Ao enviar, você concorda em receber contato da equipe DespachoCerto sobre a demonstração solicitada.</p>
             </div>
           </form>
@@ -4037,6 +4107,8 @@
 
       function closeMenu() {
         mobileMenu.classList.remove("open");
+        mobileMenu.setAttribute("aria-hidden", "true");
+        mobileMenu.setAttribute("inert", "");
         menuButton.setAttribute("aria-expanded", "false");
         menuButton.setAttribute("aria-label", "Abrir menu");
         document.body.classList.remove("menu-open");
@@ -4047,6 +4119,8 @@
       menuButton.addEventListener("click", () => {
         const willOpen = !mobileMenu.classList.contains("open");
         mobileMenu.classList.toggle("open", willOpen);
+        mobileMenu.setAttribute("aria-hidden", String(!willOpen));
+        mobileMenu.toggleAttribute("inert", !willOpen);
         menuButton.setAttribute("aria-expanded", String(willOpen));
         menuButton.setAttribute("aria-label", willOpen ? "Fechar menu" : "Abrir menu");
         document.body.classList.toggle("menu-open", willOpen);
@@ -4057,6 +4131,14 @@
       });
 
       mobileMenu.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeMenu));
+      document.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape" || !mobileMenu.classList.contains("open")) return;
+        closeMenu();
+        menuButton.focus();
+      });
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 960 && mobileMenu.classList.contains("open")) closeMenu();
+      });
 
       const revealObserver = new IntersectionObserver(
         (entries) => {
@@ -4075,6 +4157,14 @@
       const tourTabs = [...document.querySelectorAll(".tour-tab")];
       const tourPanels = [...document.querySelectorAll(".tour-panel")];
 
+      function getNextTabIndex(event, currentIndex, itemCount) {
+        if (event.key === "Home") return 0;
+        if (event.key === "End") return itemCount - 1;
+        if (["ArrowDown", "ArrowRight"].includes(event.key)) return (currentIndex + 1) % itemCount;
+        if (["ArrowUp", "ArrowLeft"].includes(event.key)) return (currentIndex - 1 + itemCount) % itemCount;
+        return null;
+      }
+
       function activateTour(name, focus = false) {
         tourTabs.forEach((tab) => {
           const active = tab.dataset.tour === name;
@@ -4092,10 +4182,9 @@
       tourTabs.forEach((tab, index) => {
         tab.addEventListener("click", () => activateTour(tab.dataset.tour));
         tab.addEventListener("keydown", (event) => {
-          if (!["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight"].includes(event.key)) return;
+          const nextIndex = getNextTabIndex(event, index, tourTabs.length);
+          if (nextIndex === null) return;
           event.preventDefault();
-          const direction = ["ArrowDown", "ArrowRight"].includes(event.key) ? 1 : -1;
-          const nextIndex = (index + direction + tourTabs.length) % tourTabs.length;
           activateTour(tourTabs[nextIndex].dataset.tour, true);
         });
       });
@@ -4110,14 +4199,18 @@
 
       const workflowSteps = [...document.querySelectorAll(".workflow-step")];
       const progressItems = [...document.querySelectorAll(".os-progress-item")];
+      const workflowPanel = document.getElementById("workflowPanel");
 
-      function activateWorkflow(index) {
+      function activateWorkflow(index, focus = false) {
         const data = workflowData[index];
         workflowSteps.forEach((step, stepIndex) => {
           const active = stepIndex === index;
           step.classList.toggle("active", active);
           step.setAttribute("aria-selected", String(active));
+          step.tabIndex = active ? 0 : -1;
+          if (active && focus) step.focus();
         });
+        workflowPanel.setAttribute("aria-labelledby", workflowSteps[index].id);
         progressItems.forEach((item, itemIndex) => {
           item.classList.toggle("complete", itemIndex < index);
           item.classList.toggle("current", itemIndex === index);
@@ -4132,7 +4225,15 @@
         document.getElementById("workflowDetail").textContent = data.detail;
       }
 
-      workflowSteps.forEach((step) => step.addEventListener("click", () => activateWorkflow(Number(step.dataset.step))));
+      workflowSteps.forEach((step, index) => {
+        step.addEventListener("click", () => activateWorkflow(Number(step.dataset.step)));
+        step.addEventListener("keydown", (event) => {
+          const nextIndex = getNextTabIndex(event, index, workflowSteps.length);
+          if (nextIndex === null) return;
+          event.preventDefault();
+          activateWorkflow(nextIndex, true);
+        });
+      });
 
       const roleData = {
         dono: {
@@ -4165,14 +4266,19 @@
       };
 
       const roleButtons = [...document.querySelectorAll(".benefit-control")];
+      const benefitPanel = document.getElementById("benefitPanel");
 
-      function activateRole(name) {
+      function activateRole(name, focus = false) {
         const data = roleData[name];
         roleButtons.forEach((button) => {
           const active = button.dataset.role === name;
           button.classList.toggle("active", active);
           button.setAttribute("aria-selected", String(active));
+          button.tabIndex = active ? 0 : -1;
+          if (active && focus) button.focus();
         });
+        const activeButton = roleButtons.find((button) => button.dataset.role === name);
+        benefitPanel.setAttribute("aria-labelledby", activeButton.id);
         const pointMarkup = data.points.map((point) => `<span class="benefit-point"><i data-lucide="check-circle-2" size="18"></i>${point}</span>`).join("");
         document.getElementById("benefitCopy").innerHTML = `<span class="role-label">${data.label}</span><h3>${data.title}</h3><p>${data.description}</p><div class="benefit-points">${pointMarkup}</div>`;
         document.getElementById("roleVisualTitle").textContent = data.visualTitle;
@@ -4185,7 +4291,15 @@
         if (window.lucide) window.lucide.createIcons({ attrs: iconOptions });
       }
 
-      roleButtons.forEach((button) => button.addEventListener("click", () => activateRole(button.dataset.role)));
+      roleButtons.forEach((button, index) => {
+        button.addEventListener("click", () => activateRole(button.dataset.role));
+        button.addEventListener("keydown", (event) => {
+          const nextIndex = getNextTabIndex(event, index, roleButtons.length);
+          if (nextIndex === null) return;
+          event.preventDefault();
+          activateRole(roleButtons[nextIndex].dataset.role, true);
+        });
+      });
 
       const criticalRows = [...document.querySelectorAll("#criticalList .critical-row")];
       let criticalIndex = 0;
@@ -4196,20 +4310,60 @@
       }, 2400);
 
       const leadForm = document.getElementById("leadForm");
-      leadForm.addEventListener("submit", (event) => {
+      const leadSubmit = document.getElementById("leadSubmit");
+      const leadSubmitLabel = document.getElementById("leadSubmitLabel");
+      const formFeedback = document.getElementById("formFeedback");
+      const formFallback = document.getElementById("formFallback");
+
+      leadForm.addEventListener("submit", async (event) => {
         event.preventDefault();
         const formData = new FormData(leadForm);
         const name = String(formData.get("name") || "");
         const phone = String(formData.get("phone") || "");
         const company = String(formData.get("company") || "");
         const volume = String(formData.get("volume") || "");
-        const challenge = String(formData.get("challenge") || "Não informado");
+        const challenge = String(formData.get("challenge") || "");
+        const website = String(formData.get("website") || "");
         const subject = encodeURIComponent(`Demonstração DespachoCerto · ${company}`);
-        const body = encodeURIComponent(`Olá, equipe DespachoCerto!\n\nQuero agendar uma demonstração.\n\nNome: ${name}\nWhatsApp: ${phone}\nEscritório: ${company}\nVolume mensal: ${volume}\nPrincipal dificuldade: ${challenge}`);
-        document.getElementById("formFeedback").classList.add("visible");
-        window.setTimeout(() => {
-          window.location.href = `mailto:contato@elevstudio.com.br?subject=${subject}&body=${body}`;
-        }, 350);
+        const body = encodeURIComponent(`Olá, equipe DespachoCerto!\n\nQuero agendar uma demonstração.\n\nNome: ${name}\nWhatsApp: ${phone}\nEscritório: ${company}\nVolume mensal: ${volume}\nPrincipal dificuldade: ${challenge || "Não informado"}`);
+
+        formFallback.href = `mailto:contato@elevstudio.com.br?subject=${subject}&body=${body}`;
+        formFallback.hidden = true;
+        formFeedback.classList.remove("visible", "error");
+        formFeedback.textContent = "";
+        formFeedback.setAttribute("role", "status");
+        leadSubmit.disabled = true;
+        leadSubmitLabel.textContent = "Enviando solicitação...";
+        leadForm.setAttribute("aria-busy", "true");
+
+        try {
+          const response = await fetch(leadForm.action, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, phone, company, volume, challenge, website }),
+          });
+          const result = await response.json().catch(() => null);
+
+          if (!response.ok || !result?.ok) {
+            throw new Error(result?.message || "Não foi possível enviar agora. Tente novamente em instantes.");
+          }
+
+          formFeedback.textContent = result.message;
+          formFeedback.classList.add("visible");
+          leadForm.reset();
+        } catch (error) {
+          formFeedback.textContent = error instanceof Error
+            ? error.message
+            : "Não foi possível enviar agora. Tente novamente em instantes.";
+          formFeedback.setAttribute("role", "alert");
+          formFeedback.classList.add("visible", "error");
+          formFallback.hidden = false;
+        } finally {
+          leadSubmit.disabled = false;
+          leadSubmitLabel.textContent = "Quero conhecer o DespachoCerto";
+          leadForm.removeAttribute("aria-busy");
+          formFeedback.focus({ preventScroll: true });
+        }
       });
 
       document.getElementById("currentYear").textContent = String(new Date().getFullYear());

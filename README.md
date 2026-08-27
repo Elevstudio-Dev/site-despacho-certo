@@ -7,7 +7,10 @@ veiculares.
 ## Estrutura
 
 - `index.html`: página institucional completa.
+- `api/lead.js`: função server-side que envia pedidos de demonstração pelo Resend.
+- `tests/lead-api.test.js`: testes de validação e envio da API de leads.
 - `despachocerto-og.png`: imagem para compartilhamento em redes sociais.
+- `despachocerto-logo-*.png`: arquivos oficiais da identidade visual.
 - `favicon.svg`: ícone do site.
 - `robots.txt`: regras para mecanismos de busca.
 - `sitemap.xml`: mapa do site.
@@ -29,6 +32,14 @@ npx serve .
 2. Selecione `Other` como framework, caso seja solicitado.
 3. Mantenha a raiz do repositório como diretório do projeto.
 4. Não é necessário configurar comando de build.
+
+Configure as variáveis de ambiente do projeto:
+
+- `RESEND_API_KEY`: chave secreta do Resend.
+- `LEAD_TO_EMAIL`: opcional; o padrão é `contato@elevstudio.com.br`.
+- `LEAD_FROM_EMAIL`: opcional; o padrão é `DespachoCerto <contato@elevstudio.com.br>`.
+
+Depois de alterar as variáveis, faça um novo deploy para aplicá-las.
 
 Domínio previsto: `despachocerto.com.br`.
 
