@@ -45,6 +45,14 @@
     />
     <meta name="twitter:image" content="https://despachocerto.com.br/despachocerto-og.png" />
 
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K4TCRD4ND5"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { window.dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K4TCRD4ND5");
+    </script>
+
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -3468,7 +3476,7 @@
           <a href="#beneficios">Benefícios</a>
           <a href="#seguranca">Segurança</a>
           <a href="#duvidas">Dúvidas</a>
-          <a class="nav-cta" href="#contato">
+          <a class="nav-cta" data-cta="cabecalho" href="#contato">
             Agendar demonstração
             <i data-lucide="arrow-up-right" aria-hidden="true"></i>
           </a>
@@ -3493,7 +3501,7 @@
       <a href="#beneficios">Benefícios <i data-lucide="arrow-right" aria-hidden="true"></i></a>
       <a href="#seguranca">Segurança <i data-lucide="arrow-right" aria-hidden="true"></i></a>
       <a href="#duvidas">Dúvidas <i data-lucide="arrow-right" aria-hidden="true"></i></a>
-      <a class="button" href="#contato">Agendar demonstração</a>
+      <a class="button" data-cta="menu-mobile" href="#contato">Agendar demonstração</a>
     </nav>
 
     <main id="conteudo">
@@ -3508,7 +3516,7 @@
             </p>
 
             <div class="hero-actions">
-              <a class="button button-primary" href="#contato">
+              <a class="button button-primary" data-cta="hero" href="#contato">
                 Agendar demonstração
                 <i data-lucide="calendar-check-2" aria-hidden="true"></i>
               </a>
@@ -4092,15 +4100,23 @@
           </a>
         </div>
         <div class="footer-column"><strong>Produto</strong><div class="footer-links"><a href="#sistema">Conheça o sistema</a><a href="#como-funciona">Como funciona</a><a href="#beneficios">Benefícios</a><a href="#seguranca">Segurança</a></div></div>
-        <div class="footer-column"><strong>Contato</strong><div class="footer-links"><a href="#contato">Agendar demonstração</a><a href="#duvidas">Perguntas frequentes</a><a href="mailto:contato@elevstudio.com.br">contato@elevstudio.com.br</a></div></div>
+        <div class="footer-column"><strong>Contato</strong><div class="footer-links"><a data-cta="rodape" href="#contato">Agendar demonstração</a><a href="#duvidas">Perguntas frequentes</a><a href="mailto:contato@elevstudio.com.br">contato@elevstudio.com.br</a></div></div>
       </div>
       <div class="container footer-bottom"><span>© <span id="currentYear">2026</span> DespachoCerto. Todos os direitos reservados.</span><span>Desenvolvido pela <a href="https://elevstudio.com.br/" target="_blank" rel="noopener noreferrer">Elev Studio</a>.</span></div>
     </footer>
 
     <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+    <script src="site-analytics.js"></script>
     <script>
       const iconOptions = { "stroke-width": 1.8 };
       if (window.lucide) window.lucide.createIcons({ attrs: iconOptions });
+
+      const siteAnalytics = window.DespachoCertoAnalytics;
+      document.querySelectorAll("[data-cta]").forEach((link) => {
+        link.addEventListener("click", () => {
+          siteAnalytics?.trackCta(link.dataset.cta, link.getAttribute("href"));
+        });
+      });
 
       const menuButton = document.getElementById("menuButton");
       const mobileMenu = document.getElementById("mobileMenu");
@@ -4350,6 +4366,7 @@
 
           formFeedback.textContent = result.message;
           formFeedback.classList.add("visible");
+          siteAnalytics?.trackLead();
           leadForm.reset();
         } catch (error) {
           formFeedback.textContent = error instanceof Error
