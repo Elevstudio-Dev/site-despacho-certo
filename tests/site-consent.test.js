@@ -4,7 +4,7 @@ const path = require('node:path');
 const test = require('node:test');
 
 const projectRoot = path.resolve(__dirname, '..');
-const consentPath = path.join(projectRoot, 'site-consent.js');
+const consentPath = path.join(projectRoot, 'site-preferences.js');
 const measurementId = 'G-K4TCRD4ND5';
 
 function loadConsentFactory() {
@@ -15,18 +15,18 @@ function loadConsentFactory() {
 
 function createHarness(savedChoice = null) {
   const values = new Map();
-  if (savedChoice !== null) values.set('despachocerto_analytics_consent', savedChoice);
+  if (savedChoice !== null) values.set('despachocerto_analytics_preference_v2', savedChoice);
 
   const listeners = new Map();
   const elements = {
-    cookieBanner: { hidden: true },
-    cookieAccept: {
+    privacyChoicePanel: { hidden: false },
+    privacyAcceptAnalytics: {
       addEventListener(type, listener) { listeners.set(`accept:${type}`, listener); },
     },
-    cookieReject: {
+    privacyDeclineAnalytics: {
       addEventListener(type, listener) { listeners.set(`reject:${type}`, listener); },
     },
-    cookiePreferences: {
+    privacySettings: {
       addEventListener(type, listener) { listeners.set(`preferences:${type}`, listener); },
     },
   };
@@ -72,7 +72,7 @@ test('shows the banner without contacting Google before a choice', () => {
   assert.equal(typeof harness.consent.initialize, 'function');
   harness.consent.initialize();
 
-  assert.equal(harness.elements.cookieBanner.hidden, false);
+  assert.equal(harness.elements.privacyChoicePanel.hidden, false);
   assert.equal(harness.scripts.length, 0);
   assert.equal(harness.target.gtag, undefined);
   assert.equal(harness.consent.hasAnalyticsConsent(), false);
@@ -83,8 +83,8 @@ test('loads GA4 with Consent Mode v2 only after acceptance', () => {
   harness.consent.initialize();
   harness.consent.accept();
 
-  assert.equal(harness.values.get('despachocerto_analytics_consent'), 'granted');
-  assert.equal(harness.elements.cookieBanner.hidden, true);
+  assert.equal(harness.values.get('despachocerto_analytics_preference_v2'), 'granted');
+  assert.equal(harness.elements.privacyChoicePanel.hidden, true);
   assert.equal(harness.scripts.length, 1);
   assert.equal(harness.scripts[0].src, `https://www.googletagmanager.com/gtag/js?id=${measurementId}`);
   assert.equal(harness.consent.hasAnalyticsConsent(), true);
@@ -114,8 +114,8 @@ test('stores a refusal without loading analytics', () => {
   harness.consent.initialize();
   harness.consent.reject();
 
-  assert.equal(harness.values.get('despachocerto_analytics_consent'), 'denied');
-  assert.equal(harness.elements.cookieBanner.hidden, true);
+  assert.equal(harness.values.get('despachocerto_analytics_preference_v2'), 'denied');
+  assert.equal(harness.elements.privacyChoicePanel.hidden, true);
   assert.equal(harness.scripts.length, 0);
   assert.equal(harness.target.gtag, undefined);
 });
@@ -124,7 +124,7 @@ test('restores a saved acceptance without showing the banner', () => {
   const harness = createHarness('granted');
   harness.consent.initialize();
 
-  assert.equal(harness.elements.cookieBanner.hidden, true);
+  assert.equal(harness.elements.privacyChoicePanel.hidden, true);
   assert.equal(harness.scripts.length, 1);
   assert.equal(harness.consent.hasAnalyticsConsent(), true);
 });
@@ -134,10 +134,10 @@ test('allows preferences to be reopened and consent to be revoked', () => {
   harness.consent.initialize();
   harness.consent.openPreferences();
 
-  assert.equal(harness.elements.cookieBanner.hidden, false);
+  assert.equal(harness.elements.privacyChoicePanel.hidden, false);
   harness.consent.reject();
 
-  assert.equal(harness.values.get('despachocerto_analytics_consent'), 'denied');
+  assert.equal(harness.values.get('despachocerto_analytics_preference_v2'), 'denied');
   assert.equal(harness.reloads, 1);
   assert.equal(harness.removedCookies.some((cookie) => cookie.startsWith('_ga=')), true);
   assert.equal(harness.removedCookies.some((cookie) => cookie.startsWith('_ga_TEST=')), true);
@@ -150,10 +150,12 @@ test('publishes privacy controls and documentation', () => {
   const privacy = fs.existsSync(privacyPath) ? fs.readFileSync(privacyPath, 'utf8') : '';
   const sitemap = fs.readFileSync(path.join(projectRoot, 'sitemap.xml'), 'utf8');
 
-  assert.match(index, /id="cookieBanner"/);
-  assert.match(index, /id="cookieAccept"/);
-  assert.match(index, /id="cookieReject"/);
-  assert.match(index, /id="cookiePreferences"/);
+  assert.match(index, /id="privacyChoicePanel"/);
+  assert.match(index, /id="privacyAcceptAnalytics"/);
+  assert.match(index, /id="privacyDeclineAnalytics"/);
+  assert.match(index, /id="privacySettings"/);
+  assert.match(index, /<section class="privacy-choice-panel" id="privacyChoicePanel"[^>]*>/);
+  assert.doesNotMatch(index.match(/<section class="privacy-choice-panel" id="privacyChoicePanel"[^>]*>/)[0], /\shidden(?:\s|>)/);
   assert.match(index, /href="\/privacidade"/);
   assert.match(privacy, /Política de Privacidade e Cookies/);
   assert.match(privacy, /Google Analytics/);

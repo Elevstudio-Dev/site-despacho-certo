@@ -16,7 +16,7 @@
   const document = options.document;
   const storage = options.storage;
   const measurementId = options.measurementId || "G-K4TCRD4ND5";
-  const storageKey = "despachocerto_analytics_consent";
+  const storageKey = "despachocerto_analytics_preference_v2";
   const validChoices = new Set(["granted", "denied"]);
   let currentChoice = null;
   let analyticsLoaded = false;
@@ -47,7 +47,7 @@
   }
 
   function setBannerVisibility(visible) {
-    const banner = getElement("cookieBanner");
+    const banner = getElement("privacyChoicePanel");
     if (banner) banner.hidden = !visible;
   }
 
@@ -137,16 +137,16 @@
 
   function openPreferences() {
     setBannerVisibility(true);
-    const rejectButton = getElement("cookieReject");
+    const rejectButton = getElement("privacyDeclineAnalytics");
     if (rejectButton && typeof rejectButton.focus === "function") rejectButton.focus();
   }
 
   function bindListeners() {
     if (listenersBound) return;
 
-    const acceptButton = getElement("cookieAccept");
-    const rejectButton = getElement("cookieReject");
-    const preferencesButton = getElement("cookiePreferences");
+    const acceptButton = getElement("privacyAcceptAnalytics");
+    const rejectButton = getElement("privacyDeclineAnalytics");
+    const preferencesButton = getElement("privacySettings");
 
     if (acceptButton) acceptButton.addEventListener("click", accept);
     if (rejectButton) rejectButton.addEventListener("click", reject);

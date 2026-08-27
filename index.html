@@ -2790,11 +2790,11 @@
         min-height: 44px;
       }
 
-      .cookie-banner[hidden] {
+      .privacy-choice-panel[hidden] {
         display: none;
       }
 
-      .cookie-banner {
+      .privacy-choice-panel {
         position: fixed;
         right: 16px;
         bottom: 16px;
@@ -2809,7 +2809,7 @@
         box-shadow: 0 18px 48px rgba(6, 29, 49, 0.24);
       }
 
-      .cookie-banner-inner {
+      .privacy-choice-inner {
         display: grid;
         grid-template-columns: 40px minmax(0, 1fr) auto;
         align-items: center;
@@ -2817,7 +2817,7 @@
         padding: 18px;
       }
 
-      .cookie-icon {
+      .privacy-choice-icon {
         display: grid;
         place-items: center;
         width: 40px;
@@ -2827,21 +2827,21 @@
         border-radius: var(--radius);
       }
 
-      .cookie-copy strong {
+      .privacy-choice-copy strong {
         display: block;
         margin-bottom: 5px;
         color: var(--navy);
         font-size: 13px;
       }
 
-      .cookie-copy p {
+      .privacy-choice-copy p {
         margin: 0;
         color: var(--muted);
         font-size: 11px;
         line-height: 1.55;
       }
 
-      .cookie-copy a,
+      .privacy-choice-copy a,
       .form-note a {
         color: var(--blue);
         font-weight: 700;
@@ -2849,13 +2849,13 @@
         text-underline-offset: 3px;
       }
 
-      .cookie-actions {
+      .privacy-choice-actions {
         display: flex;
         align-items: center;
         gap: 10px;
       }
 
-      .cookie-button {
+      .privacy-choice-button {
         min-height: 44px;
         padding: 0 16px;
         border: 1px solid var(--blue);
@@ -2866,21 +2866,21 @@
         white-space: nowrap;
       }
 
-      .cookie-button-secondary {
+      .privacy-choice-button-secondary {
         color: var(--blue);
         background: var(--white);
       }
 
-      .cookie-button-primary {
+      .privacy-choice-button-primary {
         color: var(--white);
         background: var(--blue);
       }
 
-      .cookie-button:hover {
+      .privacy-choice-button:hover {
         border-color: var(--blue-strong);
       }
 
-      .cookie-button-primary:hover {
+      .privacy-choice-button-primary:hover {
         background: var(--blue-strong);
       }
 
@@ -3541,7 +3541,7 @@
           padding: 18px 0;
         }
 
-        .cookie-banner {
+        .privacy-choice-panel {
           right: 14px;
           bottom: 14px;
           left: 14px;
@@ -3550,25 +3550,25 @@
           overflow-y: auto;
         }
 
-        .cookie-banner-inner {
+        .privacy-choice-inner {
           grid-template-columns: 36px minmax(0, 1fr);
           gap: 12px;
           padding: 16px;
         }
 
-        .cookie-icon {
+        .privacy-choice-icon {
           width: 36px;
           height: 36px;
         }
 
-        .cookie-actions {
+        .privacy-choice-actions {
           display: grid;
           grid-column: 1 / -1;
           grid-template-columns: 1fr 1.35fr;
           width: 100%;
         }
 
-        .cookie-button {
+        .privacy-choice-button {
           width: 100%;
           padding: 0 10px;
           white-space: normal;
@@ -4240,27 +4240,27 @@
           </a>
         </div>
         <div class="footer-column"><strong>Produto</strong><div class="footer-links"><a href="#sistema">Conheça o sistema</a><a href="#como-funciona">Como funciona</a><a href="#beneficios">Benefícios</a><a href="#seguranca">Segurança</a></div></div>
-        <div class="footer-column"><strong>Contato</strong><div class="footer-links"><a data-cta="rodape" href="#contato">Agendar demonstração</a><a href="#duvidas">Perguntas frequentes</a><a href="/privacidade">Privacidade e cookies</a><button class="footer-link-button" id="cookiePreferences" type="button">Preferências de cookies</button><a href="mailto:contato@elevstudio.com.br">contato@elevstudio.com.br</a></div></div>
+        <div class="footer-column"><strong>Contato</strong><div class="footer-links"><a data-cta="rodape" href="#contato">Agendar demonstração</a><a href="#duvidas">Perguntas frequentes</a><a href="/privacidade">Privacidade e cookies</a><button class="footer-link-button" id="privacySettings" type="button">Preferências de cookies</button><a href="mailto:contato@elevstudio.com.br">contato@elevstudio.com.br</a></div></div>
       </div>
       <div class="container footer-bottom"><span>© <span id="currentYear">2026</span> DespachoCerto. Todos os direitos reservados.</span><span>Desenvolvido pela <a href="https://elevstudio.com.br/" target="_blank" rel="noopener noreferrer">Elev Studio</a>.</span></div>
     </footer>
 
-    <section class="cookie-banner" id="cookieBanner" aria-labelledby="cookieTitle" aria-describedby="cookieDescription" hidden>
-      <div class="cookie-banner-inner">
-        <span class="cookie-icon" aria-hidden="true"><i data-lucide="shield-check" size="20"></i></span>
-        <div class="cookie-copy">
-          <strong id="cookieTitle">Privacidade sob seu controle</strong>
-          <p id="cookieDescription">Usamos cookies analíticos para entender o uso do site e melhorar sua experiência, somente com sua autorização. Saiba mais na <a href="/privacidade">Política de Privacidade e Cookies</a>.</p>
+    <section class="privacy-choice-panel" id="privacyChoicePanel" aria-labelledby="privacyChoiceTitle" aria-describedby="privacyChoiceDescription">
+      <div class="privacy-choice-inner">
+        <span class="privacy-choice-icon" aria-hidden="true"><i data-lucide="shield-check" size="20"></i></span>
+        <div class="privacy-choice-copy">
+          <strong id="privacyChoiceTitle">Privacidade sob seu controle</strong>
+          <p id="privacyChoiceDescription">Usamos cookies analíticos para entender o uso do site e melhorar sua experiência, somente com sua autorização. Saiba mais na <a href="/privacidade">Política de Privacidade e Cookies</a>.</p>
         </div>
-        <div class="cookie-actions">
-          <button class="cookie-button cookie-button-secondary" id="cookieReject" type="button">Recusar</button>
-          <button class="cookie-button cookie-button-primary" id="cookieAccept" type="button">Aceitar cookies analíticos</button>
+        <div class="privacy-choice-actions">
+          <button class="privacy-choice-button privacy-choice-button-secondary" id="privacyDeclineAnalytics" type="button">Recusar</button>
+          <button class="privacy-choice-button privacy-choice-button-primary" id="privacyAcceptAnalytics" type="button">Aceitar cookies analíticos</button>
         </div>
       </div>
     </section>
 
     <script src="lucide.min.js"></script>
-    <script src="site-consent.js"></script>
+    <script src="site-preferences.js"></script>
     <script src="site-analytics.js"></script>
     <script>
       const iconOptions = { "stroke-width": 1.8 };
