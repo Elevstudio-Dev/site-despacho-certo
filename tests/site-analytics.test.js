@@ -6,7 +6,6 @@ const test = require('node:test');
 const projectRoot = path.resolve(__dirname, '..');
 const htmlPath = path.join(projectRoot, 'index.html');
 const analyticsPath = path.join(projectRoot, 'site-analytics.js');
-const measurementId = 'G-K4TCRD4ND5';
 
 function loadAnalyticsFactory() {
   if (!fs.existsSync(analyticsPath)) return () => ({});
@@ -14,11 +13,13 @@ function loadAnalyticsFactory() {
   return require(analyticsPath);
 }
 
-test('installs the configured GA4 tag on the institutional site', () => {
+test('delegates GA4 loading to the consent manager', () => {
   const html = fs.readFileSync(htmlPath, 'utf8');
 
-  assert.match(html, new RegExp(`googletagmanager\\.com/gtag/js\\?id=${measurementId}`));
-  assert.match(html, new RegExp(`gtag\\(["']config["'],\\s*["']${measurementId}["']`));
+  assert.doesNotMatch(html, /<script[^>]+googletagmanager\.com\/gtag\/js/);
+  assert.doesNotMatch(html, /fonts\.(googleapis|gstatic)\.com/);
+  assert.doesNotMatch(html, /unpkg\.com/);
+  assert.match(html, /<script src="site-consent\.js"><\/script>/);
   assert.match(html, /<script src="site-analytics\.js"><\/script>/);
 });
 
@@ -33,7 +34,10 @@ test('labels every demonstration link for CTA measurement', () => {
 test('sends a CTA event with its identifier and destination', () => {
   const calls = [];
   const createAnalytics = loadAnalyticsFactory();
-  const analytics = createAnalytics({ gtag: (...args) => calls.push(args) });
+  const analytics = createAnalytics({
+    DespachoCertoConsent: { hasAnalyticsConsent: () => true },
+    gtag: (...args) => calls.push(args),
+  });
 
   assert.equal(typeof analytics.trackCta, 'function');
   assert.equal(analytics.trackCta('hero', '#contato'), true);
@@ -45,7 +49,10 @@ test('sends a CTA event with its identifier and destination', () => {
 test('records a successful lead without sending personal information', () => {
   const calls = [];
   const createAnalytics = loadAnalyticsFactory();
-  const analytics = createAnalytics({ gtag: (...args) => calls.push(args) });
+  const analytics = createAnalytics({
+    DespachoCertoConsent: { hasAnalyticsConsent: () => true },
+    gtag: (...args) => calls.push(args),
+  });
 
   assert.equal(typeof analytics.trackLead, 'function');
   assert.equal(analytics.trackLead(), true);
@@ -61,4 +68,26 @@ test('fails quietly when the Google tag is unavailable', () => {
 
   assert.equal(typeof analytics.trackLead, 'function');
   assert.equal(analytics.trackLead(), false);
+});
+
+test('does not send events when analytics consent is denied', () => {
+  const calls = [];
+  const createAnalytics = loadAnalyticsFactory();
+  const analytics = createAnalytics({
+    DespachoCertoConsent: { hasAnalyticsConsent: () => false },
+    gtag: (...args) => calls.push(args),
+  });
+
+  assert.equal(analytics.trackCta('hero', '#contato'), false);
+  assert.equal(analytics.trackLead(), false);
+  assert.deepEqual(calls, []);
+});
+
+test('fails closed when the consent manager is unavailable', () => {
+  const calls = [];
+  const createAnalytics = loadAnalyticsFactory();
+  const analytics = createAnalytics({ gtag: (...args) => calls.push(args) });
+
+  assert.equal(analytics.trackLead(), false);
+  assert.deepEqual(calls, []);
 });

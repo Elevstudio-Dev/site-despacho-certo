@@ -7,6 +7,11 @@ veiculares.
 ## Estrutura
 
 - `index.html`: página institucional completa.
+- `privacidade.html`: Política de Privacidade e Cookies do site.
+- `site-consent.js`: preferências de cookies e carregamento consentido do GA4.
+- `site-analytics.js`: eventos de conversão condicionados ao consentimento.
+- `inter-latin.woff2`: fonte Inter hospedada localmente, sem chamada externa.
+- `lucide.min.js`: biblioteca de ícones servida pelo próprio site.
 - `api/lead.js`: função server-side que envia pedidos de demonstração pelo Resend.
 - `tests/lead-api.test.js`: testes de validação e envio da API de leads.
 - `despachocerto-og.png`: imagem para compartilhamento em redes sociais.

@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Política de Privacidade e Cookies | DespachoCerto</title>
+    <meta
+      name="description"
+      content="Entenda como o site do DespachoCerto trata dados pessoais, utiliza cookies analíticos e permite o controle das suas preferências."
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0b2f4f" />
+    <link rel="canonical" href="https://despachocerto.com.br/privacidade" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <style>
+      @font-face {
+        font-family: "Inter";
+        font-style: normal;
+        font-weight: 100 900;
+        font-display: swap;
+        src: url("inter-latin.woff2") format("woff2");
+      }
+
+      :root {
+        --blue: #155a9c;
+        --blue-strong: #0f487f;
+        --navy: #0b2f4f;
+        --navy-deep: #061d31;
+        --sky: #eaf4ff;
+        --paper: #f4f6f8;
+        --white: #ffffff;
+        --ink: #263238;
+        --muted: #68747e;
+        --line: #dce4ec;
+        --radius: 8px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: var(--white);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        letter-spacing: 0;
+        text-rendering: optimizeLegibility;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      button,
+      a {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      button {
+        font: inherit;
+        letter-spacing: 0;
+      }
+
+      button:focus-visible,
+      a:focus-visible {
+        outline: 3px solid rgba(21, 90, 156, 0.32);
+        outline-offset: 3px;
+      }
+
+      img,
+      svg {
+        display: block;
+      }
+
+      .skip-link {
+        position: fixed;
+        top: 12px;
+        left: 12px;
+        z-index: 200;
+        padding: 10px 14px;
+        color: var(--white);
+        background: var(--navy);
+        border-radius: 6px;
+        transform: translateY(-160%);
+      }
+
+      .skip-link:focus {
+        transform: translateY(0);
+      }
+
+      .container {
+        width: min(100% - 40px, 1080px);
+        margin: 0 auto;
+      }
+
+      .site-header {
+        border-bottom: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.96);
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        min-height: 76px;
+      }
+
+      .brand img {
+        width: 216px;
+        height: auto;
+      }
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 44px;
+        color: var(--blue);
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .back-link:hover {
+        color: var(--blue-strong);
+      }
+
+      .policy-hero {
+        padding: 84px 0 68px;
+        color: var(--white);
+        background: var(--navy);
+      }
+
+      .eyebrow {
+        margin: 0 0 14px;
+        color: #b9daf5;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        max-width: 780px;
+        margin: 0;
+        font-size: 48px;
+        line-height: 1.08;
+      }
+
+      .policy-intro {
+        max-width: 760px;
+        margin: 22px 0 0;
+        color: rgba(255, 255, 255, 0.78);
+        font-size: 16px;
+        line-height: 1.7;
+      }
+
+      .updated-at {
+        display: inline-flex;
+        margin-top: 26px;
+        padding-top: 18px;
+        color: rgba(255, 255, 255, 0.64);
+        border-top: 1px solid rgba(255, 255, 255, 0.18);
+        font-size: 12px;
+      }
+
+      .policy-layout {
+        display: grid;
+        grid-template-columns: 220px minmax(0, 1fr);
+        gap: 72px;
+        padding: 72px 0 96px;
+      }
+
+      .policy-nav {
+        position: sticky;
+        top: 24px;
+        align-self: start;
+        border-top: 3px solid var(--blue);
+      }
+
+      .policy-nav strong {
+        display: block;
+        margin: 18px 0 12px;
+        color: var(--navy);
+        font-size: 12px;
+      }
+
+      .policy-nav a {
+        display: block;
+        padding: 8px 0;
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.4;
+        text-decoration: none;
+      }
+
+      .policy-nav a:hover {
+        color: var(--blue);
+      }
+
+      .policy-content {
+        min-width: 0;
+      }
+
+      .policy-section {
+        padding: 0 0 46px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .policy-section + .policy-section {
+        padding-top: 46px;
+      }
+
+      .policy-section:last-child {
+        padding-bottom: 0;
+        border-bottom: 0;
+      }
+
+      h2 {
+        margin: 0 0 18px;
+        color: var(--navy);
+        font-size: 25px;
+        line-height: 1.25;
+      }
+
+      h3 {
+        margin: 28px 0 10px;
+        color: var(--navy);
+        font-size: 16px;
+      }
+
+      p,
+      li {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.75;
+      }
+
+      p {
+        margin: 0 0 16px;
+      }
+
+      ul {
+        margin: 12px 0 18px;
+        padding-left: 22px;
+      }
+
+      li + li {
+        margin-top: 8px;
+      }
+
+      .policy-content a {
+        color: var(--blue);
+        font-weight: 700;
+        text-underline-offset: 3px;
+      }
+
+      .notice {
+        margin: 22px 0 0;
+        padding: 18px 20px;
+        background: var(--sky);
+        border-left: 4px solid var(--blue);
+        border-radius: 0 var(--radius) var(--radius) 0;
+      }
+
+      .notice p:last-child {
+        margin-bottom: 0;
+      }
+
+      .site-footer {
+        color: rgba(255, 255, 255, 0.68);
+        background: var(--navy-deep);
+      }
+
+      .footer-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 28px;
+        min-height: 92px;
+        font-size: 11px;
+      }
+
+      .footer-links {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+
+      .footer-links a,
+      .footer-link-button {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 0;
+        color: var(--white);
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+        font-size: 11px;
+        text-decoration: none;
+      }
+
+      .cookie-banner[hidden] {
+        display: none;
+      }
+
+      .cookie-banner {
+        position: fixed;
+        right: 16px;
+        bottom: 16px;
+        left: 16px;
+        z-index: 150;
+        width: min(920px, calc(100% - 32px));
+        margin: 0 auto;
+        color: var(--ink);
+        background: var(--white);
+        border: 1px solid #b9ccdc;
+        border-radius: var(--radius);
+        box-shadow: 0 18px 48px rgba(6, 29, 49, 0.24);
+      }
+
+      .cookie-banner-inner {
+        display: grid;
+        grid-template-columns: 40px minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 18px;
+        padding: 18px;
+      }
+
+      .cookie-icon {
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        color: var(--blue);
+        background: var(--sky);
+        border-radius: var(--radius);
+      }
+
+      .cookie-copy strong {
+        display: block;
+        margin-bottom: 5px;
+        color: var(--navy);
+        font-size: 13px;
+      }
+
+      .cookie-copy p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.55;
+      }
+
+      .cookie-copy a {
+        color: var(--blue);
+        font-weight: 700;
+        text-underline-offset: 3px;
+      }
+
+      .cookie-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .cookie-button {
+        min-height: 44px;
+        padding: 0 16px;
+        border: 1px solid var(--blue);
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .cookie-button-secondary {
+        color: var(--blue);
+        background: var(--white);
+      }
+
+      .cookie-button-primary {
+        color: var(--white);
+        background: var(--blue);
+      }
+
+      .cookie-button-primary:hover {
+        background: var(--blue-strong);
+      }
+
+      @media (max-width: 760px) {
+        .container {
+          width: min(100% - 28px, 1080px);
+        }
+
+        .brand img {
+          width: 184px;
+        }
+
+        .back-link span {
+          display: none;
+        }
+
+        .policy-hero {
+          padding: 62px 0 54px;
+        }
+
+        h1 {
+          font-size: 37px;
+        }
+
+        .policy-intro {
+          font-size: 14px;
+        }
+
+        .policy-layout {
+          grid-template-columns: 1fr;
+          gap: 0;
+          padding: 54px 0 72px;
+        }
+
+        .policy-nav {
+          display: none;
+        }
+
+        h2 {
+          font-size: 22px;
+        }
+
+        .footer-inner,
+        .footer-links {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .footer-inner {
+          gap: 10px;
+          padding: 24px 0;
+        }
+
+        .footer-links {
+          gap: 0;
+        }
+
+        .cookie-banner {
+          right: 14px;
+          bottom: 14px;
+          left: 14px;
+          width: calc(100% - 28px);
+          max-height: calc(100vh - 28px);
+          overflow-y: auto;
+        }
+
+        .cookie-banner-inner {
+          grid-template-columns: 36px minmax(0, 1fr);
+          gap: 12px;
+          padding: 16px;
+        }
+
+        .cookie-icon {
+          width: 36px;
+          height: 36px;
+        }
+
+        .cookie-actions {
+          display: grid;
+          grid-column: 1 / -1;
+          grid-template-columns: 1fr 1.35fr;
+          width: 100%;
+        }
+
+        .cookie-button {
+          width: 100%;
+          padding: 0 10px;
+          white-space: normal;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="/" aria-label="DespachoCerto - página inicial">
+          <img src="despachocerto-logo-horizontal.png" alt="DespachoCerto" width="540" height="142" />
+        </a>
+        <a class="back-link" href="/"><span aria-hidden="true">←</span><span>Voltar para o site</span></a>
+      </div>
+    </header>
+
+    <main id="conteudo">
+      <section class="policy-hero" aria-labelledby="policyTitle">
+        <div class="container">
+          <p class="eyebrow">Transparência e controle</p>
+          <h1 id="policyTitle">Política de Privacidade e Cookies</h1>
+          <p class="policy-intro">Esta política explica como tratamos os dados pessoais de quem visita o site institucional do DespachoCerto, solicita uma demonstração ou escolhe autorizar cookies analíticos.</p>
+          <span class="updated-at">Última atualização: 27 de agosto de 2026</span>
+        </div>
+      </section>
+
+      <div class="container policy-layout">
+        <nav class="policy-nav" aria-label="Seções desta política">
+          <strong>Nesta página</strong>
+          <a href="#responsavel">Responsável pelo tratamento</a>
+          <a href="#dados">Dados tratados</a>
+          <a href="#finalidades">Finalidades</a>
+          <a href="#cookies">Cookies e consentimento</a>
+          <a href="#fornecedores">Fornecedores</a>
+          <a href="#retencao">Retenção</a>
+          <a href="#direitos">Seus direitos</a>
+          <a href="#seguranca">Segurança e contato</a>
+        </nav>
+
+        <article class="policy-content">
+          <section class="policy-section" id="responsavel">
+            <h2>1. Responsável pelo tratamento</h2>
+            <p>O DespachoCerto é uma solução desenvolvida pelo grupo Elev Studio. Para assuntos relacionados a esta política, ao uso dos seus dados pessoais ou ao exercício de direitos, entre em contato pelo e-mail <a href="mailto:contato@elevstudio.com.br">contato@elevstudio.com.br</a>.</p>
+            <div class="notice">
+              <p><strong>Escopo desta política.</strong> Este documento se aplica ao site institucional <strong>despachocerto.com.br</strong>. O uso do sistema contratado por empresas clientes poderá envolver avisos, contratos e responsabilidades específicos da operação de cada empresa.</p>
+            </div>
+          </section>
+
+          <section class="policy-section" id="dados">
+            <h2>2. Dados que podemos tratar</h2>
+            <h3>Solicitação de demonstração</h3>
+            <p>Quando você envia o formulário do site, podemos receber nome, telefone, nome do escritório, volume mensal aproximado de ordens de serviço e a dificuldade relatada. O campo técnico de proteção contra envios automatizados também pode ser verificado.</p>
+            <h3>Dados técnicos e de navegação</h3>
+            <p>O provedor de hospedagem pode processar dados técnicos necessários para entregar e proteger o site, como endereço IP, data e hora da requisição, navegador, dispositivo e registros de segurança. O Google Analytics somente é carregado depois que você aceita cookies analíticos.</p>
+            <h3>Preferência de cookies</h3>
+            <p>Guardamos no armazenamento local do navegador apenas a opção <em>aceita</em> ou <em>recusada</em>, para respeitar sua escolha nas próximas visitas.</p>
+          </section>
+
+          <section class="policy-section" id="finalidades">
+            <h2>3. Por que usamos esses dados</h2>
+            <ul>
+              <li>responder à solicitação e agendar uma demonstração;</li>
+              <li>entender o contexto do escritório e preparar uma apresentação relevante;</li>
+              <li>manter comunicações pré-contratuais solicitadas pelo interessado;</li>
+              <li>proteger o formulário e o site contra fraude, abuso e falhas técnicas;</li>
+              <li>medir o uso do site e melhorar conteúdo, navegação e conversão, quando houver consentimento para análise.</li>
+            </ul>
+            <p>Não vendemos dados pessoais. Também não utilizamos os dados do formulário para publicidade comportamental.</p>
+          </section>
+
+          <section class="policy-section" id="cookies">
+            <h2>4. Cookies e sua escolha</h2>
+            <p>O site utiliza uma preferência funcional, necessária para lembrar sua decisão, e cookies analíticos opcionais. Antes de uma escolha, a tag do Google Analytics permanece bloqueada e nenhum evento analítico é enviado por ela.</p>
+            <h3>Quando você aceita</h3>
+            <p>O Google Analytics 4 pode registrar informações de navegação, como página visitada, interações com chamadas de ação, envio bem-sucedido do formulário, dados técnicos do dispositivo e localização aproximada derivada do IP. Não enviamos ao Google os campos pessoais preenchidos no formulário.</p>
+            <h3>Quando você recusa ou revoga</h3>
+            <p>A tag analítica não é carregada. Se você revogar uma autorização anterior, tentamos remover os cookies analíticos acessíveis pelo site e recarregamos a página para interromper a coleta futura.</p>
+            <p>Você pode mudar sua escolha a qualquer momento pelo botão <strong>Preferências de cookies</strong> no rodapé. Também pode apagar cookies e dados locais nas configurações do navegador.</p>
+          </section>
+
+          <section class="policy-section" id="fornecedores">
+            <h2>5. Fornecedores e compartilhamento</h2>
+            <p>Usamos fornecedores de tecnologia somente para finalidades ligadas ao funcionamento do site e ao atendimento solicitado:</p>
+            <ul>
+              <li><strong>Vercel:</strong> hospedagem, entrega e proteção técnica do site;</li>
+              <li><strong>Resend:</strong> envio do pedido de demonstração para a equipe responsável;</li>
+              <li><strong>Google Analytics:</strong> mensuração de navegação e conversões, exclusivamente após consentimento.</li>
+            </ul>
+            <p>Esses fornecedores podem processar dados em outros países conforme suas infraestruturas e termos aplicáveis. Buscamos utilizar serviços com medidas contratuais e técnicas adequadas ao tipo de tratamento realizado.</p>
+          </section>
+
+          <section class="policy-section" id="retencao">
+            <h2>6. Retenção e eliminação</h2>
+            <p>Os dados de contato são mantidos pelo período necessário para atender à solicitação, conduzir a conversa comercial e cumprir obrigações legais ou resguardar direitos. Quando deixarem de ser necessários, poderão ser eliminados ou anonimizados, observadas as hipóteses legais de conservação.</p>
+            <p>Na propriedade do Google Analytics vinculada a este site, a retenção de dados no nível do usuário e do evento está configurada para 14 meses. Relatórios agregados podem permanecer disponíveis sem identificar diretamente o visitante.</p>
+          </section>
+
+          <section class="policy-section" id="direitos">
+            <h2>7. Seus direitos</h2>
+            <p>Nos termos da legislação aplicável, você pode solicitar confirmação da existência de tratamento, acesso, correção, informação sobre compartilhamento, portabilidade quando aplicável, anonimização, bloqueio ou eliminação, oposição e revisão de decisões automatizadas, além de revogar o consentimento.</p>
+            <p>Para exercer um direito, escreva para <a href="mailto:contato@elevstudio.com.br">contato@elevstudio.com.br</a>. Poderemos pedir informações razoáveis para confirmar sua identidade e proteger os dados contra acesso indevido.</p>
+          </section>
+
+          <section class="policy-section" id="seguranca">
+            <h2>8. Segurança, atualizações e contato</h2>
+            <p>Aplicamos medidas administrativas e técnicas compatíveis com a natureza do site para reduzir riscos de acesso não autorizado, alteração, perda ou divulgação indevida. Nenhum ambiente conectado à internet, entretanto, pode oferecer risco zero.</p>
+            <p>Esta política poderá ser atualizada quando houver mudanças no site, nos fornecedores ou nas práticas de tratamento. A data no início desta página indicará a versão mais recente.</p>
+            <p>Dúvidas sobre privacidade podem ser enviadas para <a href="mailto:contato@elevstudio.com.br">contato@elevstudio.com.br</a>.</p>
+          </section>
+        </article>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span>© 2026 DespachoCerto. Uma solução Elev Studio.</span>
+        <div class="footer-links">
+          <a href="/">Voltar ao site</a>
+          <button class="footer-link-button" id="cookiePreferences" type="button">Preferências de cookies</button>
+          <a href="mailto:contato@elevstudio.com.br">Contato</a>
+        </div>
+      </div>
+    </footer>
+
+    <section class="cookie-banner" id="cookieBanner" aria-labelledby="cookieTitle" aria-describedby="cookieDescription" hidden>
+      <div class="cookie-banner-inner">
+        <span class="cookie-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-8 8.8C7.5 20.5 4 18 4 13V5l8-3 8 3v8Z"/><path d="m9 12 2 2 4-4"/></svg>
+        </span>
+        <div class="cookie-copy">
+          <strong id="cookieTitle">Privacidade sob seu controle</strong>
+          <p id="cookieDescription">Usamos cookies analíticos para entender o uso do site e melhorar sua experiência, somente com sua autorização. Leia os detalhes nesta página.</p>
+        </div>
+        <div class="cookie-actions">
+          <button class="cookie-button cookie-button-secondary" id="cookieReject" type="button">Recusar</button>
+          <button class="cookie-button cookie-button-primary" id="cookieAccept" type="button">Aceitar cookies analíticos</button>
+        </div>
+      </div>
+    </section>
+
+    <script src="site-consent.js"></script>
+  </body>
+</html>
