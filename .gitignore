@@ -1,4 +1,5 @@
 .vercel
+.worktrees/
 .DS_Store
 Thumbs.db
 
