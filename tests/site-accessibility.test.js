@@ -5,6 +5,7 @@ const test = require('node:test');
 
 const projectRoot = path.resolve(__dirname, '..');
 const index = fs.readFileSync(path.join(projectRoot, 'index.html'), 'utf8');
+const homeStyles = fs.readFileSync(path.join(projectRoot, 'site.css'), 'utf8');
 const privacy = fs.readFileSync(path.join(projectRoot, 'privacidade.html'), 'utf8');
 
 function luminance(hex) {
@@ -21,8 +22,8 @@ function contrast(first, second) {
   return (brightest + 0.05) / (darkest + 0.05);
 }
 
-function cssVariable(html, name) {
-  const match = html.match(new RegExp(`--${name}:\\s*(#[a-f\\d]{6})`, 'i'));
+function cssVariable(source, name) {
+  const match = source.match(new RegExp(`--${name}:\\s*(#[a-f\\d]{6})`, 'i'));
   assert.ok(match, `Expected --${name} to be defined`);
   return match[1];
 }
@@ -35,14 +36,14 @@ test('gives the dashboard preview a valid semantic role', () => {
 });
 
 test('keeps secondary text above WCAG AA contrast on light surfaces', () => {
-  for (const html of [index, privacy]) {
-    const muted = cssVariable(html, 'muted');
+  for (const styles of [homeStyles, privacy]) {
+    const muted = cssVariable(styles, 'muted');
     assert.ok(contrast(muted, '#f4f6f8') >= 4.5);
     assert.ok(contrast(muted, '#eaf4ff') >= 4.5);
   }
 });
 
 test('keeps red status text above WCAG AA contrast', () => {
-  const red = cssVariable(index, 'red');
+  const red = cssVariable(homeStyles, 'red');
   assert.ok(contrast(red, '#fcecec') >= 4.5);
 });
