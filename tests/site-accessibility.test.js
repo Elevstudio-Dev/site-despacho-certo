@@ -6,7 +6,7 @@ const test = require('node:test');
 const projectRoot = path.resolve(__dirname, '..');
 const index = fs.readFileSync(path.join(projectRoot, 'index.html'), 'utf8');
 const homeStyles = fs.readFileSync(path.join(projectRoot, 'site.css'), 'utf8');
-const privacy = fs.readFileSync(path.join(projectRoot, 'privacidade.html'), 'utf8');
+const legalStyles = fs.readFileSync(path.join(projectRoot, 'legal.css'), 'utf8');
 
 function luminance(hex) {
   const channels = hex.match(/[a-f\d]{2}/gi).map((value) => parseInt(value, 16) / 255);
@@ -36,7 +36,7 @@ test('gives the dashboard preview a valid semantic role', () => {
 });
 
 test('keeps secondary text above WCAG AA contrast on light surfaces', () => {
-  for (const styles of [homeStyles, privacy]) {
+  for (const styles of [homeStyles, legalStyles]) {
     const muted = cssVariable(styles, 'muted');
     assert.ok(contrast(muted, '#f4f6f8') >= 4.5);
     assert.ok(contrast(muted, '#eaf4ff') >= 4.5);
