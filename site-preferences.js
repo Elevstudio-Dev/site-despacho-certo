@@ -16,11 +16,15 @@
   const document = options.document;
   const storage = options.storage;
   const measurementId = options.measurementId || "G-K4TCRD4ND5";
-  const storageKey = "despachocerto_analytics_preference_v2";
+  const now = options.now || (() => new Date().toISOString());
+  const consentVersion = "2026-08-28";
+  const storageKey = "despachocerto_consent_v3";
+  const legacyStorageKey = "despachocerto_analytics_preference_v2";
   const validChoices = new Set(["granted", "denied"]);
   let currentChoice = null;
   let analyticsLoaded = false;
   let listenersBound = false;
+  let returnFocusTarget = null;
 
   function getElement(id) {
     return document && typeof document.getElementById === "function"
@@ -28,22 +32,63 @@
       : null;
   }
 
-  function readChoice() {
+  function preferenceRecord(choice) {
+    return {
+      version: consentVersion,
+      analytics: choice,
+      updatedAt: now(),
+    };
+  }
+
+  function parsePreference(rawValue) {
+    if (!rawValue) return null;
+
     try {
-      const savedChoice = storage && storage.getItem(storageKey);
-      return validChoices.has(savedChoice) ? savedChoice : null;
+      const parsed = JSON.parse(rawValue);
+      if (
+        parsed
+        && parsed.version === consentVersion
+        && validChoices.has(parsed.analytics)
+        && typeof parsed.updatedAt === "string"
+      ) {
+        return parsed.analytics;
+      }
     } catch (error) {
       return null;
     }
+
+    return null;
   }
 
-  function saveChoice(choice) {
+  function persistChoice(choice) {
     currentChoice = choice;
     try {
-      if (storage) storage.setItem(storageKey, choice);
+      if (storage) {
+        storage.setItem(storageKey, JSON.stringify(preferenceRecord(choice)));
+        storage.removeItem(legacyStorageKey);
+      }
     } catch (error) {
       // The current-page choice still applies when storage is unavailable.
     }
+  }
+
+  function readChoice() {
+    try {
+      if (!storage) return null;
+
+      const savedChoice = parsePreference(storage.getItem(storageKey));
+      if (savedChoice) return savedChoice;
+
+      const legacyChoice = storage.getItem(legacyStorageKey);
+      if (validChoices.has(legacyChoice)) {
+        persistChoice(legacyChoice);
+        return legacyChoice;
+      }
+    } catch (error) {
+      return null;
+    }
+
+    return null;
   }
 
   function setBannerVisibility(visible) {
@@ -110,35 +155,63 @@
     });
   }
 
-  function accept() {
-    saveChoice("granted");
-    setBannerVisibility(false);
-    enableAnalytics();
-    return true;
+  function closePreferences() {
+    const dialog = getElement("privacyPreferencesDialog");
+    if (dialog && dialog.open && typeof dialog.close === "function") dialog.close();
+
+    if (returnFocusTarget && typeof returnFocusTarget.focus === "function") {
+      returnFocusTarget.focus();
+    }
+    returnFocusTarget = null;
   }
 
-  function reject() {
-    const shouldReload = analyticsLoaded || currentChoice === "granted";
-
+  function disableAnalytics(shouldReload) {
     if (typeof target.gtag === "function") {
       target.gtag("consent", "update", consentDefaults());
     }
 
-    saveChoice("denied");
-    setBannerVisibility(false);
     removeAnalyticsCookies();
 
     if (shouldReload && target.location && typeof target.location.reload === "function") {
       target.location.reload();
     }
+  }
+
+  function savePreferences({ analytics }) {
+    if (!validChoices.has(analytics)) return false;
+
+    const shouldReload = analytics === "denied"
+      && (analyticsLoaded || currentChoice === "granted");
+    persistChoice(analytics);
+    setBannerVisibility(false);
+    closePreferences();
+
+    if (analytics === "granted") enableAnalytics();
+    else disableAnalytics(shouldReload);
 
     return true;
   }
 
+  function accept() {
+    return savePreferences({ analytics: "granted" });
+  }
+
+  function reject() {
+    return savePreferences({ analytics: "denied" });
+  }
+
   function openPreferences() {
-    setBannerVisibility(true);
-    const rejectButton = getElement("privacyDeclineAnalytics");
-    if (rejectButton && typeof rejectButton.focus === "function") rejectButton.focus();
+    const dialog = getElement("privacyPreferencesDialog");
+    const analyticsToggle = getElement("privacyAnalyticsToggle");
+    if (!dialog) return false;
+
+    returnFocusTarget = document && document.activeElement
+      ? document.activeElement
+      : getElement("privacySettings");
+    if (analyticsToggle) analyticsToggle.checked = currentChoice === "granted";
+
+    if (typeof dialog.showModal === "function" && !dialog.open) dialog.showModal();
+    return true;
   }
 
   function bindListeners() {
@@ -146,11 +219,36 @@
 
     const acceptButton = getElement("privacyAcceptAnalytics");
     const rejectButton = getElement("privacyDeclineAnalytics");
-    const preferencesButton = getElement("privacySettings");
+    const preferencesButtons = [
+      getElement("privacySettings"),
+      getElement("privacyOpenPreferences"),
+    ].filter(Boolean);
+    const saveButton = getElement("privacySavePreferences");
+    const closeButton = getElement("privacyClosePreferences");
+    const dialog = getElement("privacyPreferencesDialog");
+    const analyticsToggle = getElement("privacyAnalyticsToggle");
 
     if (acceptButton) acceptButton.addEventListener("click", accept);
     if (rejectButton) rejectButton.addEventListener("click", reject);
-    if (preferencesButton) preferencesButton.addEventListener("click", openPreferences);
+    preferencesButtons.forEach((button) => button.addEventListener("click", openPreferences));
+    if (saveButton) {
+      saveButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        savePreferences({ analytics: Boolean(analyticsToggle && analyticsToggle.checked) ? "granted" : "denied" });
+      });
+    }
+    if (closeButton) {
+      closeButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        closePreferences();
+      });
+    }
+    if (dialog) {
+      dialog.addEventListener("cancel", (event) => {
+        event.preventDefault();
+        closePreferences();
+      });
+    }
     listenersBound = true;
   }
 
@@ -172,6 +270,7 @@
     reject,
     initialize,
     openPreferences,
+    savePreferences,
     hasAnalyticsConsent() {
       return currentChoice === "granted";
     },

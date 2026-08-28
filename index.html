@@ -769,14 +769,41 @@
         <span class="privacy-choice-icon" aria-hidden="true"><i data-lucide="shield-check" size="20"></i></span>
         <div class="privacy-choice-copy">
           <strong id="privacyChoiceTitle">Privacidade sob seu controle</strong>
-          <p id="privacyChoiceDescription">Usamos cookies analíticos para entender o uso do site e melhorar sua experiência, somente com sua autorização. Saiba mais na <a href="/privacidade">Política de Privacidade e Cookies</a>.</p>
+          <p id="privacyChoiceDescription">Recursos necessários mantêm o site funcionando. Com sua autorização, usamos Analytics para melhorar a experiência. Consulte nossa <a href="/privacidade">Política de Privacidade</a> e a <a href="/cookies">Política de Cookies</a>.</p>
         </div>
         <div class="privacy-choice-actions">
           <button class="privacy-choice-button privacy-choice-button-secondary" id="privacyDeclineAnalytics" type="button">Recusar</button>
-          <button class="privacy-choice-button privacy-choice-button-primary" id="privacyAcceptAnalytics" type="button">Aceitar cookies analíticos</button>
+          <button class="privacy-choice-button privacy-choice-button-secondary" id="privacyOpenPreferences" type="button">Preferências</button>
+          <button class="privacy-choice-button privacy-choice-button-primary" id="privacyAcceptAnalytics" type="button">Aceitar analíticos</button>
         </div>
       </div>
     </section>
+
+    <dialog class="privacy-preferences-dialog" id="privacyPreferencesDialog" aria-labelledby="privacyPreferencesTitle">
+      <div class="privacy-preferences-card">
+        <header>
+          <div>
+            <span class="privacy-preferences-kicker">Controle de privacidade</span>
+            <h2 id="privacyPreferencesTitle">Preferências de cookies</h2>
+          </div>
+          <button class="privacy-dialog-close" id="privacyClosePreferences" type="button" aria-label="Fechar preferências"><span aria-hidden="true">×</span></button>
+        </header>
+        <section class="privacy-category">
+          <div><strong>Necessários</strong><p>Mantêm o site funcionando e lembram sua escolha de privacidade.</p></div>
+          <span class="privacy-always-on">Sempre ativos</span>
+        </section>
+        <section class="privacy-category">
+          <div><strong>Analíticos</strong><p>Ajudam a medir navegação e conversões pelo Google Analytics 4.</p></div>
+          <label class="privacy-toggle">
+            <input id="privacyAnalyticsToggle" type="checkbox" role="switch" />
+            <span aria-hidden="true"></span>
+            <span class="sr-only">Permitir cookies analíticos</span>
+          </label>
+        </section>
+        <p class="privacy-dialog-links"><a href="/privacidade">Política de Privacidade</a><a href="/cookies">Política de Cookies</a></p>
+        <footer><button class="privacy-choice-button privacy-choice-button-primary" id="privacySavePreferences" type="button">Salvar preferências</button></footer>
+      </div>
+    </dialog>
 
     <script src="lucide.min.js"></script>
     <script src="site-preferences.js"></script>
