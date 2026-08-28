@@ -44,15 +44,66 @@
         "@context": "https://schema.org",
         "@graph": [
           {
+            "@type": "WebSite",
+            "@id": "https://despachocerto.com.br/#website",
+            "url": "https://despachocerto.com.br/",
+            "name": "DespachoCerto",
+            "alternateName": ["Despacho Certo", "despachocerto.com.br"],
+            "inLanguage": "pt-BR",
+            "publisher": {
+              "@id": "https://despachocerto.com.br/#organization"
+            },
+            "about": {
+              "@id": "https://despachocerto.com.br/#brand"
+            }
+          },
+          {
             "@type": "Organization",
             "@id": "https://despachocerto.com.br/#organization",
             "name": "Elev Studio",
-            "url": "https://elevstudio.com.br/"
+            "legalName": "62.574.201 Carlos Eduardo Filho da Conceição",
+            "taxID": "62.574.201/0001-50",
+            "url": "https://elevstudio.com.br/",
+            "email": "contato@elevstudio.com.br",
+            "telephone": "+55 48 99952-3175",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Tubarão",
+              "addressRegion": "SC",
+              "addressCountry": "BR"
+            },
+            "logo": {
+              "@id": "https://despachocerto.com.br/#logo"
+            }
+          },
+          {
+            "@type": "ImageObject",
+            "@id": "https://despachocerto.com.br/#logo",
+            "url": "https://despachocerto.com.br/despachocerto-logo-512.png",
+            "contentUrl": "https://despachocerto.com.br/despachocerto-logo-512.png",
+            "width": 512,
+            "height": 512,
+            "caption": "DespachoCerto"
+          },
+          {
+            "@type": "Brand",
+            "@id": "https://despachocerto.com.br/#brand",
+            "name": "DespachoCerto",
+            "alternateName": "Despacho Certo",
+            "url": "https://despachocerto.com.br/",
+            "slogan": "Cada processo no lugar certo",
+            "logo": {
+              "@id": "https://despachocerto.com.br/#logo"
+            },
+            "ownedBy": {
+              "@id": "https://despachocerto.com.br/#organization"
+            }
           },
           {
             "@type": "SoftwareApplication",
             "@id": "https://despachocerto.com.br/#software",
             "name": "DespachoCerto",
+            "url": "https://despachocerto.com.br/",
             "applicationCategory": "BusinessApplication",
             "applicationSubCategory": "Sistema de gestão para despachantes",
             "operatingSystem": "Web",
@@ -60,6 +111,9 @@
             "description": "Sistema de gestão para despachantes veiculares com controle de ordens de serviço, clientes, documentos, financeiro, serviços e equipe.",
             "publisher": {
               "@id": "https://despachocerto.com.br/#organization"
+            },
+            "brand": {
+              "@id": "https://despachocerto.com.br/#brand"
             },
             "featureList": [
               "Controle de ordens de serviço",
@@ -80,15 +134,15 @@
                 "name": "O DespachoCerto substitui minha planilha de controle?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Sim. Além dos dados cadastrais, o sistema organiza status, responsáveis, documentos, pagamentos, custos e histórico de cada ordem de serviço."
+                  "text": "Sim. Além de centralizar os dados cadastrais, o sistema organiza status, responsáveis, documentos, pagamentos, custos e histórico de cada ordem de serviço. A implantação pode começar pela operação atual do escritório, sem exigir que tudo mude de uma vez."
                 }
               },
               {
                 "@type": "Question",
-                "name": "Consigo controlar clientes, veículos e documentos?",
+                "name": "Consigo importar os clientes que já tenho?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Sim. Cada cliente possui uma ficha com dados cadastrais, veículos, ordens de serviço, anexos, histórico e saldo em aberto conforme a permissão do usuário."
+                  "text": "A migração pode ser avaliada a partir da sua planilha atual. Antes da implantação, a equipe analisa formato, volume e qualidade dos dados para definir o melhor caminho e evitar duplicidades."
                 }
               },
               {
@@ -96,15 +150,39 @@
                 "name": "Funcionários podem ter acessos diferentes?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Sim. O sistema separa perfis de funcionário, financeiro e administrador, protegendo informações sensíveis como custos, lucro e configurações."
+                  "text": "Sim. O sistema possui perfis de funcionário, financeiro e administrador. Valores de venda, custos, lucro, usuários e configurações podem ficar restritos conforme a responsabilidade de cada pessoa."
                 }
               },
               {
                 "@type": "Question",
-                "name": "O sistema integra com órgãos de trânsito?",
+                "name": "Os documentos dos clientes ficam protegidos?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "O DespachoCerto possui base técnica para integrações autorizadas. A disponibilidade depende do credenciamento, contrato e regras de cada órgão ou fornecedor oficial."
+                  "text": "Os anexos são vinculados à empresa e armazenados de forma privada. O acesso depende de autenticação e permissão, com uso de links temporários para visualização e download quando aplicável."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "O sistema integra com DETRAN, Prodesp ou outros órgãos?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "O DespachoCerto possui base técnica para integrações autorizadas, inclusive configuração isolada por empresa. A ativação depende de credenciamento, contrato, certificados, custos e regras do órgão ou fornecedor responsável."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Funciona no celular?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "O acesso é feito pela web e a interface é responsiva para consultas e tarefas em diferentes tamanhos de tela. Fluxos extensos de cadastro e conferência continuam mais confortáveis em computador."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Como funciona o valor do sistema?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "A proposta considera o porte do escritório, número de usuários, necessidade de migração e volume de armazenamento. Na demonstração, a equipe entende sua operação e apresenta a configuração adequada."
                 }
               }
             ]
