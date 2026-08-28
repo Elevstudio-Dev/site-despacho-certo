@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://despachocerto.com.br/sitemap.xml
+Sitemap: https://despachocerto.com.br/blog/sitemap.xml
