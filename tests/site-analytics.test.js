@@ -6,6 +6,7 @@ const test = require('node:test');
 const projectRoot = path.resolve(__dirname, '..');
 const htmlPath = path.join(projectRoot, 'index.html');
 const analyticsPath = path.join(projectRoot, 'site-analytics.js');
+const iconsPath = path.join(projectRoot, 'lucide.min.js');
 
 function loadAnalyticsFactory() {
   if (!fs.existsSync(analyticsPath)) return () => ({});
@@ -22,6 +23,11 @@ test('delegates GA4 loading to the consent manager', () => {
   assert.match(html, /<script src="site-preferences\.js"><\/script>/);
   assert.doesNotMatch(html, /(?:id|class)="[^"]*cookie-banner/i);
   assert.match(html, /<script src="site-analytics\.js"><\/script>/);
+});
+
+test('serves the icon bundle without requesting a missing source map', () => {
+  const icons = fs.readFileSync(iconsPath, 'utf8');
+  assert.doesNotMatch(icons, /sourceMappingURL=/);
 });
 
 test('labels every demonstration link for CTA measurement', () => {
