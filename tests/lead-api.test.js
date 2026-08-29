@@ -25,6 +25,7 @@ function createResponse() {
 function validLead(overrides = {}) {
   return {
     name: "Maria Souza",
+    email: "maria@despachante.com.br",
     phone: "(11) 99999-1234",
     company: "Despachante Central",
     volume: "De 51 a 150 OS",
@@ -78,6 +79,23 @@ test("valida os campos obrigatórios antes de enviar", async () => {
   assert.equal(fetchCalls, 0);
 });
 
+test("recusa endereço de e-mail inválido", async () => {
+  let fetchCalls = 0;
+  const handler = createLeadHandler({
+    env: { RESEND_API_KEY: "re_test" },
+    fetchImpl: async () => {
+      fetchCalls += 1;
+      return { ok: true };
+    },
+  });
+  const response = createResponse();
+
+  await handler({ method: "POST", body: validLead({ email: "email-invalido" }) }, response);
+
+  assert.equal(response.statusCode, 400);
+  assert.equal(fetchCalls, 0);
+});
+
 test("descarta silenciosamente submissões preenchidas por robôs", async () => {
   let fetchCalls = 0;
   const handler = createLeadHandler({
@@ -127,17 +145,29 @@ test("envia o lead ao Resend com conteúdo escapado", async () => {
   assert.equal(response.statusCode, 200);
   assert.equal(response.payload.ok, true);
   assert.equal(requests.length, 1);
-  assert.equal(requests[0].url, "https://api.resend.com/emails");
+  assert.equal(requests[0].url, "https://api.resend.com/emails/batch");
   assert.equal(requests[0].options.method, "POST");
   assert.equal(requests[0].options.headers.Authorization, "Bearer re_test");
+  assert.match(requests[0].options.headers["Idempotency-Key"], /^lead-demo\//);
 
-  const email = JSON.parse(requests[0].options.body);
-  assert.deepEqual(email.to, ["contato@elevstudio.com.br"]);
-  assert.equal(email.from, "DespachoCerto <site@despachocerto.com.br>");
-  assert.match(email.subject, /Nova demonstração DespachoCerto/);
-  assert.doesNotMatch(email.html, /<script>/i);
-  assert.match(email.html, /&lt;script&gt;/i);
-  assert.match(email.html, /&lt;b&gt;planilhas&lt;\/b&gt;/i);
+  const emails = JSON.parse(requests[0].options.body);
+  assert.equal(emails.length, 2);
+
+  const internalEmail = emails[0];
+  assert.deepEqual(internalEmail.to, ["contato@elevstudio.com.br"]);
+  assert.equal(internalEmail.from, "DespachoCerto <site@despachocerto.com.br>");
+  assert.match(internalEmail.subject, /Nova demonstração DespachoCerto/);
+  assert.match(internalEmail.text, /maria@despachante\.com\.br/);
+  assert.doesNotMatch(internalEmail.html, /<script>/i);
+  assert.match(internalEmail.html, /&lt;script&gt;/i);
+  assert.match(internalEmail.html, /&lt;b&gt;planilhas&lt;\/b&gt;/i);
+
+  const confirmationEmail = emails[1];
+  assert.deepEqual(confirmationEmail.to, ["maria@despachante.com.br"]);
+  assert.match(confirmationEmail.subject, /Recebemos seu pedido/);
+  assert.match(confirmationEmail.html, /Olá, Maria Souza/);
+  assert.match(confirmationEmail.html, /despachocerto-logo-horizontal-fundo-azul\.png/);
+  assert.equal(confirmationEmail.reply_to, "contato@elevstudio.com.br");
 });
 
 test("retorna erro temporário quando o Resend falha", async () => {

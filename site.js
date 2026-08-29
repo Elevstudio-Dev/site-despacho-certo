@@ -301,13 +301,15 @@ leadForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const formData = new FormData(leadForm);
   const name = String(formData.get("name") || "");
+  const email = String(formData.get("email") || "");
   const phone = String(formData.get("phone") || "");
   const company = String(formData.get("company") || "");
   const volume = String(formData.get("volume") || "");
   const challenge = String(formData.get("challenge") || "");
   const website = String(formData.get("website") || "");
   const subject = encodeURIComponent(`Demonstração DespachoCerto · ${company}`);
-  const body = encodeURIComponent(`Olá, equipe DespachoCerto!\n\nQuero agendar uma demonstração.\n\nNome: ${name}\nWhatsApp: ${phone}\nEscritório: ${company}\nVolume mensal: ${volume}\nPrincipal dificuldade: ${challenge || "Não informado"}`);
+  const body = encodeURIComponent(`Olá, equipe DespachoCerto!\n\nQuero agendar uma demonstração.\n\nNome: ${name}\nE-mail: ${email}\nWhatsApp: ${phone}\nEscritório: ${company}\nVolume mensal: ${volume}\nPrincipal dificuldade: ${challenge || "Não informado"}`);
+  const submissionId = window.crypto?.randomUUID?.() || `lead_${Date.now()}_${Math.random().toString(36).slice(2)}`;
 
   formFallback.href = `mailto:contato@elevstudio.com.br?subject=${subject}&body=${body}`;
   formFallback.hidden = true;
@@ -322,7 +324,7 @@ leadForm.addEventListener("submit", async (event) => {
     const response = await fetch(leadForm.action, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, phone, company, volume, challenge, website }),
+      body: JSON.stringify({ name, email, phone, company, volume, challenge, website, submissionId }),
     });
     const result = await response.json().catch(() => null);
 
@@ -334,6 +336,7 @@ leadForm.addEventListener("submit", async (event) => {
     formFeedback.classList.add("visible");
     siteAnalytics?.trackLead();
     leadForm.reset();
+    window.location.assign("/obrigado");
   } catch (error) {
     formFeedback.textContent = error instanceof Error
       ? error.message
