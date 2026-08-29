@@ -84,6 +84,13 @@ svg {
   display: block;
 }
 
+i[data-lucide] {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  flex: 0 0 auto;
+}
+
 .skip-link {
   position: fixed;
   left: 16px;

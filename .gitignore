@@ -2,6 +2,7 @@
 .worktrees/
 .playwright-cli/
 artifacts/
+test-results/
 .DS_Store
 Thumbs.db
 

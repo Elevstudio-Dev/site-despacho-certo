@@ -1,5 +1,79 @@
 const iconOptions = { "stroke-width": 1.8 };
-if (window.lucide) window.lucide.createIcons({ attrs: iconOptions });
+
+function getIconComponentName(name) {
+  return name.replace(/(^|[-_\s])(\w)/g, (_match, _separator, letter) => letter.toUpperCase());
+}
+
+function createIconNode(definition) {
+  const [tag, attributes = {}, children = []] = definition;
+  const node = document.createElementNS("http://www.w3.org/2000/svg", tag);
+  Object.entries(attributes).forEach(([name, value]) => node.setAttribute(name, String(value)));
+  children.forEach((child) => node.appendChild(createIconNode(child)));
+  return node;
+}
+
+function hydrateIcon(element) {
+  if (!window.lucide || !element?.isConnected) return;
+  const name = element.getAttribute("data-lucide");
+  const definition = window.lucide.icons?.[getIconComponentName(name)];
+  if (!definition) return;
+
+  const originalAttributes = Object.fromEntries(
+    [...element.attributes].map((attribute) => [attribute.name, attribute.value]),
+  );
+  const size = originalAttributes.size;
+  delete originalAttributes.size;
+  const [tag, attributes, children] = definition;
+  const svg = createIconNode([
+    tag,
+    {
+      ...attributes,
+      ...iconOptions,
+      ...originalAttributes,
+      ...(size ? { width: size, height: size } : {}),
+      class: ["lucide", `lucide-${name}`, originalAttributes.class].filter(Boolean).join(" "),
+    },
+    children,
+  ]);
+  element.replaceWith(svg);
+}
+
+function getIcons(root) {
+  const icons = root?.matches?.("[data-lucide]") ? [root] : [];
+  return root?.querySelectorAll ? [...icons, ...root.querySelectorAll("[data-lucide]")] : icons;
+}
+
+function hydrateIcons(root) {
+  getIcons(root).forEach(hydrateIcon);
+}
+
+const iconObserver = "IntersectionObserver" in window
+  ? new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        iconObserver.unobserve(entry.target);
+        hydrateIcon(entry.target);
+      });
+    },
+    { rootMargin: "300px 0px" },
+  )
+  : null;
+
+function observeDeferredIcons(root) {
+  getIcons(root).forEach((icon) => {
+    if (iconObserver) iconObserver.observe(icon);
+    else hydrateIcon(icon);
+  });
+}
+
+[
+  document.querySelector(".site-header"),
+  document.querySelector(".hero"),
+  document.getElementById("privacyChoicePanel"),
+  document.getElementById("privacyPreferencesDialog"),
+].filter(Boolean).forEach(hydrateIcons);
+observeDeferredIcons(document);
 
 const siteAnalytics = window.DespachoCertoAnalytics;
 document.querySelectorAll("[data-cta]").forEach((link) => {
@@ -19,7 +93,7 @@ function closeMenu() {
   menuButton.setAttribute("aria-label", "Abrir menu");
   document.body.classList.remove("menu-open");
   menuButton.innerHTML = '<i data-lucide="menu" aria-hidden="true"></i>';
-  if (window.lucide) window.lucide.createIcons({ attrs: iconOptions });
+  hydrateIcons(menuButton);
 }
 
 menuButton.addEventListener("click", () => {
@@ -33,7 +107,8 @@ menuButton.addEventListener("click", () => {
   menuButton.innerHTML = willOpen
     ? '<i data-lucide="x" aria-hidden="true"></i>'
     : '<i data-lucide="menu" aria-hidden="true"></i>';
-  if (window.lucide) window.lucide.createIcons({ attrs: iconOptions });
+  hydrateIcons(menuButton);
+  if (willOpen) hydrateIcons(mobileMenu);
 });
 
 mobileMenu.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeMenu));
@@ -82,6 +157,7 @@ function activateTour(name, focus = false) {
     const active = panel.dataset.panel === name;
     panel.classList.toggle("active", active);
     panel.hidden = !active;
+    if (active) hydrateIcons(panel);
   });
 }
 
@@ -194,7 +270,7 @@ function activateRole(name, focus = false) {
     const queue = item[3] ? `<div class="role-queue">${[0, 1, 2, 3, 4].map((bar) => `<i class="${bar < item[3] ? "active" : ""}"></i>`).join("")}</div>` : "";
     return `<div class="role-insight ${index === 2 ? "wide" : ""}"><span>${item[0]}</span><strong>${item[1]}</strong><p>${item[2]}</p>${queue}</div>`;
   }).join("");
-  if (window.lucide) window.lucide.createIcons({ attrs: iconOptions });
+  hydrateIcons(benefitPanel);
 }
 
 roleButtons.forEach((button, index) => {
