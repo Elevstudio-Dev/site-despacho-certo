@@ -7,12 +7,22 @@ const test = require('node:test');
 const projectRoot = path.resolve(__dirname, '..');
 const index = fs.readFileSync(path.join(projectRoot, 'index.html'), 'utf8');
 const vercel = JSON.parse(fs.readFileSync(path.join(projectRoot, 'vercel.json'), 'utf8'));
+const secureSiteSource = '/((?!blog(?:/.*)?|_next(?:/.*)?).*)';
 
 function responseHeaders() {
-  const globalRule = vercel.headers.find((rule) => rule.source === '/(.*)');
-  assert.ok(globalRule, 'Expected a global header rule');
-  return Object.fromEntries(globalRule.headers.map(({ key, value }) => [key, value]));
+  const siteRule = vercel.headers.find((rule) => rule.source === secureSiteSource);
+  assert.ok(siteRule, 'Expected security headers to exclude the proxied blog');
+  return Object.fromEntries(siteRule.headers.map(({ key, value }) => [key, value]));
 }
+
+test('keeps the blog proxy outside the static site CSP', () => {
+  const rewrites = Object.fromEntries(vercel.rewrites.map(({ source, destination }) => [source, destination]));
+
+  assert.equal(rewrites['/blog'], 'https://app.despachocerto.com.br/blog');
+  assert.equal(rewrites['/blog/:path*'], 'https://app.despachocerto.com.br/blog/:path*');
+  assert.equal(rewrites['/_next/:path*'], 'https://app.despachocerto.com.br/_next/:path*');
+  assert.equal(vercel.headers.some((rule) => rule.source === '/(.*)'), false);
+});
 
 test('allows only the site and consented GA4 resources', () => {
   const headers = responseHeaders();

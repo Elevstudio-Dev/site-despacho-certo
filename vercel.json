@@ -1,9 +1,23 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/blog",
+      "destination": "https://app.despachocerto.com.br/blog"
+    },
+    {
+      "source": "/blog/:path*",
+      "destination": "https://app.despachocerto.com.br/blog/:path*"
+    },
+    {
+      "source": "/_next/:path*",
+      "destination": "https://app.despachocerto.com.br/_next/:path*"
+    }
+  ],
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "/((?!blog(?:/.*)?|_next(?:/.*)?).*)",
       "headers": [
         {
           "key": "X-Content-Type-Options",
@@ -19,7 +33,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' https://www.googletagmanager.com 'sha256-HgSzpg5xb6W4QlRbPEZHv8h7hNf83n95W1kgT80iQ14='; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; style-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+          "value": "default-src 'self'; script-src 'self' https://www.googletagmanager.com 'sha256-WDD0/BDRZmZrhDMnJm+fHfAyxeRYsc7CInIETUg/T4Q='; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; style-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
         },
         {
           "key": "X-Frame-Options",
