@@ -6,7 +6,7 @@ const test = require('node:test');
 const projectRoot = path.resolve(__dirname, '..');
 const htmlPath = path.join(projectRoot, 'index.html');
 const analyticsPath = path.join(projectRoot, 'site-analytics.js');
-const iconsPath = path.join(projectRoot, 'lucide.min.js');
+const iconsPath = path.join(projectRoot, 'site-icon-data.js');
 
 function loadAnalyticsFactory() {
   if (!fs.existsSync(analyticsPath)) return () => ({});

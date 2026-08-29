@@ -17,7 +17,7 @@ veiculares.
 - `site-preferences.js`: consentimento v3, centro de preferências e carregamento autorizado do GA4.
 - `site-analytics.js`: eventos de conversão condicionados ao consentimento.
 - `inter-latin.woff2`: fonte Inter hospedada localmente, sem chamada externa.
-- `lucide.min.js`: biblioteca de ícones servida pelo próprio site.
+- `site-icon-data.js`: definições Lucide usadas pelo site, reduzidas ao conjunto necessário.
 - `api/lead.js`: função server-side que envia pedidos de demonstração pelo Resend.
 - `tests/lead-api.test.js`: testes de validação e envio da API de leads.
 - `despachocerto-og.png`: imagem para compartilhamento em redes sociais.

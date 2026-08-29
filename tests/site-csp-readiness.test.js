@@ -21,7 +21,7 @@ test('serves home behavior from a same-origin script', () => {
   const index = fs.readFileSync(indexPath, 'utf8');
 
   assert.equal(fs.existsSync(scriptPath), true);
-  for (const source of ['lucide.min.js', 'site-preferences.js', 'site-analytics.js', 'site.js']) {
+  for (const source of ['site-icon-data.js', 'site-preferences.js', 'site-analytics.js', 'site.js']) {
     const escapedSource = source.replaceAll('.', '\\.');
     assert.match(index, new RegExp(`<script src="${escapedSource}" defer><\\/script>`));
   }
