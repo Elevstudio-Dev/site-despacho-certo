@@ -37,12 +37,14 @@ test('allows only the site and consented GA4 resources', () => {
   assert.doesNotMatch(csp, /unsafe-inline|unsafe-eval/);
   assert.match(csp, /default-src 'self'/);
   assert.match(csp, /script-src 'self' https:\/\/www\.googletagmanager\.com/);
+  assert.match(csp, /script-src[^;]+https:\/\/challenges\.cloudflare\.com/);
   assert.match(csp, /connect-src 'self' https:\/\/\*\.google-analytics\.com https:\/\/\*\.analytics\.google\.com https:\/\/\*\.googletagmanager\.com/);
   assert.match(csp, /style-src 'self'/);
   assert.match(csp, /font-src 'self'/);
   assert.match(csp, /object-src 'none'/);
   assert.match(csp, /base-uri 'self'/);
   assert.match(csp, /form-action 'self'/);
+  assert.match(csp, /frame-src https:\/\/challenges\.cloudflare\.com/);
   assert.match(csp, /frame-ancestors 'none'/);
   assert.match(csp, /upgrade-insecure-requests/);
 });

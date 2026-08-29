@@ -24,3 +24,11 @@ test('redirects a successful lead to a dedicated thank-you page', () => {
   assert.match(thankYou, /Recebemos seu pedido de demonstração/);
   assert.match(thankYou, /href="\/sistema-para-despachante"/);
 });
+
+test('protects the lead form without falling back to an email application', () => {
+  assert.match(index, /id="turnstileWidget"/);
+  assert.match(siteScript, /\/api\/public-config/);
+  assert.match(siteScript, /cf-turnstile-response/);
+  assert.doesNotMatch(index, /id="formFallback"/);
+  assert.doesNotMatch(siteScript, /formFallback|mailto:/);
+});

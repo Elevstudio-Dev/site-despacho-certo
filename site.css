@@ -2562,20 +2562,23 @@ i[data-lucide] {
   white-space: nowrap;
 }
 
-.form-fallback {
-  display: inline-flex;
+.turnstile-field {
   grid-column: 1 / -1;
-  align-items: center;
-  width: fit-content;
-  min-height: 44px;
-  color: var(--blue);
-  font-size: 11px;
-  font-weight: 750;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  min-width: 0;
 }
 
-.form-fallback[hidden] {
+.turnstile-field iframe {
+  max-width: 100%;
+}
+
+.turnstile-status {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.turnstile-status:empty {
   display: none;
 }
 
@@ -3588,7 +3591,8 @@ i[data-lucide] {
   .form-field.full,
   .lead-form .button,
   .form-note,
-  .form-feedback {
+  .form-feedback,
+  .turnstile-field {
     grid-column: auto;
   }
 

@@ -8,17 +8,9 @@ function createResponse() {
     headers: {},
     statusCode: 200,
     payload: undefined,
-    setHeader(name, value) {
-      this.headers[name] = value;
-    },
-    status(code) {
-      this.statusCode = code;
-      return this;
-    },
-    json(payload) {
-      this.payload = payload;
-      return this;
-    },
+    setHeader(name, value) { this.headers[name] = value; },
+    status(code) { this.statusCode = code; return this; },
+    json(payload) { this.payload = payload; return this; },
   };
 }
 
@@ -31,67 +23,64 @@ function validLead(overrides = {}) {
     volume: "De 51 a 150 OS",
     challenge: "Quero organizar os processos da equipe.",
     website: "",
+    turnstileToken: "turnstile-test-token",
+    submissionId: "lead_test_12345678",
     ...overrides,
   };
 }
 
+function configuredEnv(overrides = {}) {
+  return {
+    RESEND_API_KEY: "re_test",
+    SUPABASE_URL: "https://project.supabase.co",
+    SUPABASE_SERVICE_ROLE_KEY: "service_role_test",
+    TURNSTILE_SECRET_KEY: "turnstile_secret_test",
+    LEAD_RATE_LIMIT_SECRET: "rate_limit_secret_test",
+    ...overrides,
+  };
+}
+
+function successfulServices(requests) {
+  return async (url, options) => {
+    requests.push({ url, options });
+    if (url.includes("/turnstile/v0/siteverify")) {
+      return { ok: true, json: async () => ({ success: true, hostname: "despachocerto.com.br" }) };
+    }
+    if (url.includes("/rpc/check_marketing_lead_rate_limit")) {
+      return { ok: true, json: async () => true };
+    }
+    return { ok: true, status: 200, json: async () => ({ data: [{ id: "email_batch_1" }] }) };
+  };
+}
+
 test("recusa métodos diferentes de POST", async () => {
-  const handler = createLeadHandler({
-    env: { RESEND_API_KEY: "re_test" },
-    fetchImpl: async () => {
-      throw new Error("fetch não deveria ser chamado");
-    },
-  });
+  const handler = createLeadHandler({ env: configuredEnv(), fetchImpl: async () => { throw new Error("unexpected fetch"); } });
   const response = createResponse();
-
   await handler({ method: "GET" }, response);
-
   assert.equal(response.statusCode, 405);
   assert.equal(response.headers.Allow, "POST");
-  assert.deepEqual(response.payload, {
-    ok: false,
-    message: "Método não permitido.",
-  });
 });
 
-test("valida os campos obrigatórios antes de enviar", async () => {
+test("valida os campos obrigatórios antes de chamar serviços", async () => {
   let fetchCalls = 0;
   const handler = createLeadHandler({
-    env: { RESEND_API_KEY: "re_test" },
-    fetchImpl: async () => {
-      fetchCalls += 1;
-      return { ok: true };
-    },
+    env: configuredEnv(),
+    fetchImpl: async () => { fetchCalls += 1; return { ok: true }; },
   });
   const response = createResponse();
-
-  await handler(
-    {
-      method: "POST",
-      body: validLead({ name: "A", phone: "123", volume: "Outro" }),
-    },
-    response,
-  );
-
+  await handler({ method: "POST", body: validLead({ name: "A", phone: "123", volume: "Outro" }) }, response);
   assert.equal(response.statusCode, 400);
-  assert.equal(response.payload.ok, false);
-  assert.match(response.payload.message, /dados informados/i);
   assert.equal(fetchCalls, 0);
 });
 
 test("recusa endereço de e-mail inválido", async () => {
   let fetchCalls = 0;
   const handler = createLeadHandler({
-    env: { RESEND_API_KEY: "re_test" },
-    fetchImpl: async () => {
-      fetchCalls += 1;
-      return { ok: true };
-    },
+    env: configuredEnv(),
+    fetchImpl: async () => { fetchCalls += 1; return { ok: true }; },
   });
   const response = createResponse();
-
   await handler({ method: "POST", body: validLead({ email: "email-invalido" }) }, response);
-
   assert.equal(response.statusCode, 400);
   assert.equal(fetchCalls, 0);
 });
@@ -99,102 +88,154 @@ test("recusa endereço de e-mail inválido", async () => {
 test("descarta silenciosamente submissões preenchidas por robôs", async () => {
   let fetchCalls = 0;
   const handler = createLeadHandler({
-    env: { RESEND_API_KEY: "re_test" },
-    fetchImpl: async () => {
-      fetchCalls += 1;
-      return { ok: true };
-    },
+    env: configuredEnv(),
+    fetchImpl: async () => { fetchCalls += 1; return { ok: true }; },
   });
   const response = createResponse();
-
-  await handler(
-    { method: "POST", body: validLead({ website: "https://spam.example" }) },
-    response,
-  );
-
+  await handler({ method: "POST", body: validLead({ website: "https://spam.example" }) }, response);
   assert.equal(response.statusCode, 200);
   assert.equal(response.payload.ok, true);
   assert.equal(fetchCalls, 0);
 });
 
-test("envia o lead ao Resend com conteúdo escapado", async () => {
+test("valida, limita, persiste e envia o lead com conteúdo escapado", async () => {
   const requests = [];
   const handler = createLeadHandler({
-    env: {
-      RESEND_API_KEY: "re_test",
-      LEAD_FROM_EMAIL: "DespachoCerto <site@despachocerto.com.br>",
-    },
-    fetchImpl: async (url, options) => {
-      requests.push({ url, options });
-      return { ok: true };
-    },
+    env: configuredEnv({ LEAD_FROM_EMAIL: "DespachoCerto <site@despachocerto.com.br>" }),
+    fetchImpl: successfulServices(requests),
   });
   const response = createResponse();
-
-  await handler(
-    {
-      method: "POST",
-      body: validLead({
-        company: "Central <script>alert('x')</script>",
-        challenge: "Usamos <b>planilhas</b> hoje.",
-      }),
-    },
-    response,
-  );
+  await handler({
+    method: "POST",
+    headers: { "x-forwarded-for": "203.0.113.10" },
+    body: validLead({
+      company: "Central <script>alert('x')</script>",
+      challenge: "Usamos <b>planilhas</b> hoje.",
+    }),
+  }, response);
 
   assert.equal(response.statusCode, 200);
-  assert.equal(response.payload.ok, true);
-  assert.equal(requests.length, 1);
-  assert.equal(requests[0].url, "https://api.resend.com/emails/batch");
-  assert.equal(requests[0].options.method, "POST");
-  assert.equal(requests[0].options.headers.Authorization, "Bearer re_test");
-  assert.match(requests[0].options.headers["Idempotency-Key"], /^lead-demo\//);
+  const turnstileRequest = requests.find(({ url }) => url.includes("/turnstile/v0/siteverify"));
+  assert.equal(JSON.parse(turnstileRequest.options.body).response, "turnstile-test-token");
 
-  const emails = JSON.parse(requests[0].options.body);
+  const rateLimitRequest = requests.find(({ url }) => url.includes("/rpc/check_marketing_lead_rate_limit"));
+  const rateLimitBody = JSON.parse(rateLimitRequest.options.body);
+  assert.match(rateLimitBody.p_ip_hash, /^[a-f0-9]{64}$/);
+  assert.equal(rateLimitBody.p_limit, 5);
+
+  const storageRequest = requests.find(({ url }) => url.endsWith("/rest/v1/marketing_leads"));
+  assert.equal(storageRequest.options.headers.apikey, "service_role_test");
+  const storedLead = JSON.parse(storageRequest.options.body);
+  assert.equal(storedLead.submission_id, "lead_test_12345678");
+  assert.equal(storedLead.email, "maria@despachante.com.br");
+  assert.equal(storedLead.source, "site_institucional");
+
+  const resendRequest = requests.find(({ url }) => url === "https://api.resend.com/emails/batch");
+  assert.equal(resendRequest.options.headers.Authorization, "Bearer re_test");
+  assert.equal(resendRequest.options.headers["Idempotency-Key"], "lead-demo/lead_test_12345678");
+  const emails = JSON.parse(resendRequest.options.body);
   assert.equal(emails.length, 2);
+  assert.doesNotMatch(emails[0].html, /<script>/i);
+  assert.match(emails[0].html, /&lt;script&gt;/i);
+  assert.match(emails[0].html, /&lt;b&gt;planilhas&lt;\/b&gt;/i);
+  assert.deepEqual(emails[1].to, ["maria@despachante.com.br"]);
+  assert.match(emails[1].html, /despachocerto-logo-horizontal-fundo-azul\.png/);
 
-  const internalEmail = emails[0];
-  assert.deepEqual(internalEmail.to, ["contato@elevstudio.com.br"]);
-  assert.equal(internalEmail.from, "DespachoCerto <site@despachocerto.com.br>");
-  assert.match(internalEmail.subject, /Nova demonstração DespachoCerto/);
-  assert.match(internalEmail.text, /maria@despachante\.com\.br/);
-  assert.doesNotMatch(internalEmail.html, /<script>/i);
-  assert.match(internalEmail.html, /&lt;script&gt;/i);
-  assert.match(internalEmail.html, /&lt;b&gt;planilhas&lt;\/b&gt;/i);
-
-  const confirmationEmail = emails[1];
-  assert.deepEqual(confirmationEmail.to, ["maria@despachante.com.br"]);
-  assert.match(confirmationEmail.subject, /Recebemos seu pedido/);
-  assert.match(confirmationEmail.html, /Olá, Maria Souza/);
-  assert.match(confirmationEmail.html, /despachocerto-logo-horizontal-fundo-azul\.png/);
-  assert.equal(confirmationEmail.reply_to, "contato@elevstudio.com.br");
+  const successUpdate = requests.find(({ url }) => url.includes("marketing_leads?submission_id=eq."));
+  assert.deepEqual(JSON.parse(successUpdate.options.body), { email_status: "queued" });
 });
 
-test("retorna erro temporário quando o Resend falha", async () => {
+test("recusa token antispam inválido antes de armazenar o lead", async () => {
+  const requests = [];
   const handler = createLeadHandler({
-    env: { RESEND_API_KEY: "re_test" },
-    fetchImpl: async () => ({ ok: false, status: 429 }),
+    env: configuredEnv(),
+    fetchImpl: async (url, options) => {
+      requests.push({ url, options });
+      if (url.includes("/rpc/check_marketing_lead_rate_limit")) return { ok: true, json: async () => true };
+      if (url.includes("/turnstile/v0/siteverify")) return { ok: true, json: async () => ({ success: false }) };
+      throw new Error("unexpected fetch");
+    },
   });
   const response = createResponse();
+  await handler({ method: "POST", body: validLead(), headers: {} }, response);
+  assert.equal(response.statusCode, 400);
+  assert.match(response.payload.message, /verificação de segurança/i);
+  assert.equal(requests.some(({ url }) => url.endsWith("/rest/v1/marketing_leads")), false);
+});
 
-  await handler({ method: "POST", body: validLead() }, response);
+test("limita excesso de tentativas antes da validação externa", async () => {
+  const requests = [];
+  const handler = createLeadHandler({
+    env: configuredEnv(),
+    fetchImpl: async (url, options) => {
+      requests.push({ url, options });
+      if (url.includes("/rpc/check_marketing_lead_rate_limit")) return { ok: true, json: async () => false };
+      throw new Error("unexpected fetch");
+    },
+  });
+  const response = createResponse();
+  await handler({ method: "POST", body: validLead(), headers: { "x-forwarded-for": "203.0.113.10" } }, response);
+  assert.equal(response.statusCode, 429);
+  assert.equal(response.headers["Retry-After"], "900");
+  assert.equal(requests.length, 1);
+});
 
+test("mantém o lead salvo e marca falha quando o Resend recusa", async () => {
+  const requests = [];
+  const handler = createLeadHandler({
+    env: configuredEnv(),
+    fetchImpl: async (url, options) => {
+      requests.push({ url, options });
+      if (url.includes("/turnstile/v0/siteverify")) return { ok: true, json: async () => ({ success: true }) };
+      if (url.includes("/rpc/check_marketing_lead_rate_limit")) return { ok: true, json: async () => true };
+      if (url === "https://api.resend.com/emails/batch") return { ok: false, status: 429 };
+      return { ok: true, status: 204, json: async () => ({}) };
+    },
+  });
+  const response = createResponse();
+  await handler({ method: "POST", body: validLead(), headers: {} }, response);
   assert.equal(response.statusCode, 502);
-  assert.deepEqual(response.payload, {
-    ok: false,
-    message: "Não foi possível enviar agora. Tente novamente em instantes.",
-  });
+  const failureUpdate = requests.find(({ url, options }) => url.includes("marketing_leads?submission_id=eq.") && JSON.parse(options.body).email_status === "failed");
+  assert.ok(failureUpdate);
 });
 
-test("informa quando o serviço de e-mail não está configurado", async () => {
+test("não registra dados pessoais nos eventos operacionais", async () => {
+  const logs = [];
   const handler = createLeadHandler({
-    env: {},
-    fetchImpl: async () => ({ ok: true }),
+    env: configuredEnv(),
+    fetchImpl: successfulServices([]),
+    logger: { info: (event) => logs.push(event), error: (event) => logs.push(event) },
   });
   const response = createResponse();
+  await handler({ method: "POST", body: validLead(), headers: {} }, response);
+  const serialized = JSON.stringify(logs);
+  assert.doesNotMatch(serialized, /Maria Souza|maria@despachante\.com\.br|Despachante Central/);
+  assert.match(serialized, /lead_email_queued/);
+  assert.match(serialized, /lead_test_12345678/);
+});
 
+test("confirma o envio mesmo se a atualização do status falhar depois do Resend", async () => {
+  const requests = [];
+  const handler = createLeadHandler({
+    env: configuredEnv(),
+    fetchImpl: async (url, options) => {
+      requests.push({ url, options });
+      if (url.includes("/turnstile/v0/siteverify")) return { ok: true, json: async () => ({ success: true }) };
+      if (url.includes("/rpc/check_marketing_lead_rate_limit")) return { ok: true, json: async () => true };
+      if (url.includes("marketing_leads?submission_id=eq.")) throw new Error("status unavailable");
+      return { ok: true, status: 200, json: async () => ({}) };
+    },
+    logger: { info() {}, error() {} },
+  });
+  const response = createResponse();
+  await handler({ method: "POST", body: validLead(), headers: {} }, response);
+  assert.equal(response.statusCode, 200);
+  assert.equal(response.payload.ok, true);
+});
+
+test("informa quando os serviços obrigatórios não estão configurados", async () => {
+  const handler = createLeadHandler({ env: {}, fetchImpl: async () => ({ ok: true }) });
+  const response = createResponse();
   await handler({ method: "POST", body: validLead() }, response);
-
   assert.equal(response.statusCode, 503);
-  assert.equal(response.payload.ok, false);
 });

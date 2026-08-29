@@ -819,8 +819,11 @@
               <label class="form-field">Volume mensal de OS<select name="volume" required><option value="">Selecione</option><option>Até 50 OS</option><option>De 51 a 150 OS</option><option>De 151 a 300 OS</option><option>Mais de 300 OS</option></select></label>
               <label class="form-field full">Principal dificuldade hoje<textarea name="challenge" placeholder="Ex.: documentos, status, cobrança, financeiro ou equipe"></textarea></label>
               <div class="form-honeypot" aria-hidden="true"><label>Não preencha este campo<input name="website" type="text" autocomplete="off" tabindex="-1" /></label></div>
+              <div class="turnstile-field">
+                <div id="turnstileWidget"></div>
+                <p class="turnstile-status" id="turnstileStatus" aria-live="polite">Preparando verificação de segurança...</p>
+              </div>
               <p class="form-feedback" id="formFeedback" role="status" aria-live="polite" tabindex="-1"></p>
-              <a class="form-fallback" id="formFallback" href="mailto:contato@elevstudio.com.br" hidden>Enviar a solicitação pelo aplicativo de e-mail</a>
               <button class="button button-primary" id="leadSubmit" type="submit"><span id="leadSubmitLabel">Quero conhecer o DespachoCerto</span> <i data-lucide="arrow-right" size="17" aria-hidden="true"></i></button>
               <p class="form-note">Ao enviar, você concorda em receber contato da equipe DespachoCerto sobre a demonstração solicitada. Consulte nossa <a href="/privacidade">Política de Privacidade</a>.</p>
             </div>

@@ -1,6 +1,9 @@
 const crypto = require("node:crypto");
 
 const RESEND_ENDPOINT = "https://api.resend.com/emails/batch";
+const TURNSTILE_VERIFY_ENDPOINT = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+const RATE_LIMIT_WINDOW_SECONDS = 900;
+const RATE_LIMIT_MAX_ATTEMPTS = 5;
 const DEFAULT_TO_EMAIL = "contato@elevstudio.com.br";
 const DEFAULT_FROM_EMAIL = "DespachoCerto <contato@elevstudio.com.br>";
 const DEFAULT_REPLY_TO_EMAIL = "contato@elevstudio.com.br";
@@ -51,6 +54,7 @@ function validateLead(body) {
     challenge: normalizeText(body.challenge, 1000),
     website: normalizeText(body.website, 200),
     submissionId: normalizeText(body.submissionId, 80),
+    turnstileToken: normalizeText(body.turnstileToken || body["cf-turnstile-response"], 2048),
   };
   const phoneDigits = lead.phone.replace(/\D/g, "");
   const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(lead.email);
@@ -154,9 +158,53 @@ function buildEmails(lead, env) {
   return [buildInternalEmail(lead, env), buildConfirmationEmail(lead, env)];
 }
 
+function getHeader(request, name) {
+  const value = request?.headers?.[name] ?? request?.headers?.[name.toLowerCase()];
+  return Array.isArray(value) ? value[0] : normalizeText(value, 500);
+}
+
+function getClientIp(request) {
+  const forwarded = getHeader(request, "x-forwarded-for");
+  return forwarded.split(",")[0]?.trim() || getHeader(request, "x-real-ip") || "unknown";
+}
+
+function createIpHash(request, secret) {
+  return crypto.createHmac("sha256", secret).update(getClientIp(request)).digest("hex");
+}
+
+function supabaseRequest(env, path, options = {}) {
+  const baseUrl = env.SUPABASE_URL.replace(/\/$/, "");
+  return {
+    url: `${baseUrl}/rest/v1/${path}`,
+    options: {
+      ...options,
+      headers: {
+        apikey: env.SUPABASE_SERVICE_ROLE_KEY,
+        Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    },
+  };
+}
+
+async function parseJson(response, fallback = null) {
+  try {
+    return await response.json();
+  } catch {
+    return fallback;
+  }
+}
+
+function writeLog(logger, level, event, details) {
+  const method = typeof logger?.[level] === "function" ? logger[level] : logger?.log;
+  method?.call(logger, { event, ...details });
+}
+
 function createLeadHandler({
   env = process.env,
   fetchImpl = globalThis.fetch,
+  logger = console,
 } = {}) {
   return async function leadHandler(request, response) {
     if (request.method !== "POST") {
@@ -184,17 +232,121 @@ function createLeadHandler({
       });
     }
 
-    if (!env.RESEND_API_KEY || typeof fetchImpl !== "function") {
+    const requiredConfiguration = [
+      env.RESEND_API_KEY,
+      env.SUPABASE_URL,
+      env.SUPABASE_SERVICE_ROLE_KEY,
+      env.TURNSTILE_SECRET_KEY,
+      env.LEAD_RATE_LIMIT_SECRET,
+    ];
+    if (requiredConfiguration.some((value) => !value) || typeof fetchImpl !== "function") {
       return response.status(503).json({
         ok: false,
-        message: "O envio está temporariamente indisponível.",
+        message: "O formulário está temporariamente indisponível.",
       });
     }
 
+    const submissionId = /^[a-zA-Z0-9_-]{8,80}$/.test(validation.lead.submissionId)
+      ? validation.lead.submissionId
+      : crypto.randomUUID();
+    const startedAt = Date.now();
+    const log = (level, event, details = {}) => writeLog(logger, level, event, {
+      submissionId,
+      durationMs: Date.now() - startedAt,
+      ...details,
+    });
+
     try {
-      const submissionId = /^[a-zA-Z0-9_-]{8,80}$/.test(validation.lead.submissionId)
-        ? validation.lead.submissionId
-        : crypto.randomUUID();
+      log("info", "lead_request_received");
+
+      const rateLimitCall = supabaseRequest(env, "rpc/check_marketing_lead_rate_limit", {
+        method: "POST",
+        body: JSON.stringify({
+          p_ip_hash: createIpHash(request, env.LEAD_RATE_LIMIT_SECRET),
+          p_limit: RATE_LIMIT_MAX_ATTEMPTS,
+          p_window_seconds: RATE_LIMIT_WINDOW_SECONDS,
+        }),
+      });
+      const rateLimitResponse = await fetchImpl(rateLimitCall.url, rateLimitCall.options);
+      const allowed = await parseJson(rateLimitResponse, false);
+      if (!rateLimitResponse.ok) {
+        log("error", "lead_dependency_failed", { stage: "rate_limit", status: rateLimitResponse.status });
+        return response.status(503).json({ ok: false, message: "O formulário está temporariamente indisponível." });
+      }
+      if (allowed !== true) {
+        response.setHeader("Retry-After", String(RATE_LIMIT_WINDOW_SECONDS));
+        log("info", "lead_rate_limited");
+        return response.status(429).json({
+          ok: false,
+          message: "Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente novamente.",
+        });
+      }
+
+      if (!validation.lead.turnstileToken) {
+        return response.status(400).json({
+          ok: false,
+          message: "Conclua a verificação de segurança e tente novamente.",
+        });
+      }
+      const turnstileResponse = await fetchImpl(TURNSTILE_VERIFY_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          secret: env.TURNSTILE_SECRET_KEY,
+          response: validation.lead.turnstileToken,
+          idempotency_key: submissionId,
+        }),
+      });
+      const turnstileResult = await parseJson(turnstileResponse, { success: false });
+      if (!turnstileResponse.ok || turnstileResult?.success !== true) {
+        log("info", "lead_turnstile_rejected", { status: turnstileResponse.status });
+        return response.status(400).json({
+          ok: false,
+          message: "Não foi possível concluir a verificação de segurança. Tente novamente.",
+        });
+      }
+
+      const storageCall = supabaseRequest(env, "marketing_leads", {
+        method: "POST",
+        headers: { Prefer: "resolution=ignore-duplicates,return=minimal" },
+        body: JSON.stringify({
+          submission_id: submissionId,
+          name: validation.lead.name,
+          email: validation.lead.email,
+          phone: validation.lead.phone,
+          company: validation.lead.company,
+          volume: validation.lead.volume,
+          challenge: validation.lead.challenge || null,
+          source: "site_institucional",
+        }),
+      });
+      const storageResponse = await fetchImpl(storageCall.url, storageCall.options);
+      if (!storageResponse.ok) {
+        log("error", "lead_dependency_failed", { stage: "storage", status: storageResponse.status });
+        return response.status(503).json({ ok: false, message: "O formulário está temporariamente indisponível." });
+      }
+      log("info", "lead_persisted");
+
+      const updateEmailStatus = async (emailStatus) => {
+        try {
+          const statusCall = supabaseRequest(
+            env,
+            `marketing_leads?submission_id=eq.${encodeURIComponent(submissionId)}`,
+            {
+              method: "PATCH",
+              headers: { Prefer: "return=minimal" },
+              body: JSON.stringify({ email_status: emailStatus }),
+            },
+          );
+          const statusResponse = await fetchImpl(statusCall.url, statusCall.options);
+          if (!statusResponse.ok) {
+            log("error", "lead_dependency_failed", { stage: "status_update", status: statusResponse.status });
+          }
+        } catch {
+          log("error", "lead_dependency_failed", { stage: "status_update" });
+        }
+      };
+
       const resendResponse = await fetchImpl(RESEND_ENDPOINT, {
         method: "POST",
         headers: {
@@ -207,21 +359,22 @@ function createLeadHandler({
       });
 
       if (!resendResponse.ok) {
-        console.error("Resend recusou o lead", { status: resendResponse.status });
+        await updateEmailStatus("failed");
+        log("error", "lead_email_failed", { status: resendResponse.status });
         return response.status(502).json({
           ok: false,
           message: "Não foi possível enviar agora. Tente novamente em instantes.",
         });
       }
 
+      await updateEmailStatus("queued");
+      log("info", "lead_email_queued");
       return response.status(200).json({
         ok: true,
         message: "Solicitação recebida. Nossa equipe entrará em contato em breve.",
       });
     } catch (error) {
-      console.error("Falha ao enviar lead", {
-        message: error instanceof Error ? error.message : "Erro desconhecido",
-      });
+      log("error", "lead_processing_failed", { stage: "unexpected" });
       return response.status(502).json({
         ok: false,
         message: "Não foi possível enviar agora. Tente novamente em instantes.",

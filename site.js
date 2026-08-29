@@ -295,7 +295,74 @@ const leadForm = document.getElementById("leadForm");
 const leadSubmit = document.getElementById("leadSubmit");
 const leadSubmitLabel = document.getElementById("leadSubmitLabel");
 const formFeedback = document.getElementById("formFeedback");
-const formFallback = document.getElementById("formFallback");
+const turnstileStatus = document.getElementById("turnstileStatus");
+let turnstileToken = "";
+let turnstileWidgetId = null;
+let turnstileLoadPromise = null;
+
+function setTurnstileStatus(message) {
+  turnstileStatus.textContent = message;
+}
+
+function loadTurnstile() {
+  if (turnstileLoadPromise) return turnstileLoadPromise;
+
+  turnstileLoadPromise = fetch("/api/public-config", {
+    headers: { Accept: "application/json" },
+  })
+    .then(async (response) => {
+      const config = await response.json().catch(() => null);
+      if (!response.ok || !config?.turnstileSiteKey) throw new Error("Turnstile indisponível");
+      return config.turnstileSiteKey;
+    })
+    .then((sitekey) => new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+      script.async = true;
+      script.defer = true;
+      script.addEventListener("load", () => resolve(sitekey), { once: true });
+      script.addEventListener("error", () => reject(new Error("Falha ao carregar Turnstile")), { once: true });
+      document.head.appendChild(script);
+    }))
+    .then((sitekey) => {
+      turnstileWidgetId = window.turnstile.render("#turnstileWidget", {
+        sitekey,
+        language: "pt-BR",
+        theme: "light",
+        appearance: "interaction-only",
+        callback(token) {
+          turnstileToken = token;
+          setTurnstileStatus("Verificação de segurança concluída.");
+        },
+        "expired-callback"() {
+          turnstileToken = "";
+          setTurnstileStatus("A verificação expirou e será renovada.");
+        },
+        "error-callback"() {
+          turnstileToken = "";
+          setTurnstileStatus("Não foi possível concluir a verificação. Tente novamente.");
+        },
+      });
+      setTurnstileStatus("Verificação de segurança em andamento...");
+    })
+    .catch(() => {
+      turnstileLoadPromise = null;
+      setTurnstileStatus("A verificação de segurança está indisponível. Recarregue a página.");
+    });
+
+  return turnstileLoadPromise;
+}
+
+const turnstileObserver = "IntersectionObserver" in window
+  ? new IntersectionObserver((entries, observer) => {
+    if (!entries.some((entry) => entry.isIntersecting)) return;
+    observer.disconnect();
+    loadTurnstile();
+  }, { rootMargin: "500px 0px" })
+  : null;
+
+if (turnstileObserver) turnstileObserver.observe(leadForm);
+else loadTurnstile();
 
 leadForm.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -307,12 +374,8 @@ leadForm.addEventListener("submit", async (event) => {
   const volume = String(formData.get("volume") || "");
   const challenge = String(formData.get("challenge") || "");
   const website = String(formData.get("website") || "");
-  const subject = encodeURIComponent(`Demonstração DespachoCerto · ${company}`);
-  const body = encodeURIComponent(`Olá, equipe DespachoCerto!\n\nQuero agendar uma demonstração.\n\nNome: ${name}\nE-mail: ${email}\nWhatsApp: ${phone}\nEscritório: ${company}\nVolume mensal: ${volume}\nPrincipal dificuldade: ${challenge || "Não informado"}`);
   const submissionId = window.crypto?.randomUUID?.() || `lead_${Date.now()}_${Math.random().toString(36).slice(2)}`;
 
-  formFallback.href = `mailto:contato@elevstudio.com.br?subject=${subject}&body=${body}`;
-  formFallback.hidden = true;
   formFeedback.classList.remove("visible", "error");
   formFeedback.textContent = "";
   formFeedback.setAttribute("role", "status");
@@ -321,10 +384,14 @@ leadForm.addEventListener("submit", async (event) => {
   leadForm.setAttribute("aria-busy", "true");
 
   try {
+    await loadTurnstile();
+    if (!turnstileToken) {
+      throw new Error("Aguarde a verificação de segurança e envie novamente.");
+    }
     const response = await fetch(leadForm.action, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, phone, company, volume, challenge, website, submissionId }),
+      body: JSON.stringify({ name, email, phone, company, volume, challenge, website, submissionId, turnstileToken, "cf-turnstile-response": turnstileToken }),
     });
     const result = await response.json().catch(() => null);
 
@@ -343,7 +410,8 @@ leadForm.addEventListener("submit", async (event) => {
       : "Não foi possível enviar agora. Tente novamente em instantes.";
     formFeedback.setAttribute("role", "alert");
     formFeedback.classList.add("visible", "error");
-    formFallback.hidden = false;
+    turnstileToken = "";
+    if (window.turnstile && turnstileWidgetId !== null) window.turnstile.reset(turnstileWidgetId);
   } finally {
     leadSubmit.disabled = false;
     leadSubmitLabel.textContent = "Quero conhecer o DespachoCerto";

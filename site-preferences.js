@@ -17,7 +17,7 @@
   const storage = options.storage;
   const measurementId = options.measurementId || "G-K4TCRD4ND5";
   const now = options.now || (() => new Date().toISOString());
-  const consentVersion = "2026-08-28";
+  const consentVersion = "2026-08-29";
   const storageKey = "despachocerto_consent_v3";
   const legacyStorageKey = "despachocerto_analytics_preference_v2";
   const validChoices = new Set(["granted", "denied"]);
@@ -131,6 +131,24 @@
     script.id = "google-analytics-tag";
     script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
     document.head.appendChild(script);
+
+    target.va = target.va || function vercelAnalytics() {
+      (target.vaq = target.vaq || []).push(arguments);
+    };
+    const vercelAnalyticsScript = document.createElement("script");
+    vercelAnalyticsScript.async = true;
+    vercelAnalyticsScript.id = "vercel-web-analytics";
+    vercelAnalyticsScript.src = "/_vercel/insights/script.js";
+    document.head.appendChild(vercelAnalyticsScript);
+
+    target.si = target.si || function vercelSpeedInsights() {
+      (target.siq = target.siq || []).push(arguments);
+    };
+    const speedInsightsScript = document.createElement("script");
+    speedInsightsScript.async = true;
+    speedInsightsScript.id = "vercel-speed-insights";
+    speedInsightsScript.src = "/_vercel/speed-insights/script.js";
+    document.head.appendChild(speedInsightsScript);
     analyticsLoaded = true;
   }
 

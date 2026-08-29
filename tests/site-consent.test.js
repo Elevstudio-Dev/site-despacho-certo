@@ -6,7 +6,7 @@ const test = require('node:test');
 const projectRoot = path.resolve(__dirname, '..');
 const consentPath = path.join(projectRoot, 'site-preferences.js');
 const measurementId = 'G-K4TCRD4ND5';
-const consentVersion = '2026-08-28';
+const consentVersion = '2026-08-29';
 const storageKey = 'despachocerto_consent_v3';
 const legacyStorageKey = 'despachocerto_analytics_preference_v2';
 const fixedNow = '2026-08-28T20:00:00.000Z';
@@ -127,8 +127,10 @@ test('loads GA4 with Consent Mode v2 only after acceptance', () => {
   });
   assert.equal(harness.values.has(legacyStorageKey), false);
   assert.equal(harness.elements.privacyChoicePanel.hidden, true);
-  assert.equal(harness.scripts.length, 1);
+  assert.equal(harness.scripts.length, 3);
   assert.equal(harness.scripts[0].src, `https://www.googletagmanager.com/gtag/js?id=${measurementId}`);
+  assert.equal(harness.scripts[1].src, '/_vercel/insights/script.js');
+  assert.equal(harness.scripts[2].src, '/_vercel/speed-insights/script.js');
   assert.equal(harness.consent.hasAnalyticsConsent(), true);
 
   const commands = harness.target.dataLayer.map((entry) => Array.from(entry));
@@ -177,7 +179,7 @@ test('migrates a saved v2 acceptance and removes the legacy key', () => {
   });
   assert.equal(harness.values.has(legacyStorageKey), false);
   assert.equal(harness.elements.privacyChoicePanel.hidden, true);
-  assert.equal(harness.scripts.length, 1);
+  assert.equal(harness.scripts.length, 3);
 });
 
 test('asks again when a saved preference belongs to an older policy version', () => {
@@ -256,6 +258,8 @@ test('publishes privacy controls and documentation', () => {
   assert.match(privacy, /Google Analytics/);
   assert.match(privacy, /Resend/);
   assert.match(privacy, /Vercel/);
+  assert.match(privacy, /Supabase/);
+  assert.match(privacy, /Cloudflare Turnstile/);
   assert.match(privacy, /contato@elevstudio\.com\.br/);
   assert.doesNotMatch(privacy, /fonts\.(googleapis|gstatic)\.com/);
   assert.match(sitemap, /https:\/\/despachocerto\.com\.br\/privacidade/);
