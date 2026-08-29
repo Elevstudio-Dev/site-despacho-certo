@@ -6,9 +6,15 @@ veiculares.
 
 ## Estrutura
 
-- `index.html`: página institucional completa.
-- `privacidade.html`: Política de Privacidade e Cookies do site.
-- `site-preferences.js`: preferências de privacidade e carregamento autorizado do GA4.
+- `index.html`: página institucional e dados estruturados da marca e do software.
+- `site.css`: identidade visual e estilos da página institucional.
+- `site.js`: navegação, demonstrações interativas e formulário da página institucional.
+- `privacidade.html`: Política de Privacidade do site.
+- `cookies.html`: Política de Cookies e inventário de armazenamento.
+- `termos.html`: Termos de Uso do site institucional.
+- `legal.css`: layout compartilhado pelas páginas legais.
+- `legal.js`: comportamento comum e atualização do ano nas páginas legais.
+- `site-preferences.js`: consentimento v3, centro de preferências e carregamento autorizado do GA4.
 - `site-analytics.js`: eventos de conversão condicionados ao consentimento.
 - `inter-latin.woff2`: fonte Inter hospedada localmente, sem chamada externa.
 - `lucide.min.js`: biblioteca de ícones servida pelo próprio site.
@@ -19,16 +25,38 @@ veiculares.
 - `favicon.svg`: ícone do site.
 - `robots.txt`: regras para mecanismos de busca.
 - `sitemap.xml`: mapa do site.
-- `vercel.json`: configuração de publicação e cabeçalhos de segurança.
+- `vercel.json`: rotas limpas, CSP e demais cabeçalhos de segurança.
+
+## Privacidade e segurança
+
+O site usa Google Consent Mode v2 em modo básico. O GA4 não é solicitado antes
+de uma autorização explícita para a categoria analítica. A escolha é guardada
+no armazenamento local em `despachocerto_consent_v3` e pode ser alterada pelo
+botão **Preferências de cookies** em qualquer rodapé.
+
+Rotas legais publicadas:
+
+- `/privacidade`
+- `/cookies`
+- `/termos`
+
+A Content Security Policy não permite `unsafe-inline` ou `unsafe-eval`, bloqueia
+iframes de terceiros e autoriza o JSON-LD da home por hash SHA-256. Sempre que o
+conteúdo do bloco `application/ld+json` mudar, atualize o hash em `vercel.json` e
+execute `node --test tests/site-security.test.js`.
 
 ## Executar localmente
 
-O site é estático e pode ser aberto diretamente pelo arquivo `index.html`.
-
-Para servir por HTTP:
+Para testar rotas limpas e cabeçalhos, sirva o projeto por HTTP:
 
 ```bash
-npx serve .
+npx --yes serve . -l 4175
+```
+
+Execute a suíte automatizada antes de publicar:
+
+```bash
+node --test
 ```
 
 ## Publicar na Vercel

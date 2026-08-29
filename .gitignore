@@ -1,5 +1,7 @@
 .vercel
 .worktrees/
+.playwright-cli/
+artifacts/
 .DS_Store
 Thumbs.db
 
