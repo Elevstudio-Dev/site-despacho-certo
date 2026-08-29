@@ -32,7 +32,7 @@ test('serves the icon bundle without requesting a missing source map', () => {
 
 test('labels every demonstration link for CTA measurement', () => {
   const html = fs.readFileSync(htmlPath, 'utf8');
-  const demonstrationLinks = html.match(/<a\b[^>]*href="#contato"[^>]*>/g) || [];
+  const demonstrationLinks = html.match(/<a\b[^>]*href="(?:#contato|\/contato)"[^>]*>/g) || [];
 
   assert.ok(demonstrationLinks.length >= 9);
   demonstrationLinks.forEach((link) => assert.match(link, /\bdata-cta="[^"]+"/));
