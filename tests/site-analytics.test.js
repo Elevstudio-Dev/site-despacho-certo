@@ -20,9 +20,9 @@ test('delegates GA4 loading to the consent manager', () => {
   assert.doesNotMatch(html, /<script[^>]+googletagmanager\.com\/gtag\/js/);
   assert.doesNotMatch(html, /fonts\.(googleapis|gstatic)\.com/);
   assert.doesNotMatch(html, /unpkg\.com/);
-  assert.match(html, /<script src="site-preferences\.js"><\/script>/);
+  assert.match(html, /<script src="site-preferences\.js" defer><\/script>/);
   assert.doesNotMatch(html, /(?:id|class)="[^"]*cookie-banner/i);
-  assert.match(html, /<script src="site-analytics\.js"><\/script>/);
+  assert.match(html, /<script src="site-analytics\.js" defer><\/script>/);
 });
 
 test('serves the icon bundle without requesting a missing source map', () => {
