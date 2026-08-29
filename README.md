@@ -25,6 +25,7 @@ veiculares.
 - `favicon.svg`: ícone do site.
 - `robots.txt`: regras para mecanismos de busca.
 - `sitemap.xml`: mapa do site.
+- `.github/workflows/indexnow.yml`: envio automático das URLs do sitemap ao IndexNow.
 - `vercel.json`: rotas limpas, CSP e demais cabeçalhos de segurança.
 
 ## Privacidade e segurança
@@ -71,6 +72,11 @@ Configure as variáveis de ambiente do projeto:
 - `RESEND_API_KEY`: chave secreta do Resend.
 - `LEAD_TO_EMAIL`: opcional; o padrão é `contato@elevstudio.com.br`.
 - `LEAD_FROM_EMAIL`: opcional; o padrão é `DespachoCerto <contato@elevstudio.com.br>`.
+- `SUPABASE_URL`: URL do projeto que armazena os leads.
+- `SUPABASE_SERVICE_ROLE_KEY`: chave server-side do Supabase.
+- `LEAD_RATE_LIMIT_SECRET`: segredo usado para pseudonimizar o IP no limite de requisições.
+- `TURNSTILE_SITE_KEY`: chave pública do widget Cloudflare Turnstile.
+- `TURNSTILE_SECRET_KEY`: chave server-side para validar o Turnstile.
 
 Depois de alterar as variáveis, faça um novo deploy para aplicá-las.
 

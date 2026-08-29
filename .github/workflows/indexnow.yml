@@ -1,0 +1,68 @@
+name: Notify IndexNow
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: indexnow-production
+  cancel-in-progress: true
+
+jobs:
+  submit-sitemap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the site
+        uses: actions/checkout@v4
+
+      - name: Wait for the ownership key
+        env:
+          INDEXNOW_KEY: ac1067625d0c36a8e032ea6b43826db1
+        run: |
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent --show-error \
+              "https://despachocerto.com.br/${INDEXNOW_KEY}.txt" \
+              | grep --fixed-strings --line-regexp "${INDEXNOW_KEY}"; then
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "The IndexNow ownership key was not published in time." >&2
+          exit 1
+
+      - name: Submit sitemap URLs to IndexNow
+        env:
+          INDEXNOW_KEY: ac1067625d0c36a8e032ea6b43826db1
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.request
+          import xml.etree.ElementTree as ET
+
+          namespace = {"sitemap": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+          root = ET.parse("sitemap.xml").getroot()
+          urls = [node.text for node in root.findall("sitemap:url/sitemap:loc", namespace)]
+          key = os.environ["INDEXNOW_KEY"]
+          payload = json.dumps({
+              "host": "despachocerto.com.br",
+              "key": key,
+              "keyLocation": f"https://despachocerto.com.br/{key}.txt",
+              "urlList": urls,
+          }).encode("utf-8")
+          request = urllib.request.Request(
+              "https://api.indexnow.org/indexnow",
+              data=payload,
+              headers={"Content-Type": "application/json; charset=utf-8"},
+              method="POST",
+          )
+          with urllib.request.urlopen(request, timeout=30) as response:
+              if response.status not in (200, 202):
+                  raise RuntimeError(f"IndexNow returned HTTP {response.status}")
+              print(f"Submitted {len(urls)} URLs (HTTP {response.status}).")
+          PY
