@@ -24,7 +24,7 @@ test('keeps the blog proxy outside the static site CSP', () => {
   assert.equal(vercel.headers.some((rule) => rule.source === '/(.*)'), false);
 });
 
-test('allows only the site and consented GA4 resources', () => {
+test('allows only the site and consented analytics resources', () => {
   const headers = responseHeaders();
   const csp = headers['Content-Security-Policy'];
   assert.ok(csp, 'Expected a Content-Security-Policy header');
@@ -38,7 +38,10 @@ test('allows only the site and consented GA4 resources', () => {
   assert.match(csp, /default-src 'self'/);
   assert.match(csp, /script-src 'self' https:\/\/www\.googletagmanager\.com/);
   assert.match(csp, /script-src[^;]+https:\/\/challenges\.cloudflare\.com/);
+  assert.match(csp, /script-src[^;]+https:\/\/www\.clarity\.ms/);
   assert.match(csp, /connect-src 'self' https:\/\/\*\.google-analytics\.com https:\/\/\*\.analytics\.google\.com https:\/\/\*\.googletagmanager\.com/);
+  assert.match(csp, /connect-src[^;]+https:\/\/\*\.clarity\.ms[^;]+https:\/\/c\.bing\.com/);
+  assert.match(csp, /img-src[^;]+https:\/\/\*\.clarity\.ms[^;]+https:\/\/c\.bing\.com/);
   assert.match(csp, /style-src 'self'/);
   assert.match(csp, /font-src 'self'/);
   assert.match(csp, /object-src 'none'/);

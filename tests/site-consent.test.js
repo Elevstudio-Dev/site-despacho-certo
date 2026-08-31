@@ -6,7 +6,8 @@ const test = require('node:test');
 const projectRoot = path.resolve(__dirname, '..');
 const consentPath = path.join(projectRoot, 'site-preferences.js');
 const measurementId = 'G-K4TCRD4ND5';
-const consentVersion = '2026-08-29';
+const clarityId = 'yb518bh3sn';
+const consentVersion = '2026-08-31';
 const storageKey = 'despachocerto_consent_v3';
 const legacyStorageKey = 'despachocerto_analytics_preference_v2';
 const fixedNow = '2026-08-28T20:00:00.000Z';
@@ -80,6 +81,7 @@ function createHarness({ legacyChoice = null, savedPreference = null } = {}) {
     document,
     storage,
     measurementId,
+    clarityId,
     now: () => fixedNow,
   });
 
@@ -112,10 +114,11 @@ test('shows the banner without contacting Google before a choice', () => {
   assert.equal(harness.elements.privacyChoicePanel.hidden, false);
   assert.equal(harness.scripts.length, 0);
   assert.equal(harness.target.gtag, undefined);
+  assert.equal(harness.target.clarity, undefined);
   assert.equal(harness.consent.hasAnalyticsConsent(), false);
 });
 
-test('loads GA4 with Consent Mode v2 only after acceptance', () => {
+test('loads consented analytics only after acceptance', () => {
   const harness = createHarness();
   harness.consent.initialize();
   harness.consent.accept();
@@ -127,10 +130,11 @@ test('loads GA4 with Consent Mode v2 only after acceptance', () => {
   });
   assert.equal(harness.values.has(legacyStorageKey), false);
   assert.equal(harness.elements.privacyChoicePanel.hidden, true);
-  assert.equal(harness.scripts.length, 3);
+  assert.equal(harness.scripts.length, 4);
   assert.equal(harness.scripts[0].src, `https://www.googletagmanager.com/gtag/js?id=${measurementId}`);
   assert.equal(harness.scripts[1].src, '/_vercel/insights/script.js');
   assert.equal(harness.scripts[2].src, '/_vercel/speed-insights/script.js');
+  assert.equal(harness.scripts[3].src, `https://www.clarity.ms/tag/${clarityId}?ref=bwt`);
   assert.equal(harness.consent.hasAnalyticsConsent(), true);
 
   const commands = harness.target.dataLayer.map((entry) => Array.from(entry));
@@ -151,6 +155,10 @@ test('loads GA4 with Consent Mode v2 only after acceptance', () => {
     allow_google_signals: false,
     allow_ad_personalization_signals: false,
   }]);
+  assert.deepEqual(harness.target.clarity.q[0], ['consentv2', {
+    ad_Storage: 'denied',
+    analytics_Storage: 'granted',
+  }]);
 });
 
 test('stores a refusal without loading analytics', () => {
@@ -166,20 +174,17 @@ test('stores a refusal without loading analytics', () => {
   assert.equal(harness.elements.privacyChoicePanel.hidden, true);
   assert.equal(harness.scripts.length, 0);
   assert.equal(harness.target.gtag, undefined);
+  assert.equal(harness.target.clarity, undefined);
 });
 
-test('migrates a saved v2 acceptance and removes the legacy key', () => {
+test('asks again instead of migrating consent from the previous policy', () => {
   const harness = createHarness({ legacyChoice: 'granted' });
   harness.consent.initialize();
 
-  assert.deepEqual(storedPreference(harness), {
-    version: consentVersion,
-    analytics: 'granted',
-    updatedAt: fixedNow,
-  });
-  assert.equal(harness.values.has(legacyStorageKey), false);
-  assert.equal(harness.elements.privacyChoicePanel.hidden, true);
-  assert.equal(harness.scripts.length, 3);
+  assert.equal(harness.values.has(storageKey), false);
+  assert.equal(harness.values.has(legacyStorageKey), true);
+  assert.equal(harness.elements.privacyChoicePanel.hidden, false);
+  assert.equal(harness.scripts.length, 0);
 });
 
 test('asks again when a saved preference belongs to an older policy version', () => {
@@ -236,6 +241,10 @@ test('allows analytics consent to be revoked from preferences', () => {
   assert.equal(harness.removedCookies.some((cookie) => cookie.startsWith('_ga=')), true);
   assert.equal(harness.removedCookies.some((cookie) => cookie.startsWith('_ga_TEST=')), true);
   assert.equal(harness.removedCookies.some((cookie) => cookie.startsWith('session=')), false);
+  assert.deepEqual(harness.target.clarity.q.slice(-2), [
+    ['consentv2', { ad_Storage: 'denied', analytics_Storage: 'denied' }],
+    ['consent', false],
+  ]);
 });
 
 test('publishes privacy controls and documentation', () => {
@@ -260,6 +269,8 @@ test('publishes privacy controls and documentation', () => {
   assert.match(privacy, /Vercel/);
   assert.match(privacy, /Supabase/);
   assert.match(privacy, /Cloudflare Turnstile/);
+  assert.match(privacy, /Microsoft Clarity/);
+  assert.match(index, /id="leadForm"[^>]+data-clarity-mask="true"/);
   assert.match(privacy, /contato@elevstudio\.com\.br/);
   assert.doesNotMatch(privacy, /fonts\.(googleapis|gstatic)\.com/);
   assert.match(sitemap, /https:\/\/despachocerto\.com\.br\/privacidade/);

@@ -8,6 +8,7 @@
     document: root.document,
     storage: root.localStorage,
     measurementId: "G-K4TCRD4ND5",
+    clarityId: "yb518bh3sn",
   });
 
   root.DespachoCertoConsent = consent;
@@ -16,8 +17,9 @@
   const document = options.document;
   const storage = options.storage;
   const measurementId = options.measurementId || "G-K4TCRD4ND5";
+  const clarityId = options.clarityId || "yb518bh3sn";
   const now = options.now || (() => new Date().toISOString());
-  const consentVersion = "2026-08-29";
+  const consentVersion = "2026-08-31";
   const storageKey = "despachocerto_consent_v3";
   const legacyStorageKey = "despachocerto_analytics_preference_v2";
   const validChoices = new Set(["granted", "denied"]);
@@ -79,11 +81,6 @@
       const savedChoice = parsePreference(storage.getItem(storageKey));
       if (savedChoice) return savedChoice;
 
-      const legacyChoice = storage.getItem(legacyStorageKey);
-      if (validChoices.has(legacyChoice)) {
-        persistChoice(legacyChoice);
-        return legacyChoice;
-      }
     } catch (error) {
       return null;
     }
@@ -149,6 +146,19 @@
     speedInsightsScript.id = "vercel-speed-insights";
     speedInsightsScript.src = "/_vercel/speed-insights/script.js";
     document.head.appendChild(speedInsightsScript);
+
+    target.clarity = target.clarity || function clarity() {
+      (target.clarity.q = target.clarity.q || []).push(Array.from(arguments));
+    };
+    target.clarity("consentv2", {
+      ad_Storage: "denied",
+      analytics_Storage: "granted",
+    });
+    const clarityScript = document.createElement("script");
+    clarityScript.async = true;
+    clarityScript.id = "microsoft-clarity-tag";
+    clarityScript.src = `https://www.clarity.ms/tag/${clarityId}?ref=bwt`;
+    document.head.appendChild(clarityScript);
     analyticsLoaded = true;
   }
 
@@ -186,6 +196,14 @@
   function disableAnalytics(shouldReload) {
     if (typeof target.gtag === "function") {
       target.gtag("consent", "update", consentDefaults());
+    }
+
+    if (typeof target.clarity === "function") {
+      target.clarity("consentv2", {
+        ad_Storage: "denied",
+        analytics_Storage: "denied",
+      });
+      target.clarity("consent", false);
     }
 
     removeAnalyticsCookies();
