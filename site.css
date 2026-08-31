@@ -908,6 +908,12 @@ i[data-lucide] {
   font-weight: 700;
 }
 
+.section,
+.final-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
+
 .section {
   padding: 112px 0;
 }
