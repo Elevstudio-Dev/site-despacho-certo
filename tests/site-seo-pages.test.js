@@ -5,6 +5,7 @@ const test = require('node:test');
 
 const projectRoot = path.resolve(__dirname, '..');
 const sitemap = fs.readFileSync(path.join(projectRoot, 'sitemap.xml'), 'utf8');
+const contentPageStyles = fs.readFileSync(path.join(projectRoot, 'content-page.css'), 'utf8');
 const pages = [
   'sistema-para-despachante',
   'ordem-de-servico-para-despachante',
@@ -67,4 +68,16 @@ test('links the product hub from the home page', () => {
   assert.match(index, /href="\/precos"/);
   assert.match(index, /href="\/sobre"/);
   assert.match(index, /href="\/contato"/);
+});
+
+test('keeps the Inter typeface on content pages', () => {
+  assert.match(contentPageStyles, /body\s*\{[^}]*font-family:\s*"Inter"/s);
+  assert.doesNotMatch(contentPageStyles, /body\s*,[^{}]*\{[^}]*font:\s*inherit/s);
+});
+
+test('uses the readable brand lockup on dark content-page surfaces', () => {
+  pages.forEach((slug) => {
+    const html = readPage(slug);
+    assert.equal((html.match(/content-brand-mark/g) || []).length, 2, `Expected two readable brand lockups for ${slug}`);
+  });
 });
