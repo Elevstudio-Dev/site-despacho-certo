@@ -73,7 +73,8 @@ Configure as variáveis de ambiente do projeto:
 - `LEAD_TO_EMAIL`: opcional; o padrão é `contato@elevstudio.com.br`.
 - `LEAD_FROM_EMAIL`: opcional; o padrão é `DespachoCerto <contato@elevstudio.com.br>`.
 - `SUPABASE_URL`: URL do projeto que armazena os leads.
-- `SUPABASE_SERVICE_ROLE_KEY`: chave server-side do Supabase.
+- `SUPABASE_SECRET_KEY`: chave server-side dedicada ao site (recomendado).
+- `SUPABASE_SERVICE_ROLE_KEY`: alternativa legada aceita durante a migração.
 - `LEAD_RATE_LIMIT_SECRET`: segredo usado para pseudonimizar o IP no limite de requisições.
 - `TURNSTILE_SITE_KEY`: chave pública do widget Cloudflare Turnstile.
 - `TURNSTILE_SECRET_KEY`: chave server-side para validar o Turnstile.

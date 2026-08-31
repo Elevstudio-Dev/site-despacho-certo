@@ -18,13 +18,15 @@ test("responde saudável sem expor valores sensíveis", async () => {
     env: {
       RESEND_API_KEY: "secret_resend",
       SUPABASE_URL: "https://secret.supabase.co",
-      SUPABASE_SERVICE_ROLE_KEY: "secret_supabase",
+      SUPABASE_SECRET_KEY: "sb_secret_supabase",
       TURNSTILE_SECRET_KEY: "secret_turnstile",
       LEAD_RATE_LIMIT_SECRET: "secret_rate_limit",
     },
     fetchImpl: async (url, options) => {
       assert.equal(url, "https://secret.supabase.co/rest/v1/marketing_leads?select=id&limit=1");
       assert.equal(options.method, "HEAD");
+      assert.equal(options.headers.apikey, "sb_secret_supabase");
+      assert.equal(options.headers.Authorization, undefined);
       return { ok: true };
     },
   });
@@ -49,7 +51,7 @@ test("sinaliza indisponibilidade real do banco", async () => {
     env: {
       RESEND_API_KEY: "configured",
       SUPABASE_URL: "https://project.supabase.co",
-      SUPABASE_SERVICE_ROLE_KEY: "configured",
+      SUPABASE_SECRET_KEY: "sb_secret_configured",
       TURNSTILE_SECRET_KEY: "configured",
       LEAD_RATE_LIMIT_SECRET: "configured",
     },

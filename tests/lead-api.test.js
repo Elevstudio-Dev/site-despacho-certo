@@ -33,7 +33,7 @@ function configuredEnv(overrides = {}) {
   return {
     RESEND_API_KEY: "re_test",
     SUPABASE_URL: "https://project.supabase.co",
-    SUPABASE_SERVICE_ROLE_KEY: "service_role_test",
+    SUPABASE_SECRET_KEY: "sb_secret_test",
     TURNSTILE_SECRET_KEY: "turnstile_secret_test",
     LEAD_RATE_LIMIT_SECRET: "rate_limit_secret_test",
     ...overrides,
@@ -124,7 +124,8 @@ test("valida, limita, persiste e envia o lead com conteúdo escapado", async () 
   assert.equal(rateLimitBody.p_limit, 5);
 
   const storageRequest = requests.find(({ url }) => url.endsWith("/rest/v1/marketing_leads"));
-  assert.equal(storageRequest.options.headers.apikey, "service_role_test");
+  assert.equal(storageRequest.options.headers.apikey, "sb_secret_test");
+  assert.equal(storageRequest.options.headers.Authorization, undefined);
   const storedLead = JSON.parse(storageRequest.options.body);
   assert.equal(storedLead.submission_id, "lead_test_12345678");
   assert.equal(storedLead.email, "maria@despachante.com.br");

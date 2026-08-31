@@ -1,4 +1,5 @@
 const crypto = require("node:crypto");
+const { getSupabaseHeaders, getSupabaseKey } = require("./supabase-config.js");
 
 const RESEND_ENDPOINT = "https://api.resend.com/emails/batch";
 const TURNSTILE_VERIFY_ENDPOINT = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
@@ -179,8 +180,7 @@ function supabaseRequest(env, path, options = {}) {
     options: {
       ...options,
       headers: {
-        apikey: env.SUPABASE_SERVICE_ROLE_KEY,
-        Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+        ...getSupabaseHeaders(env),
         "Content-Type": "application/json",
         ...options.headers,
       },
@@ -235,7 +235,7 @@ function createLeadHandler({
     const requiredConfiguration = [
       env.RESEND_API_KEY,
       env.SUPABASE_URL,
-      env.SUPABASE_SERVICE_ROLE_KEY,
+      getSupabaseKey(env),
       env.TURNSTILE_SECRET_KEY,
       env.LEAD_RATE_LIMIT_SECRET,
     ];

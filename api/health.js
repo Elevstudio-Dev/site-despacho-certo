@@ -1,7 +1,8 @@
+const { getSupabaseHeaders, getSupabaseKey } = require("./supabase-config.js");
+
 const REQUIRED_ENVIRONMENT = [
   "RESEND_API_KEY",
   "SUPABASE_URL",
-  "SUPABASE_SERVICE_ROLE_KEY",
   "TURNSTILE_SECRET_KEY",
   "LEAD_RATE_LIMIT_SECRET",
 ];
@@ -14,7 +15,8 @@ function createHealthHandler({ env = process.env, fetchImpl = globalThis.fetch }
     }
 
     response.setHeader("Cache-Control", "no-store");
-    const configured = REQUIRED_ENVIRONMENT.every((key) => Boolean(env[key]));
+    const configured = REQUIRED_ENVIRONMENT.every((key) => Boolean(env[key]))
+      && Boolean(getSupabaseKey(env));
     if (!configured || typeof fetchImpl !== "function") {
       return response.status(503).json({ ok: false, service: "lead-form" });
     }
@@ -25,10 +27,7 @@ function createHealthHandler({ env = process.env, fetchImpl = globalThis.fetch }
         `${supabaseUrl}/rest/v1/marketing_leads?select=id&limit=1`,
         {
           method: "HEAD",
-          headers: {
-            apikey: env.SUPABASE_SERVICE_ROLE_KEY,
-            Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
-          },
+          headers: getSupabaseHeaders(env),
         },
       );
       const healthy = databaseResponse.ok;
