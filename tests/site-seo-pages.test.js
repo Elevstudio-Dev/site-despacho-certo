@@ -16,7 +16,6 @@ const pages = [
   'precos',
   'sobre',
   'contato',
-  'clientes/ohana-consultoria',
 ];
 
 function readPage(slug) {
