@@ -44,3 +44,9 @@ test('preserves the lead and analytics behavior in the external script', () => {
   assert.match(script, /leadForm\.addEventListener\("submit"/);
   assert.match(script, /trackLead\(\)/);
 });
+
+test('publishes the Bing Webmaster Tools verification tag', () => {
+  const index = fs.readFileSync(indexPath, 'utf8');
+
+  assert.match(index, /<meta name="msvalidate\.01" content="[A-F0-9]+" \/>/);
+});
