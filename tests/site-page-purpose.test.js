@@ -20,6 +20,90 @@ function read(file) {
   return fs.readFileSync(path.join(projectRoot, file), 'utf8');
 }
 
+function normalizeBody(page) {
+  return page
+    .match(/<main\b[\s\S]*?<\/main>/)?.[0]
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function createOsTimelineHarness() {
+  let activeElement = null;
+  const listeners = new WeakMap();
+
+  function element({ dataset = {}, attributes = {}, textContent = '' } = {}) {
+    const attributeMap = new Map(Object.entries(attributes));
+    const node = {
+      dataset,
+      textContent,
+      tabIndex: Number(attributes.tabindex ?? 0),
+      addEventListener(type, listener) {
+        const handlers = listeners.get(node) || {};
+        handlers[type] = listener;
+        listeners.set(node, handlers);
+      },
+      focus() { activeElement = node; },
+      getAttribute(name) { return attributeMap.get(name) ?? null; },
+      removeAttribute(name) { attributeMap.delete(name); },
+      setAttribute(name, value) { attributeMap.set(name, String(value)); },
+    };
+    return node;
+  }
+
+  const eventData = [
+    ['abertura', 'Abertura da OS', 'Ana Paula', 'active'],
+    ['documento', 'Documento pendente', 'Ana Paula', 'pending'],
+    ['responsavel', 'Troca de responsável', 'Rafael Lima', 'active'],
+    ['retorno', 'Retorno ao cliente', 'Rafael Lima', 'checked'],
+    ['pagamento', 'Pagamento confirmado', 'Camila Souza', 'checked'],
+    ['entrega', 'Entrega concluída', 'Rafael Lima', 'checked'],
+  ];
+  const events = eventData.map(([name, title, responsible, status], index) => element({
+    dataset: {
+      osEvent: name,
+      osTitle: title,
+      osDate: `${index + 2} ago. 2026`,
+      osSummary: `Detalhe de ${title}`,
+      osResponsible: responsible,
+      osStatus: status === 'checked' ? 'Concluído' : 'Em andamento',
+      osStatusTone: status,
+      osNext: index === eventData.length - 1 ? 'OS encerrada' : eventData[index + 1][1],
+    },
+    attributes: {
+      'aria-current': index === 0 ? 'step' : '',
+      tabindex: index === 0 ? '0' : '-1',
+    },
+  }));
+  events.slice(1).forEach((event) => event.removeAttribute('aria-current'));
+
+  const detailFields = Object.fromEntries(
+    ['title', 'date', 'summary', 'responsible', 'status', 'next'].map((name) => [name, element()]),
+  );
+  const detail = {
+    querySelector(selector) {
+      const name = selector.match(/^\[data-os-detail="([^"]+)"\]$/)?.[1];
+      return detailFields[name] || null;
+    },
+  };
+  const timeline = {
+    querySelector(selector) { return selector === '.os-event-detail' ? detail : null; },
+    querySelectorAll(selector) { return selector === '[data-os-event]' ? events : []; },
+  };
+  const document = {
+    querySelectorAll(selector) { return selector === '.os-timeline' ? [timeline] : []; },
+  };
+
+  vm.runInNewContext(read('content-page.js'), { document, window: {}, Date });
+
+  return {
+    get activeElement() { return activeElement; },
+    detail,
+    detailFields,
+    events,
+    dispatch(node, type, event = {}) { listeners.get(node)?.[type]?.(event); },
+  };
+}
+
 function createProductMapHarness({ hash = '', width = 1200 } = {}) {
   let activeElement = null;
   const listeners = new WeakMap();
@@ -127,6 +211,66 @@ function assertProductModuleState(harness, expectedName) {
   assert.equal(visiblePanels.length, 1);
   assert.equal(visiblePanels[0].dataset.productPanel, expectedName);
 }
+
+function assertOsEventState(harness, expectedName) {
+  const currentEvents = harness.events.filter(
+    (event) => event.getAttribute('aria-current') === 'step',
+  );
+  const tabbableEvents = harness.events.filter((event) => event.tabIndex === 0);
+
+  assert.equal(currentEvents.length, 1);
+  assert.equal(currentEvents[0].dataset.osEvent, expectedName);
+  assert.equal(tabbableEvents.length, 1);
+  assert.equal(tabbableEvents[0].dataset.osEvent, expectedName);
+}
+
+test('makes OS and finance pages operationally distinct', () => {
+  const os = read('ordem-de-servico-para-despachante.html');
+  const finance = read('controle-financeiro-para-despachante.html');
+
+  assert.match(os, /class="os-timeline"/);
+  assert.match(os, /Troca de responsável|Documento pendente|Retorno ao cliente/);
+  assert.match(os, />Montar uma OS na demonstração</);
+  assert.match(finance, /class="finance-ledger"/);
+  assert.match(finance, /Custo de terceiro|Recebimento parcial|Saldo da OS|Lucro bruto/);
+  assert.match(finance, />Ver o fechamento de uma OS</);
+  assert.match(finance, /não substitui (?:a )?contabilidade/i);
+  assert.match(
+    finance,
+    /<th[^>]*>Movimento<\/th>[\s\S]*<th[^>]*>Tipo<\/th>[\s\S]*<th[^>]*>Valor<\/th>[\s\S]*<th[^>]*>Situação<\/th>/,
+  );
+  assert.notEqual(normalizeBody(os), normalizeBody(finance));
+});
+
+test('selects an OS event by click and updates the stable detail region', () => {
+  const harness = createOsTimelineHarness();
+  const detailRegion = harness.detail;
+  const responsibilityChange = harness.events[2];
+
+  harness.dispatch(responsibilityChange, 'click');
+
+  assertOsEventState(harness, 'responsavel');
+  assert.equal(harness.detail, detailRegion);
+  assert.equal(harness.detailFields.title.textContent, 'Troca de responsável');
+  assert.equal(harness.detailFields.responsible.textContent, 'Rafael Lima');
+  assert.equal(harness.detailFields.status.getAttribute('data-status'), 'active');
+});
+
+test('moves OS event selection with arrow keys and keeps keyboard focus aligned', () => {
+  const harness = createOsTimelineHarness();
+  const first = harness.events[0];
+  let prevented = false;
+
+  harness.dispatch(first, 'keydown', {
+    key: 'ArrowLeft',
+    preventDefault() { prevented = true; },
+  });
+
+  assert.equal(prevented, true);
+  assertOsEventState(harness, 'entrega');
+  assert.equal(harness.activeElement, harness.events[5]);
+  assert.equal(harness.detailFields.title.textContent, 'Entrega concluída');
+});
 
 test('gives home and platform overview different jobs', () => {
   const home = read('index.html');

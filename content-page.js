@@ -116,3 +116,52 @@ document.querySelectorAll(".product-map").forEach((map) => {
   const selected = hashTarget || modules.find((module) => module.getAttribute("aria-selected") === "true") || modules[0];
   activateProductModule(selected.dataset.productModule);
 });
+
+function nextOsEventIndex(event, currentIndex, itemCount) {
+  if (event.key === "Home") return 0;
+  if (event.key === "End") return itemCount - 1;
+  if (["ArrowDown", "ArrowRight"].includes(event.key)) return (currentIndex + 1) % itemCount;
+  if (["ArrowUp", "ArrowLeft"].includes(event.key)) return (currentIndex - 1 + itemCount) % itemCount;
+  return null;
+}
+
+document.querySelectorAll(".os-timeline").forEach((timeline) => {
+  const events = [...timeline.querySelectorAll("[data-os-event]")];
+  const detail = timeline.querySelector(".os-event-detail");
+  if (!events.length || !detail) return;
+
+  const fields = Object.fromEntries(
+    ["title", "date", "summary", "responsible", "status", "next"].map((name) => [
+      name,
+      detail.querySelector(`[data-os-detail="${name}"]`),
+    ]),
+  );
+
+  function activateOsEvent(activeEvent, { focus = false } = {}) {
+    events.forEach((event) => {
+      const active = event === activeEvent;
+      if (active) event.setAttribute("aria-current", "step");
+      else event.removeAttribute("aria-current");
+      event.tabIndex = active ? 0 : -1;
+    });
+
+    Object.entries(fields).forEach(([name, field]) => {
+      if (field) field.textContent = activeEvent.dataset[`os${name[0].toUpperCase()}${name.slice(1)}`] || "";
+    });
+    fields.status?.setAttribute("data-status", activeEvent.dataset.osStatusTone || "active");
+    if (focus) activeEvent.focus();
+  }
+
+  events.forEach((event, index) => {
+    event.addEventListener("click", () => activateOsEvent(event));
+    event.addEventListener("keydown", (keyboardEvent) => {
+      const nextIndex = nextOsEventIndex(keyboardEvent, index, events.length);
+      if (nextIndex === null) return;
+      keyboardEvent.preventDefault();
+      activateOsEvent(events[nextIndex], { focus: true });
+    });
+  });
+
+  const selected = events.find((event) => event.getAttribute("aria-current") === "step") || events[0];
+  activateOsEvent(selected);
+});
