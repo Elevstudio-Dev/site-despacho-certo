@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fixture do sistema visual operacional</title>
+  <link rel="stylesheet" href="/content-page.css">
+  <style>
+    .fixture-stack { display: grid; gap: 40px; padding: 48px 0; }
+    .fixture-stack > section { min-width: 0; }
+    .fixture-label { margin: 0 0 8px; font: 700 12px/1.4 Inter, sans-serif; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="content-hero">
+      <div class="container hero-layout">
+        <div class="hero-copy">
+          <p class="eyebrow">Segurança operacional</p>
+          <h1>Acesso começa pela empresa, passa pelo perfil e termina no dado permitido.</h1>
+          <p>Uma composição longa e determinística para medir a estabilidade do hero.</p>
+        </div>
+        <div class="product-visual" aria-label="Área reservada para a demonstração do produto">
+          <div class="visual-shell">
+            <div class="visual-topbar"><strong>DespachoCerto</strong><span class="visual-status">Operação ativa</span></div>
+            <div class="visual-body"><div class="visual-sidebar"><span></span><span></span></div><div class="visual-workspace"><strong>Visão operacional</strong></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container fixture-stack">
+      <section>
+        <p class="fixture-label">Mapa do produto</p>
+        <div class="product-map">
+          <div class="product-map-modules">
+            <button type="button" data-product-module="ordens" aria-selected="true"><span>01</span><span>Ordens</span></button>
+            <button type="button" data-product-module="financeiro" aria-selected="false"><span>02</span><span>Financeiro</span></button>
+          </div>
+          <div data-product-panel="ordens">
+            <span class="record-id">OS-2048</span>
+            <h2>Uma linha de trabalho compartilhada</h2>
+            <div class="product-map-flow"><div>Cliente</div><div>Processo</div><div>Resultado</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <p class="fixture-label">Linha do tempo</p>
+        <div class="os-timeline">
+          <div class="os-event-list">
+            <button type="button" data-os-event="abertura" data-step="01" aria-current="step"><span>Abertura da OS</span></button>
+            <button type="button" data-os-event="documento" data-step="02"><span>Documento pendente</span></button>
+          </div>
+          <div class="os-event-detail"><h2>Troca de responsável registrada</h2><div class="os-event-detail-grid"><div>Responsável anterior</div><div>Novo responsável</div></div></div>
+        </div>
+      </section>
+
+      <section>
+        <p class="fixture-label">Livro financeiro</p>
+        <div class="finance-ledger">
+          <table>
+            <caption>Fechamento da OS-2048</caption>
+            <thead><tr><th>Movimento</th><th>Tipo</th><th>Valor</th><th>Situação</th></tr></thead>
+            <tbody><tr><td>Recebimento parcial</td><td>Entrada</td><td><span class="record-value is-credit">R$ 450,00</span></td><td><span class="record-status" data-status="checked">Recebido</span></td></tr></tbody>
+            <tfoot><tr><td colspan="3">Saldo da OS</td><td><span class="record-value">R$ 210,00</span></td></tr></tfoot>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <p class="fixture-label">Mesa documental</p>
+        <div class="document-desk">
+          <div class="document-desk-column"><header><strong>Pendente</strong><span class="record-status" data-status="pending">1 item</span></header><div class="document-record">CRLV atualizado</div></div>
+          <div class="document-desk-column"><header><strong>Recebido</strong><span class="record-status" data-status="received">1 item</span></header><div class="document-record">Documento pessoal</div></div>
+          <div class="document-desk-column"><header><strong>Conferido</strong><span class="record-status" data-status="checked">1 item</span></header><div class="document-record">Comprovante</div></div>
+        </div>
+      </section>
+
+      <section>
+        <p class="fixture-label">Matriz de integração</p>
+        <div class="integration-matrix">
+          <div class="integration-matrix-row is-heading"><span>Conexão</span><span>Uso</span><span>Disponibilidade</span><span>Dependência</span></div>
+          <div class="integration-matrix-row"><strong>Fornecedor autorizado</strong><span>Consulta</span><span><span class="record-status" data-status="pending">Sob análise</span></span><span>Credenciamento</span></div>
+        </div>
+      </section>
+
+      <section>
+        <p class="fixture-label">Camadas de confiança</p>
+        <div class="trust-layers">
+          <div class="trust-layer"><span>01</span><strong>Empresa</strong><p>Define o contexto de acesso.</p></div>
+          <div class="trust-layer"><span>02</span><strong>Perfil</strong><p>Limita as ações permitidas.</p></div>
+        </div>
+      </section>
+
+      <section>
+        <p class="fixture-label">Composição de proposta</p>
+        <div class="proposal-builder">
+          <div class="proposal-factors"><div class="proposal-factor"><span>01</span><div><strong>Usuários</strong><p>Quantidade de pessoas e perfis.</p></div><span>Escopo</span></div><div class="proposal-factor"><span>02</span><div><strong>Integrações</strong><p>Dependências técnicas e institucionais.</p></div><span>Escopo</span></div></div>
+          <aside class="proposal-summary"><h2>Proposta explicada</h2><p>O sistema não calcula preço fictício.</p><a class="button" href="#next-step">Solicitar proposta</a></aside>
+        </div>
+      </section>
+
+      <section>
+        <p class="fixture-label">História do produto</p>
+        <div class="story-rail"><article class="story-milestone"><time>Origem</time><span class="story-milestone-marker"></span><div><h2>Produto da Elev Studio</h2><p>Construído para a rotina do despachante.</p></div></article><article class="story-milestone"><time>Evolução</time><span class="story-milestone-marker"></span><div><h2>Desenvolvimento contínuo</h2><p>Melhorias baseadas no trabalho operacional.</p></div></article></div>
+      </section>
+
+      <section id="next-step" class="page-next-step"><div><h2>Veja uma OS real na demonstração</h2><p>O próximo passo mantém a intenção da página.</p></div><a class="button button-primary" href="#">Agendar demonstração</a></section>
+    </div>
+  </main>
+</body>
+</html>
