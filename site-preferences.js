@@ -298,7 +298,7 @@
       return;
     }
 
-    setBannerVisibility(currentChoice !== "denied");
+    if (currentChoice === "denied") setBannerVisibility(false);
   }
 
   return Object.freeze({

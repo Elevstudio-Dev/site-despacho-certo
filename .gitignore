@@ -3,6 +3,7 @@
 .playwright-cli/
 artifacts/
 test-results/
+tmp/
 .DS_Store
 Thumbs.db
 

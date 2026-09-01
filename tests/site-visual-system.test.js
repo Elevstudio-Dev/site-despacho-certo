@@ -60,3 +60,30 @@ test('ships the local Archivo variable font', () => {
   assert.ok(fs.existsSync(fontPath), 'Expected archivo-latin.woff2 to exist');
   assert.ok(fs.statSync(fontPath).size > 10000, 'Expected a non-empty Archivo WOFF2 asset');
 });
+
+test('preloads the local interface fonts and reserves the brand ratio', () => {
+  const acquisitionPages = [
+    'index.html',
+    'sistema-para-despachante.html',
+    'ordem-de-servico-para-despachante.html',
+    'controle-financeiro-para-despachante.html',
+    'gestao-de-documentos.html',
+    'integracoes.html',
+    'seguranca.html',
+    'precos.html',
+    'sobre.html',
+    'contato.html',
+  ];
+
+  acquisitionPages.forEach((file) => {
+    const html = fs.readFileSync(path.join(root, file), 'utf8');
+    assert.match(html, /rel="preload" href="\/?inter-latin\.woff2" as="font" type="font\/woff2" crossorigin/);
+    assert.match(html, /rel="preload" href="\/?archivo-latin\.woff2" as="font" type="font\/woff2" crossorigin/);
+  });
+  const shell = fs.readFileSync(path.join(root, 'site-shell.css'), 'utf8');
+  assert.match(shell, /\.site-navigation__brand img\s*\{[^}]*aspect-ratio:\s*270\s*\/\s*71/s);
+  assert.equal((homeStyles.match(/font-display:\s*optional/g) || []).length, 2);
+  assert.equal((contentStyles.match(/font-display:\s*optional/g) || []).length, 2);
+  assert.doesNotMatch(homeStyles, /\.hero-copy\s*\{[^}]*animation:/s);
+  assert.doesNotMatch(homeStyles, /\.hero-product\s*\{[^}]*animation:/s);
+});

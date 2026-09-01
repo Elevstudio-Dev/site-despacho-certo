@@ -2,7 +2,7 @@
   font-family: "Inter";
   font-style: normal;
   font-weight: 100 900;
-  font-display: swap;
+  font-display: optional;
   src: url("inter-latin.woff2") format("woff2");
 }
 
@@ -10,7 +10,7 @@
   font-family: "Archivo";
   font-style: normal;
   font-weight: 400 900;
-  font-display: swap;
+  font-display: optional;
   src: url("archivo-latin.woff2") format("woff2");
 }
 
@@ -354,7 +354,6 @@ i[data-lucide] {
   position: relative;
   z-index: 4;
   max-width: 520px;
-  animation: heroCopyIn 700ms 120ms both cubic-bezier(0.2, 0.75, 0.25, 1);
 }
 
 .eyebrow {
@@ -473,7 +472,6 @@ i[data-lucide] {
   width: 780px;
   max-width: 100%;
   justify-self: end;
-  animation: productIn 850ms 220ms both cubic-bezier(0.2, 0.75, 0.25, 1);
 }
 
 .app-window {
@@ -3110,20 +3108,6 @@ body:has(:target) .final-cta {
 
 .mobile-demo-nav {
   display: none;
-}
-
-@keyframes heroCopyIn {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-}
-
-@keyframes productIn {
-  from {
-    opacity: 0;
-    transform: translateX(42px) translateY(18px);
-  }
 }
 
 @keyframes panelIn {

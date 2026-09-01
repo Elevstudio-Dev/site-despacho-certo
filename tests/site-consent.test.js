@@ -118,6 +118,22 @@ test('shows the banner without contacting Google before a choice', () => {
   assert.equal(harness.consent.hasAnalyticsConsent(), false);
 });
 
+test('leaves the server-rendered banner untouched until a choice exists', () => {
+  const harness = createHarness();
+  const banner = harness.elements.privacyChoicePanel;
+  let writes = 0;
+  let hidden = false;
+  Object.defineProperty(banner, 'hidden', {
+    get() { return hidden; },
+    set(value) { writes += 1; hidden = value; },
+  });
+
+  harness.consent.initialize();
+
+  assert.equal(writes, 0);
+  assert.equal(banner.hidden, false);
+});
+
 test('loads consented analytics only after acceptance', () => {
   const harness = createHarness();
   harness.consent.initialize();

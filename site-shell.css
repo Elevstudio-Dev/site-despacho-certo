@@ -53,7 +53,9 @@
 
 .site-navigation__brand img {
   width: 190px;
-  height: auto;
+  height: 50px;
+  aspect-ratio: 270 / 71;
+  object-fit: contain;
 }
 
 .site-navigation__desktop {
@@ -290,7 +292,7 @@
 
 @media (max-width: 640px) {
   .site-navigation__inner { width: min(100% - 28px, 1180px); }
-  .site-navigation__brand img { width: 174px; }
+  .site-navigation__brand img { width: 174px; height: 46px; }
   .site-navigation__mobile { padding-inline: 14px; }
 }
 

@@ -53,3 +53,12 @@ test('keeps content footer media inside narrow grid tracks', () => {
   assert.match(contentStyles, /\.footer-grid\s*>\s*\*\s*\{[^}]*min-width:\s*0/s);
   assert.match(contentStyles, /\.footer-brand img\s*\{[^}]*max-width:\s*100%[^}]*height:\s*auto/s);
 });
+
+test('keeps content-page utility labels above WCAG AA contrast', () => {
+  for (const color of ['#526979', '#315f52', '#b43e31']) {
+    assert.ok(contrast(color, '#ffffff') >= 4.5, `${color} must pass on white`);
+  }
+  assert.ok(contrast('#315f52', '#e1f3ec') >= 4.5);
+  assert.match(contentStyles, /\.breadcrumbs\s*\{[^}]*color:\s*#526979/s);
+  assert.match(contentStyles, /\.visual-heading \.visual-chip\s*\{[^}]*color:\s*#315f52/s);
+});
