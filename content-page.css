@@ -704,8 +704,12 @@ button { cursor: pointer; }
 .document-desk > * { min-width: 0; min-height: 250px; padding: 22px; border-right: 1px solid var(--line); }
 .document-desk > *:last-child { border-right: 0; }
 .document-desk-column > header { min-height: 52px; display: flex; align-items: start; justify-content: space-between; gap: 10px; border-bottom: 1px solid var(--line); }
+.document-desk-column > header > div { min-width: 0; }
+.document-desk-column h3 { margin: 6px 0 14px; color: var(--blue-register); font-size: 18px; }
 .document-record { min-height: 72px; display: grid; align-content: center; gap: 5px; padding: 12px 0; border-bottom: 1px solid var(--line); }
 .document-record:last-child { border-bottom: 0; }
+.document-record > span:not(.record-status) { color: var(--muted); font-size: 11px; }
+.document-record .record-status { justify-self: start; }
 
 .integration-matrix {
   --primitive-accent: var(--cyan-signal);
@@ -741,6 +745,13 @@ button { cursor: pointer; }
 .trust-layer > :first-child { width: 40px; height: 40px; display: grid; place-items: center; color: var(--blue-register); background: #e3f3f8; border: 1px solid #a9d5e2; border-radius: 4px; font-weight: 850; }
 .trust-layer strong { color: var(--blue-register); }
 .trust-layer p { margin-bottom: 0; color: var(--muted); }
+
+.responsibility-table { overflow-x: auto; background: var(--white); border: 1px solid var(--line); }
+.responsibility-table table { width: 100%; min-width: 680px; border-collapse: collapse; table-layout: fixed; }
+.responsibility-table th { padding: 18px 22px; color: var(--white); background: var(--blue-register); text-align: left; }
+.responsibility-table th + th { background: var(--blue-action); }
+.responsibility-table td { padding: 18px 22px; color: var(--ink); border-top: 1px solid var(--line); vertical-align: top; }
+.responsibility-table td + td { border-left: 1px solid var(--line); }
 
 .proposal-builder {
   --primitive-accent: var(--coral-pending);

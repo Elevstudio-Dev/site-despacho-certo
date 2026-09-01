@@ -242,6 +242,23 @@ test('makes OS and finance pages operationally distinct', () => {
   assert.notEqual(normalizeBody(os), normalizeBody(finance));
 });
 
+test('gives documents, integrations and security unique evidence', () => {
+  const docs = read('gestao-de-documentos.html');
+  const integrations = read('integracoes.html');
+  const security = read('seguranca.html');
+
+  assert.match(docs, /class="document-desk"/);
+  assert.match(docs, /Pendente|Recebido|Conferido/);
+  assert.match(docs, /arquivo reutilizável|anexo específico/i);
+  assert.match(integrations, /class="integration-matrix"/);
+  assert.match(integrations, /Depende de fornecedor|Depende de credenciamento|Sob análise/);
+  assert.doesNotMatch(integrations, /Disponível agora|Integração ativa/i);
+  assert.match(security, /class="trust-layers"/);
+  assert.match(security, /Responsabilidade do DespachoCerto|Responsabilidade do escritório/);
+  assert.notEqual(normalizeBody(docs), normalizeBody(integrations));
+  assert.notEqual(normalizeBody(integrations), normalizeBody(security));
+});
+
 test('selects an OS event by click and updates the stable detail region', () => {
   const harness = createOsTimelineHarness();
   const detailRegion = harness.detail;
