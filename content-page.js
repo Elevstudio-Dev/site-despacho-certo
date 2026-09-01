@@ -59,31 +59,60 @@ function nextProductModuleIndex(event, currentIndex, itemCount) {
 document.querySelectorAll(".product-map").forEach((map) => {
   const modules = [...map.querySelectorAll("[data-product-module]")];
   const panels = [...map.querySelectorAll("[data-product-panel]")];
+  const tablist = map.querySelector('[role="tablist"]');
   if (!modules.length || !panels.length) return;
 
-  function activateProductModule(name, focus = false) {
+  const horizontalLayout = window.matchMedia?.("(min-width: 641px) and (max-width: 960px)");
+  function syncProductMapOrientation(media = horizontalLayout) {
+    tablist?.setAttribute("aria-orientation", media?.matches ? "horizontal" : "vertical");
+  }
+  syncProductMapOrientation();
+  horizontalLayout?.addEventListener?.("change", syncProductMapOrientation);
+
+  function productModuleFromHash() {
+    return modules.find((module) => `#${module.id}` === window.location.hash);
+  }
+
+  function syncProductModuleUrl(module) {
+    const nextHash = `#${module.id}`;
+    if (window.location.hash === nextHash) return;
+    window.history?.replaceState(window.history.state, "", nextHash);
+  }
+
+  function activateProductModule(name, { focus = false, syncUrl = false } = {}) {
+    const activeModule = modules.find((module) => module.dataset.productModule === name);
+    if (!activeModule) return;
+
     modules.forEach((module) => {
-      const active = module.dataset.productModule === name;
+      const active = module === activeModule;
       module.setAttribute("aria-selected", String(active));
       module.tabIndex = active ? 0 : -1;
-      if (active && focus) module.focus();
     });
     panels.forEach((panel) => {
       panel.hidden = panel.dataset.productPanel !== name;
     });
+    if (focus) activeModule.focus();
+    if (syncUrl) syncProductModuleUrl(activeModule);
   }
 
   modules.forEach((module, index) => {
-    module.addEventListener("click", () => activateProductModule(module.dataset.productModule));
+    module.addEventListener("click", () => {
+      activateProductModule(module.dataset.productModule, { syncUrl: true });
+    });
     module.addEventListener("keydown", (event) => {
       const nextIndex = nextProductModuleIndex(event, index, modules.length);
       if (nextIndex === null) return;
       event.preventDefault();
-      activateProductModule(modules[nextIndex].dataset.productModule, true);
+      activateProductModule(modules[nextIndex].dataset.productModule, { focus: true, syncUrl: true });
     });
   });
 
-  const hashTarget = modules.find((module) => `#${module.id}` === window.location.hash);
+  window.addEventListener?.("hashchange", () => {
+    const hashTarget = productModuleFromHash();
+    if (hashTarget) activateProductModule(hashTarget.dataset.productModule);
+  });
+
+  const hashTarget = productModuleFromHash();
   const selected = hashTarget || modules.find((module) => module.getAttribute("aria-selected") === "true") || modules[0];
   activateProductModule(selected.dataset.productModule);
 });
