@@ -1,0 +1,28 @@
+# DespachoCerto
+
+> Sistema de gestão para despachante veicular: ordens de serviço, clientes, documentos, financeiro e equipe em um só lugar. Desenvolvido pela Elev Studio.
+
+DespachoCerto é um software (SaaS, Next.js + Supabase) para despachantes veiculares brasileiros administrarem toda a rotina do escritório: abertura e acompanhamento de ordem de serviço (OS), cadastro de clientes e veículos, documentos e anexos por processo, controle financeiro por OS (custo, valor, saldo, lucro), permissões por perfil de usuário (Funcionário, Financeiro, Administrador) e histórico completo de cada processo. O sistema roda em `app.despachocerto.com.br`; este site institucional roda em `despachocerto.com.br`.
+
+## Páginas principais
+
+- [Página inicial](https://despachocerto.com.br/): visão geral do produto.
+- [Sistema para despachante veicular](https://despachocerto.com.br/sistema-para-despachante): o que é o sistema e o que ele centraliza.
+- [Ordem de serviço para despachante](https://despachocerto.com.br/ordem-de-servico-para-despachante): controle de status, documentos, responsáveis e pagamentos por OS.
+- [Controle financeiro para despachante](https://despachocerto.com.br/controle-financeiro-para-despachante): pagamentos, custos, saldos, contas a receber e lucro por OS.
+- [Gestão de documentos](https://despachocerto.com.br/gestao-de-documentos): anexos de clientes, veículos e OS com checklist e histórico.
+- [Segurança e LGPD](https://despachocerto.com.br/seguranca): isolamento por empresa, permissões e proteção de dados.
+- [Integrações](https://despachocerto.com.br/integracoes): como o DespachoCerto avalia integrações com APIs e portais do setor.
+- [Preços](https://despachocerto.com.br/precos): como o preço é definido (usuários, armazenamento, migração, implantação).
+- [Sobre](https://despachocerto.com.br/sobre): origem do produto e da Elev Studio.
+- [Contato](https://despachocerto.com.br/contato): agendar demonstração.
+
+## Clientes
+
+- [Ohana Consultoria](https://despachocerto.com.br/clientes/ohana-consultoria): primeira cliente do DespachoCerto, despachante e consultoria veicular.
+
+## Optional
+
+- [Política de Privacidade](https://despachocerto.com.br/privacidade)
+- [Política de Cookies](https://despachocerto.com.br/cookies)
+- [Termos de Uso](https://despachocerto.com.br/termos)
