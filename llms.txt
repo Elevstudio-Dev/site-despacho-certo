@@ -17,11 +17,7 @@ DespachoCerto é um software (SaaS, Next.js + Supabase) para despachantes veicul
 - [Sobre](https://despachocerto.com.br/sobre): origem do produto e da Elev Studio.
 - [Contato](https://despachocerto.com.br/contato): agendar demonstração.
 
-## Clientes
-
-- [Ohana Consultoria](https://despachocerto.com.br/clientes/ohana-consultoria): primeira cliente do DespachoCerto, despachante e consultoria veicular.
-
-## Optional
+## Informações legais
 
 - [Política de Privacidade](https://despachocerto.com.br/privacidade)
 - [Política de Cookies](https://despachocerto.com.br/cookies)
