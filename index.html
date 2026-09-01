@@ -255,7 +255,7 @@
             </p>
 
             <div class="hero-actions">
-              <a class="button button-primary" data-cta="hero" href="#contato">
+              <a class="button button-primary" data-cta="hero" href="/contato">
                 Agendar demonstração
                 <i data-lucide="calendar-check-2" aria-hidden="true"></i>
               </a>
@@ -419,7 +419,7 @@
                 <strong>Descubra onde seu escritório está perdendo tempo.</strong>
                 <span>Mostre sua rotina e veja como ela fica organizada no DespachoCerto.</span>
               </div>
-              <a class="button button-primary" data-cta="dores" href="#contato">
+              <a class="button button-primary" data-cta="dores" href="/contato">
                 Quero analisar minha operação
                 <i data-lucide="arrow-right" size="17" aria-hidden="true"></i>
               </a>
@@ -617,7 +617,7 @@
               <strong>Quer ver esses módulos com os serviços do seu escritório?</strong>
               <span>Levamos um fluxo real para a demonstração, da abertura da OS ao fechamento.</span>
             </div>
-            <a class="button button-primary" data-cta="tour-produto" href="#contato">
+            <a class="button button-primary" data-cta="tour-produto" href="/contato">
               Ver uma demonstração personalizada
               <i data-lucide="calendar-check-2" size="17" aria-hidden="true"></i>
             </a>
@@ -638,7 +638,7 @@
               <button class="workflow-step" id="workflowTab3" type="button" role="tab" aria-selected="false" aria-controls="workflowPanel" tabindex="-1" data-step="3"><span class="workflow-step-index">4</span><span><strong>Receber</strong><span>Pagamento e custo</span></span></button>
               <button class="workflow-step" id="workflowTab4" type="button" role="tab" aria-selected="false" aria-controls="workflowPanel" tabindex="-1" data-step="4"><span class="workflow-step-index">5</span><span><strong>Finalizar</strong><span>Entrega e histórico</span></span></button>
             </div>
-            <a class="button button-primary workflow-cta" data-cta="jornada-os" href="#contato">
+            <a class="button button-primary workflow-cta" data-cta="jornada-os" href="/contato">
               Levar uma OS real para a demonstração
               <i data-lucide="arrow-right" size="17" aria-hidden="true"></i>
             </a>
@@ -723,7 +723,7 @@
               <strong>Veja a visão certa para cada pessoa da sua equipe.</strong>
               <span>A demonstração considera os perfis, responsabilidades e restrições do seu escritório.</span>
             </div>
-            <a class="button button-outline" data-cta="perfis" href="#contato">
+            <a class="button button-outline" data-cta="perfis" href="/contato">
               Conversar sobre minha equipe
               <i data-lucide="users" size="17" aria-hidden="true"></i>
             </a>
@@ -754,7 +754,7 @@
             <h2 id="segurancaTitle">Dados do cliente tratados com responsabilidade.</h2>
             <p>O DespachoCerto nasce multiempresa, com isolamento de dados e permissões pensadas para documentos pessoais, informações veiculares e registros financeiros.</p>
             <div class="security-note"><i data-lucide="info" size="17"></i><span>Integrações com órgãos e fornecedores oficiais dependem de credenciamento, contrato e disponibilidade técnica. O sistema não promete acesso não autorizado.</span></div>
-            <a class="button button-light security-cta" data-cta="seguranca" href="#contato">
+            <a class="button button-light security-cta" data-cta="seguranca" href="/contato">
               Falar sobre segurança e implantação
               <i data-lucide="arrow-right" size="17" aria-hidden="true"></i>
             </a>
@@ -800,34 +800,15 @@
         </div>
       </section>
 
-      <section class="final-section" id="contato" aria-labelledby="contatoTitle">
+      <section class="final-section" aria-labelledby="contatoTitle">
         <div class="container final-layout">
           <div class="final-copy reveal">
             <p class="eyebrow eyebrow-on-dark">Próximo passo</p>
-            <h2 id="contatoTitle">Veja o DespachoCerto trabalhando com um processo do seu escritório.</h2>
-            <p>Em uma demonstração objetiva, mostramos como abrir uma OS, conferir documentos, acompanhar status e fechar o financeiro.</p>
+            <h2 id="contatoTitle">Leve um processo do seu escritório para a demonstração.</h2>
+            <p>Conte onde a equipe perde contexto hoje. A conversa percorre esse processo no DespachoCerto, sem apresentação genérica e sem compromisso.</p>
             <div class="final-points"><span class="final-point"><i data-lucide="check" size="16"></i> Demonstração com fluxo de despachante</span><span class="final-point"><i data-lucide="check" size="16"></i> Diagnóstico rápido da operação atual</span><span class="final-point"><i data-lucide="check" size="16"></i> Orientação de implantação e migração</span></div>
           </div>
-
-          <form class="lead-form reveal" id="leadForm" action="/api/lead" method="post" data-clarity-mask="true">
-            <header><h3>Agende uma demonstração</h3><p>Conte um pouco sobre o escritório para prepararmos uma conversa útil.</p></header>
-            <div class="form-grid">
-              <label class="form-field">Seu nome<input name="name" type="text" autocomplete="name" placeholder="Como podemos chamar você?" required /></label>
-              <label class="form-field">E-mail<input name="email" type="email" autocomplete="email" placeholder="voce@escritorio.com.br" required /></label>
-              <label class="form-field">WhatsApp<input name="phone" type="tel" autocomplete="tel" placeholder="(00) 00000-0000" required /></label>
-              <label class="form-field">Nome do escritório<input name="company" type="text" autocomplete="organization" placeholder="Empresa ou escritório" required /></label>
-              <label class="form-field">Volume mensal de OS<select name="volume" required><option value="">Selecione</option><option>Até 50 OS</option><option>De 51 a 150 OS</option><option>De 151 a 300 OS</option><option>Mais de 300 OS</option></select></label>
-              <label class="form-field full">Principal dificuldade hoje<textarea name="challenge" placeholder="Ex.: documentos, status, cobrança, financeiro ou equipe"></textarea></label>
-              <div class="form-honeypot" aria-hidden="true"><label>Não preencha este campo<input name="website" type="text" autocomplete="off" tabindex="-1" /></label></div>
-              <div class="turnstile-field">
-                <div id="turnstileWidget"></div>
-                <p class="turnstile-status" id="turnstileStatus" aria-live="polite">Preparando verificação de segurança...</p>
-              </div>
-              <p class="form-feedback" id="formFeedback" role="status" aria-live="polite" tabindex="-1"></p>
-              <button class="button button-primary" id="leadSubmit" type="submit"><span id="leadSubmitLabel">Quero conhecer o DespachoCerto</span> <i data-lucide="arrow-right" size="17" aria-hidden="true"></i></button>
-              <p class="form-note">Ao enviar, você concorda em receber contato da equipe DespachoCerto sobre a demonstração solicitada. Consulte nossa <a href="/privacidade">Política de Privacidade</a>.</p>
-            </div>
-          </form>
+          <div class="final-action reveal"><a class="button button-primary" data-cta="final" href="/contato">Preparar minha demonstração <i data-lucide="arrow-right" size="17" aria-hidden="true"></i></a></div>
         </div>
       </section>
     </main>
@@ -843,7 +824,7 @@
           </a>
         </div>
         <div class="footer-column"><strong>Produto</strong><div class="footer-links"><a href="/sistema-para-despachante">Conheça o sistema</a><a href="/ordem-de-servico-para-despachante">Ordens de serviço</a><a href="/controle-financeiro-para-despachante">Financeiro</a><a href="/gestao-de-documentos">Documentos</a><a href="/precos">Preços</a><a href="/blog">Blog</a></div></div>
-        <div class="footer-column"><strong>Contato</strong><div class="footer-links"><a data-cta="rodape" href="/contato">Agendar demonstração</a><a href="/sobre">Sobre</a><a href="#duvidas">Perguntas frequentes</a><a href="/privacidade">Privacidade</a><a href="/cookies">Cookies</a><a href="/termos">Termos de Uso</a><button class="footer-link-button" id="privacySettings" type="button">Preferências de cookies</button><a href="mailto:contato@elevstudio.com.br">contato@elevstudio.com.br</a></div></div>
+        <div class="footer-column"><strong>Contato</strong><div class="footer-links"><a data-cta="rodape" href="/contato">Agendar demonstração</a><a href="/sobre">Sobre</a><a href="#duvidas">Perguntas frequentes</a><a href="/privacidade">Privacidade</a><a href="/cookies">Cookies</a><a href="/termos">Termos de Uso</a><button class="footer-link-button" id="privacySettings" type="button">Preferências de cookies</button></div></div>
       </div>
       <div class="container footer-bottom"><span>© <span id="currentYear">2026</span> DespachoCerto. Todos os direitos reservados.</span><span>Desenvolvido pela <a href="https://elevstudio.com.br/" target="_blank" rel="noopener noreferrer">Elev Studio</a>.</span></div>
     </footer>

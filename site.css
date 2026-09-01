@@ -2437,6 +2437,10 @@ body:has(:target) .final-section {
   align-items: start;
 }
 
+.final-action {
+  align-self: center;
+}
+
 .final-copy h2 {
   color: var(--white);
 }

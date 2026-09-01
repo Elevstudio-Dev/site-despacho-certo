@@ -29,7 +29,7 @@
       });
     },
 
-    trackLead() {
+    trackLeadSuccess() {
       return sendEvent("generate_lead", {
         form_id: "leadForm",
         method: "website",

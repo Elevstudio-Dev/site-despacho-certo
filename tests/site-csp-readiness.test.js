@@ -7,6 +7,7 @@ const projectRoot = path.resolve(__dirname, '..');
 const indexPath = path.join(projectRoot, 'index.html');
 const cssPath = path.join(projectRoot, 'site.css');
 const scriptPath = path.join(projectRoot, 'site.js');
+const leadFormScriptPath = path.join(projectRoot, 'lead-form.js');
 
 test('serves home styles from a same-origin stylesheet', () => {
   const index = fs.readFileSync(indexPath, 'utf8');
@@ -37,12 +38,12 @@ test('serves home behavior from a same-origin script', () => {
 });
 
 test('preserves the lead and analytics behavior in the external script', () => {
-  assert.equal(fs.existsSync(scriptPath), true);
-  const script = fs.readFileSync(scriptPath, 'utf8');
+  assert.equal(fs.existsSync(leadFormScriptPath), true);
+  const script = fs.readFileSync(leadFormScriptPath, 'utf8');
 
   assert.match(script, /DespachoCertoAnalytics/);
   assert.match(script, /leadForm\.addEventListener\("submit"/);
-  assert.match(script, /trackLead\(\)/);
+  assert.match(script, /trackLeadSuccess\?\.\(\)/);
 });
 
 test('publishes the Bing Webmaster Tools verification tag', () => {

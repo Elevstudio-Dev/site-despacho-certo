@@ -249,6 +249,7 @@ test('allows analytics consent to be revoked from preferences', () => {
 
 test('publishes privacy controls and documentation', () => {
   const index = fs.readFileSync(path.join(projectRoot, 'index.html'), 'utf8');
+  const contact = fs.readFileSync(path.join(projectRoot, 'contato.html'), 'utf8');
   const privacy = fs.readFileSync(path.join(projectRoot, 'privacidade.html'), 'utf8');
   const sitemap = fs.readFileSync(path.join(projectRoot, 'sitemap.xml'), 'utf8');
 
@@ -270,7 +271,7 @@ test('publishes privacy controls and documentation', () => {
   assert.match(privacy, /Supabase/);
   assert.match(privacy, /Cloudflare Turnstile/);
   assert.match(privacy, /Microsoft Clarity/);
-  assert.match(index, /id="leadForm"[^>]+data-clarity-mask="true"/);
+  assert.match(contact, /id="leadForm"[^>]+data-clarity-mask="true"/);
   assert.match(privacy, /contato@elevstudio\.com\.br/);
   assert.doesNotMatch(privacy, /fonts\.(googleapis|gstatic)\.com/);
   assert.match(sitemap, /https:\/\/despachocerto\.com\.br\/privacidade/);

@@ -142,6 +142,33 @@ button { cursor: pointer; }
 .hero-note span { display: inline-flex; align-items: center; gap: 7px; }
 .hero-note svg { color: var(--green); }
 
+.contact-outcomes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; margin: 32px 0 0; padding: 1px; list-style: none; background: var(--line); border: 1px solid var(--line); }
+.contact-outcomes li { min-height: 112px; padding: 16px; background: var(--white); }
+.contact-outcomes strong { display: block; color: var(--blue-900); font-size: 14px; }
+.contact-outcomes span { display: block; margin-top: 5px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+
+.lead-form { padding: 30px; color: var(--ink); background: var(--white); border: 1px solid #cbdbe4; border-radius: 8px; box-shadow: var(--shadow); }
+.lead-form header { margin-bottom: 22px; }
+.lead-form h2 { margin: 0; color: var(--navy-deep, var(--blue-950)); font-size: 20px; line-height: 1.25; }
+.lead-form header p { margin: 7px 0 0; color: var(--muted); font-size: 12px; }
+.form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+.form-field { display: grid; gap: 7px; color: var(--ink); font-size: 11px; font-weight: 700; }
+.form-field.full, .lead-form .button, .form-note, .form-feedback, .turnstile-field { grid-column: 1 / -1; }
+.form-field input, .form-field select, .form-field textarea { width: 100%; min-height: 46px; padding: 10px 12px; color: var(--ink); background: var(--white); border: 1px solid #b9c8d4; border-radius: 5px; }
+.form-field textarea { min-height: 88px; resize: vertical; }
+.form-field input::placeholder, .form-field textarea::placeholder { color: #98a3ac; }
+.form-honeypot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+.turnstile-field { min-width: 0; }
+.turnstile-field iframe { max-width: 100%; }
+.turnstile-status { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
+.turnstile-status:empty { display: none; }
+.form-feedback { display: none; margin: 0; padding: 11px 12px; color: var(--green); background: #e1f3ec; border-radius: 5px; font-size: 11px; font-weight: 700; }
+.form-feedback.visible { display: block; }
+.form-feedback.error { color: #9f241d; background: #fff1f0; border: 1px solid #f5c2be; }
+.lead-form .button { min-height: 48px; }
+.lead-form .button:disabled { cursor: wait; opacity: 0.72; transform: none; }
+.form-note { margin: 0; color: var(--muted); font-size: 9px; line-height: 1.5; }
+
 .product-visual { position: relative; min-height: 470px; }
 .visual-shell { overflow: hidden; background: var(--white); border: 1px solid #cbdbe4; border-radius: 8px; box-shadow: var(--shadow); }
 .visual-topbar { min-height: 48px; display: flex; align-items: center; gap: 8px; padding: 0 16px; background: var(--blue-950); color: var(--white); }
@@ -283,6 +310,9 @@ button { cursor: pointer; }
   .hero-copy > p:not(.eyebrow) { font-size: 16px; }
   .hero-actions .button { width: 100%; }
   .hero-note { display: grid; gap: 8px; }
+  .contact-outcomes, .form-grid { grid-template-columns: 1fr; }
+  .lead-form { padding: 20px; }
+  .form-field.full, .lead-form .button, .form-note, .form-feedback, .turnstile-field { grid-column: auto; }
   .visual-body { grid-template-columns: 72px 1fr; min-height: 340px; }
   .visual-workspace { padding: 14px; }
   .visual-grid { grid-template-columns: 1fr; }
