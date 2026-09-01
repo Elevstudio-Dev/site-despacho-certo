@@ -373,7 +373,7 @@
         </div>
       </section>
 
-      <section class="section" aria-labelledby="problemaTitle">
+      <section class="problem" aria-labelledby="problemaTitle">
         <div class="container problem-layout">
           <div class="problem-copy reveal">
             <p class="eyebrow">A rotina real</p>
@@ -428,326 +428,69 @@
         </div>
       </section>
 
-      <section class="section section-sky product-tour" id="sistema" aria-labelledby="sistemaTitle">
+      <section class="module-routes" id="sistema" aria-labelledby="sistemaTitle">
         <div class="container">
           <div class="section-heading reveal">
             <div>
-              <p class="eyebrow">Por dentro do DespachoCerto</p>
-              <h2 id="sistemaTitle">Uma visão completa, sem complicar a operação.</h2>
+              <p class="eyebrow">Escolha por onde começar</p>
+              <h2 id="sistemaTitle">Cinco caminhos para organizar a rotina.</h2>
             </div>
-            <p>Explore os módulos que conectam atendimento, execução e resultado financeiro no mesmo fluxo.</p>
+            <p>Cada área resolve uma parte concreta do trabalho. A visão geral mostra como todas se conectam.</p>
           </div>
-
-          <div class="tour-layout">
-            <div class="tour-tabs" role="tablist" aria-label="Módulos do sistema">
-              <button class="tour-tab" type="button" role="tab" aria-selected="true" aria-controls="panel-os" id="tab-os" data-tour="os">
-                <i data-lucide="clipboard-list" aria-hidden="true"></i>
-                <span><strong>Ordens de serviço</strong><small>Status, prazos e responsáveis</small></span>
-                <i class="tab-arrow" data-lucide="arrow-right" aria-hidden="true"></i>
-              </button>
-              <button class="tour-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-clientes" id="tab-clientes" data-tour="clientes">
-                <i data-lucide="users" aria-hidden="true"></i>
-                <span><strong>Banco de clientes</strong><small>Histórico, veículos e saldo</small></span>
-                <i class="tab-arrow" data-lucide="arrow-right" aria-hidden="true"></i>
-              </button>
-              <button class="tour-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-financeiro" id="tab-financeiro" data-tour="financeiro">
-                <i data-lucide="wallet-cards" aria-hidden="true"></i>
-                <span><strong>Financeiro</strong><small>Receita, custo e lucro</small></span>
-                <i class="tab-arrow" data-lucide="arrow-right" aria-hidden="true"></i>
-              </button>
-              <button class="tour-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-documentos" id="tab-documentos" data-tour="documentos">
-                <i data-lucide="folder-check" aria-hidden="true"></i>
-                <span><strong>Documentos</strong><small>Checklist e anexos</small></span>
-                <i class="tab-arrow" data-lucide="arrow-right" aria-hidden="true"></i>
-              </button>
-              <button class="tour-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-equipe" id="tab-equipe" data-tour="equipe">
-                <i data-lucide="shield-check" aria-hidden="true"></i>
-                <span><strong>Equipe e acesso</strong><small>Perfis e permissões</small></span>
-                <i class="tab-arrow" data-lucide="arrow-right" aria-hidden="true"></i>
-              </button>
-            </div>
-
-            <div class="tour-stage">
-              <article class="tour-panel active" id="panel-os" role="tabpanel" aria-labelledby="tab-os" data-panel="os">
-                <div class="tour-context">
-                  <h3>Saiba onde cada processo está e o que precisa acontecer agora.</h3>
-                  <p>Busque por número, placa, cliente, telefone ou serviço e filtre por período, status, responsável e pagamento.</p>
-                </div>
-                <div class="product-surface">
-                  <div class="surface-toolbar">
-                    <div><span>Ordens de serviço</span><strong>Controle operacional</strong></div>
-                    <div class="surface-toolbar-actions"><span class="surface-button"><i data-lucide="filter" size="13"></i> Filtrar</span><span class="surface-button primary"><i data-lucide="plus" size="13"></i> Nova OS</span></div>
-                  </div>
-                  <div class="surface-body">
-                    <div class="surface-metrics">
-                      <div class="surface-metric"><span>OS abertas</span><strong>28</strong></div>
-                      <div class="surface-metric"><span>Aguardando doc</span><strong>6</strong></div>
-                      <div class="surface-metric"><span>Em andamento</span><strong>10</strong></div>
-                      <div class="surface-metric"><span>Com lembrete</span><strong>4</strong></div>
-                    </div>
-                    <div class="surface-grid">
-                      <section class="surface-section">
-                        <h4><i data-lucide="list-filter" size="15"></i> OS que pedem atenção</h4>
-                        <div class="surface-list">
-                          <div class="surface-row"><strong>OS-0248 · ABC1D23</strong><span>Mariana Costa</span><span>Hoje, 14h</span><span class="status doc">Aguardando doc</span></div>
-                          <div class="surface-row"><strong>OS-0246 · EFG4H56</strong><span>Auto Mais Ltda.</span><span>Vence hoje</span><span class="status late">Pagamento</span></div>
-                          <div class="surface-row"><strong>OS-0244 · VWX8Y90</strong><span>Carlos Nunes</span><span>3 dias</span><span class="status progress">Em andamento</span></div>
-                          <div class="surface-row"><strong>OS-0241 · JKL7M89</strong><span>Loja Avenida</span><span>1 dia</span><span class="status progress">Em análise</span></div>
-                        </div>
-                      </section>
-                      <aside class="surface-section">
-                        <h4><i data-lucide="user-round-check" size="15"></i> Por responsável</h4>
-                        <div class="surface-side-list">
-                          <div class="surface-side-item"><span><strong>Ana Paula</strong><span>7 em andamento</span></span><strong>12 OS</strong></div>
-                          <div class="surface-side-item"><span><strong>Rafael Lima</strong><span>3 aguardando doc</span></span><strong>9 OS</strong></div>
-                          <div class="surface-side-item"><span><strong>Camila Souza</strong><span>2 para finalizar</span></span><strong>7 OS</strong></div>
-                        </div>
-                      </aside>
-                    </div>
-                  </div>
-                </div>
-              </article>
-
-              <article class="tour-panel" id="panel-clientes" role="tabpanel" aria-labelledby="tab-clientes" data-panel="clientes" hidden>
-                <div class="tour-context">
-                  <h3>A ficha do cliente deixa de ser cadastro e vira memória do escritório.</h3>
-                  <p>Dados, veículos, OS, documentos, observações e saldo ficam reunidos para qualquer pessoa autorizada continuar o atendimento.</p>
-                </div>
-                <div class="product-surface">
-                  <div class="surface-toolbar">
-                    <div><span>Banco de clientes</span><strong>Mariana Costa</strong></div>
-                    <div class="surface-toolbar-actions"><span class="surface-button"><i data-lucide="message-circle" size="13"></i> WhatsApp</span><span class="surface-button primary"><i data-lucide="paperclip" size="13"></i> Anexar</span></div>
-                  </div>
-                  <div class="surface-body client-profile">
-                    <section class="profile-summary">
-                      <span class="profile-status">Ficha ativa · Sem saldo</span>
-                      <h4>Mariana Costa</h4>
-                      <p>(11) 99876-5432 · CPF cadastrado</p>
-                      <div class="profile-metrics"><div><span>OS</span><strong>7</strong></div><div><span>Veículos</span><strong>2</strong></div><div><span>Anexos</span><strong>13</strong></div></div>
-                      <div class="profile-info"><div><span>Último serviço</span><strong>08/08/2026</strong></div><div><span>Veículos</span><strong>ABC1D23 · KLM4N56</strong></div><div><span>E-mail</span><strong>mariana@email.com</strong></div><div><span>Observação</span><strong>Prefere contato por WhatsApp</strong></div></div>
-                    </section>
-                    <section class="history-panel">
-                      <h4>Histórico de atendimento</h4>
-                      <div class="history-item"><span class="history-dot"><i data-lucide="check" size="12"></i></span><span><strong>Transferência finalizada</strong><span>OS-0232 · Documento entregue e pagamento confirmado</span></span><span>08 ago</span></div>
-                      <div class="history-item"><span class="history-dot"><i data-lucide="paperclip" size="12"></i></span><span><strong>CRLV anexado</strong><span>Arquivo ligado ao veículo ABC1D23</span></span><span>07 ago</span></div>
-                      <div class="history-item"><span class="history-dot"><i data-lucide="message-circle" size="12"></i></span><span><strong>Contato registrado</strong><span>Cliente avisada sobre conclusão do processo</span></span><span>07 ago</span></div>
-                      <div class="history-item"><span class="history-dot"><i data-lucide="clipboard-list" size="12"></i></span><span><strong>Nova OS criada</strong><span>Licenciamento do veículo KLM4N56</span></span><span>18 jul</span></div>
-                    </section>
-                  </div>
-                </div>
-              </article>
-
-              <article class="tour-panel" id="panel-financeiro" role="tabpanel" aria-labelledby="tab-financeiro" data-panel="financeiro" hidden>
-                <div class="tour-context">
-                  <h3>Veja o que entrou, o que saiu e quais serviços realmente deixam margem.</h3>
-                  <p>Separe valor de venda, custo, recebimentos e lançamentos avulsos com acesso restrito aos perfis financeiros.</p>
-                </div>
-                <div class="product-surface">
-                  <div class="surface-toolbar">
-                    <div><span>Financeiro</span><strong>Visão do mês</strong></div>
-                    <div class="surface-toolbar-actions"><span class="surface-button"><i data-lucide="download" size="13"></i> Exportar</span><span class="surface-button primary"><i data-lucide="plus" size="13"></i> Lançamento</span></div>
-                  </div>
-                  <div class="surface-body">
-                    <div class="surface-metrics"><div class="surface-metric"><span>Faturamento</span><strong>R$ 42.860</strong></div><div class="surface-metric"><span>Custos</span><strong>R$ 26.410</strong></div><div class="surface-metric"><span>Lucro bruto</span><strong>R$ 16.450</strong></div><div class="surface-metric"><span>A receber</span><strong>R$ 7.280</strong></div></div>
-                    <div class="surface-grid">
-                      <section class="surface-section">
-                        <h4><i data-lucide="bar-chart-3" size="15"></i> Receita e custo</h4>
-                        <div class="finance-chart" aria-hidden="true">
-                          <div class="chart-group"><i class="chart-bar chart-height-52"></i><i class="chart-bar cost chart-height-32"></i><span>Sem 1</span></div>
-                          <div class="chart-group"><i class="chart-bar chart-height-72"></i><i class="chart-bar cost chart-height-44"></i><span>Sem 2</span></div>
-                          <div class="chart-group"><i class="chart-bar chart-height-61"></i><i class="chart-bar cost chart-height-42"></i><span>Sem 3</span></div>
-                          <div class="chart-group"><i class="chart-bar chart-height-88"></i><i class="chart-bar cost chart-height-51"></i><span>Sem 4</span></div>
-                        </div>
-                      </section>
-                      <aside class="surface-section">
-                        <h4><i data-lucide="circle-dollar-sign" size="15"></i> Serviços com margem</h4>
-                        <div class="surface-side-list"><div class="surface-side-item"><span><strong>Transferência</strong><span>18 OS no período</span></span><strong>44%</strong></div><div class="surface-side-item"><span><strong>Primeiro emplacamento</strong><span>6 OS no período</span></span><strong>39%</strong></div><div class="surface-side-item"><span><strong>Regularização</strong><span>5 OS no período</span></span><strong>34%</strong></div></div>
-                      </aside>
-                    </div>
-                  </div>
-                </div>
-              </article>
-
-              <article class="tour-panel" id="panel-documentos" role="tabpanel" aria-labelledby="tab-documentos" data-panel="documentos" hidden>
-                <div class="tour-context">
-                  <h3>O checklist mostra o que falta antes que a pendência vire atraso.</h3>
-                  <p>Receba, valide e organize arquivos por cliente ou OS. PDFs podem ser reunidos para facilitar envio e arquivamento.</p>
-                </div>
-                <div class="product-surface">
-                  <div class="surface-toolbar">
-                    <div><span>OS-0248 · Transferência</span><strong>Documentos e checklist</strong></div>
-                    <div class="surface-toolbar-actions"><span class="surface-button"><i data-lucide="files" size="13"></i> Juntar PDFs</span><span class="surface-button primary"><i data-lucide="upload" size="13"></i> Enviar arquivo</span></div>
-                  </div>
-                  <div class="surface-body document-grid">
-                    <section class="surface-section">
-                      <h4><i data-lucide="list-checks" size="15"></i> Checklist do serviço</h4>
-                      <div class="checklist"><div class="check-row"><span class="check-icon"><i data-lucide="check" size="13"></i></span><span><strong>Documento do proprietário</strong><span>Validado por Ana Paula</span></span><span class="status done">Validado</span></div><div class="check-row"><span class="check-icon"><i data-lucide="check" size="13"></i></span><span><strong>Comprovante de endereço</strong><span>Recebido em 11/08</span></span><span class="status done">Recebido</span></div><div class="check-row"><span class="check-icon pending"><i data-lucide="clock-3" size="13"></i></span><span><strong>ATPV-e assinada</strong><span>Solicitada ao cliente</span></span><span class="status doc">Pendente</span></div><div class="check-row"><span class="check-icon"><i data-lucide="check" size="13"></i></span><span><strong>Laudo de vistoria</strong><span>Validado em 10/08</span></span><span class="status done">Validado</span></div></div>
-                    </section>
-                    <section class="surface-section">
-                      <h4><i data-lucide="paperclip" size="15"></i> Arquivos ligados à OS</h4>
-                      <div class="file-list"><div class="file-row"><span class="file-icon"><i data-lucide="file-text" size="15"></i></span><span><strong>documento-proprietario.pdf</strong><span>Cliente · 1,2 MB · 11/08/2026</span></span><i data-lucide="download" size="14"></i></div><div class="file-row"><span class="file-icon"><i data-lucide="file-text" size="15"></i></span><span><strong>comprovante-endereco.pdf</strong><span>OS-0248 · 842 KB · 11/08/2026</span></span><i data-lucide="download" size="14"></i></div><div class="file-row"><span class="file-icon"><i data-lucide="image" size="15"></i></span><span><strong>laudo-vistoria.jpg</strong><span>Veículo ABC1D23 · 2,4 MB</span></span><i data-lucide="download" size="14"></i></div><div class="file-row"><span class="file-icon"><i data-lucide="receipt-text" size="15"></i></span><span><strong>comprovante-pagamento.pdf</strong><span>Financeiro · 380 KB</span></span><i data-lucide="download" size="14"></i></div></div>
-                    </section>
-                  </div>
-                </div>
-              </article>
-
-              <article class="tour-panel" id="panel-equipe" role="tabpanel" aria-labelledby="tab-equipe" data-panel="equipe" hidden>
-                <div class="tour-context">
-                  <h3>Cada pessoa enxerga o necessário para trabalhar com segurança.</h3>
-                  <p>Perfis operacionais, financeiros e administrativos reduzem exposição de dados e deixam responsabilidades claras.</p>
-                </div>
-                <div class="product-surface">
-                  <div class="surface-toolbar">
-                    <div><span>Configurações</span><strong>Usuários e permissões</strong></div>
-                    <div class="surface-toolbar-actions"><span class="surface-button primary"><i data-lucide="user-plus" size="13"></i> Novo usuário</span></div>
-                  </div>
-                  <div class="surface-body">
-                    <div class="permission-grid">
-                      <section class="permission-role"><strong>Funcionário</strong><div class="permission-list"><span class="permission-item">Criar e editar OS <i data-lucide="check" size="13"></i></span><span class="permission-item">Clientes e anexos <i data-lucide="check" size="13"></i></span><span class="permission-item">Alterar status <i data-lucide="check" size="13"></i></span><span class="permission-item blocked">Ver lucro e custos <i data-lucide="minus" size="13"></i></span><span class="permission-item blocked">Gerenciar usuários <i data-lucide="minus" size="13"></i></span></div></section>
-                      <section class="permission-role finance"><strong>Financeiro</strong><div class="permission-list"><span class="permission-item">Pagamentos e custos <i data-lucide="check" size="13"></i></span><span class="permission-item">Lucro e margem <i data-lucide="check" size="13"></i></span><span class="permission-item">Relatórios e exportação <i data-lucide="check" size="13"></i></span><span class="permission-item">Lançamentos gerais <i data-lucide="check" size="13"></i></span><span class="permission-item blocked">Gerenciar usuários <i data-lucide="minus" size="13"></i></span></div></section>
-                      <section class="permission-role admin"><strong>Administrador</strong><div class="permission-list"><span class="permission-item">Acesso operacional <i data-lucide="check" size="13"></i></span><span class="permission-item">Acesso financeiro <i data-lucide="check" size="13"></i></span><span class="permission-item">Usuários e perfis <i data-lucide="check" size="13"></i></span><span class="permission-item">Serviços e configurações <i data-lucide="check" size="13"></i></span><span class="permission-item">Integrações da empresa <i data-lucide="check" size="13"></i></span></div></section>
-                    </div>
-                  </div>
-                </div>
-              </article>
-            </div>
-          </div>
-          <div class="section-cta section-cta-tour reveal">
-            <div class="section-cta-copy">
-              <strong>Quer ver esses módulos com os serviços do seu escritório?</strong>
-              <span>Levamos um fluxo real para a demonstração, da abertura da OS ao fechamento.</span>
-            </div>
-            <a class="button button-primary" data-cta="tour-produto" href="/contato">
-              Ver uma demonstração personalizada
-              <i data-lucide="calendar-check-2" size="17" aria-hidden="true"></i>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section class="section section-paper" id="como-funciona" aria-labelledby="workflowTitle">
-        <div class="container workflow-layout">
-          <div class="workflow-copy reveal">
-            <p class="eyebrow">Do atendimento ao arquivo</p>
-            <h2 id="workflowTitle">Uma OS conduz o trabalho de ponta a ponta.</h2>
-            <p>Clique nas etapas e veja como cliente, documentos, execução, cobrança e histórico permanecem conectados.</p>
-            <div class="workflow-steps" role="tablist" aria-label="Etapas da ordem de serviço">
-              <button class="workflow-step active" id="workflowTab0" type="button" role="tab" aria-selected="true" aria-controls="workflowPanel" tabindex="0" data-step="0"><span class="workflow-step-index">1</span><span><strong>Abrir a OS</strong><span>Cliente, veículo e serviço</span></span></button>
-              <button class="workflow-step" id="workflowTab1" type="button" role="tab" aria-selected="false" aria-controls="workflowPanel" tabindex="-1" data-step="1"><span class="workflow-step-index">2</span><span><strong>Receber documentos</strong><span>Checklist e anexos</span></span></button>
-              <button class="workflow-step" id="workflowTab2" type="button" role="tab" aria-selected="false" aria-controls="workflowPanel" tabindex="-1" data-step="2"><span class="workflow-step-index">3</span><span><strong>Executar</strong><span>Status e responsável</span></span></button>
-              <button class="workflow-step" id="workflowTab3" type="button" role="tab" aria-selected="false" aria-controls="workflowPanel" tabindex="-1" data-step="3"><span class="workflow-step-index">4</span><span><strong>Receber</strong><span>Pagamento e custo</span></span></button>
-              <button class="workflow-step" id="workflowTab4" type="button" role="tab" aria-selected="false" aria-controls="workflowPanel" tabindex="-1" data-step="4"><span class="workflow-step-index">5</span><span><strong>Finalizar</strong><span>Entrega e histórico</span></span></button>
-            </div>
-            <a class="button button-primary workflow-cta" data-cta="jornada-os" href="/contato">
-              Levar uma OS real para a demonstração
-              <i data-lucide="arrow-right" size="17" aria-hidden="true"></i>
-            </a>
-          </div>
-
-          <div class="workflow-stage reveal" id="workflowPanel" role="tabpanel" aria-labelledby="workflowTab0" aria-live="polite">
-            <div class="os-head">
-              <div><p class="eyebrow">Ordem de serviço</p><h3>OS-0248</h3><p>Transferência de propriedade · ABC1D23</p></div>
-              <div class="os-head-state"><span>Status atual</span><strong id="workflowStatus">Em análise</strong></div>
-            </div>
-
-            <div class="os-progress" id="osProgress" aria-hidden="true">
-              <div class="os-progress-item current"><span class="os-progress-dot"></span><span>Cadastro</span></div>
-              <div class="os-progress-item"><span class="os-progress-dot"></span><span>Documentos</span></div>
-              <div class="os-progress-item"><span class="os-progress-dot"></span><span>Execução</span></div>
-              <div class="os-progress-item"><span class="os-progress-dot"></span><span>Financeiro</span></div>
-              <div class="os-progress-item"><span class="os-progress-dot"></span><span>Finalização</span></div>
-            </div>
-
-            <div class="os-grid">
-              <section class="os-section">
-                <h4><i data-lucide="clipboard-check" size="15"></i> Resumo da OS</h4>
-                <div class="os-info">
-                  <div><span>Cliente</span><strong>Mariana Costa</strong></div>
-                  <div><span>Veículo</span><strong>ABC1D23</strong></div>
-                  <div><span>Serviço</span><strong>Transferência</strong></div>
-                  <div><span>Responsável</span><strong id="workflowOwner">Ana Paula</strong></div>
-                  <div><span>Prazo</span><strong>14/08/2026</strong></div>
-                  <div><span>Pagamento</span><strong id="workflowPayment">Aguardando</strong></div>
-                </div>
-              </section>
-              <section class="os-section">
-                <h4><i data-lucide="history" size="15"></i> Linha do tempo</h4>
-                <div class="os-event-list" id="workflowEvents">
-                  <div class="os-event active"><span class="os-event-dot"></span><span><strong id="eventTitle">OS criada</strong><span id="eventText">Cliente, veículo e serviço vinculados ao processo.</span></span></div>
-                  <div class="os-event"><span class="os-event-dot"></span><span><strong>Próximo passo</strong><span id="nextStepText">Conferir documentos necessários para iniciar.</span></span></div>
-                  <div class="os-event"><span class="os-event-dot"></span><span><strong>Registro automático</strong><span>Alterações ficam ligadas ao usuário e horário.</span></span></div>
-                </div>
-              </section>
-            </div>
-
-            <div class="os-footer">
-              <p><strong id="workflowHeadline">Cadastro completo.</strong> <span id="workflowDetail">A equipe já sabe quem conduz a próxima etapa.</span></p>
-              <span class="surface-button primary"><i data-lucide="message-circle" size="13"></i> Mensagem pronta</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="beneficios" aria-labelledby="beneficiosTitle">
-        <div class="container">
-          <div class="section-heading reveal">
-            <div><p class="eyebrow">Valor para cada perfil</p><h2 id="beneficiosTitle">O mesmo sistema. A clareza que cada pessoa precisa.</h2></div>
-            <p>Organização não é mostrar tudo para todos. É entregar a informação certa para cada responsabilidade.</p>
-          </div>
-
-          <div class="benefit-controls reveal" role="tablist" aria-label="Benefícios por perfil">
-            <button class="benefit-control active" id="benefitTabDono" type="button" role="tab" aria-selected="true" aria-controls="benefitPanel" tabindex="0" data-role="dono">Dono do escritório</button>
-            <button class="benefit-control" id="benefitTabEquipe" type="button" role="tab" aria-selected="false" aria-controls="benefitPanel" tabindex="-1" data-role="equipe">Equipe operacional</button>
-            <button class="benefit-control" id="benefitTabFinanceiro" type="button" role="tab" aria-selected="false" aria-controls="benefitPanel" tabindex="-1" data-role="financeiro">Financeiro</button>
-          </div>
-
-          <div class="benefit-stage reveal" id="benefitPanel" role="tabpanel" aria-labelledby="benefitTabDono" aria-live="polite">
-            <div class="benefit-copy-block" id="benefitCopy">
-              <span class="role-label">Dono do escritório</span>
-              <h3>Controle sem depender de perguntar para todo mundo.</h3>
-              <p>Abra o dia sabendo quantas OS estão abertas, onde existem pendências, o que falta receber e como está o resultado do período.</p>
-              <div class="benefit-points"><span class="benefit-point"><i data-lucide="check-circle-2" size="18"></i> Prioridades operacionais em uma única visão</span><span class="benefit-point"><i data-lucide="check-circle-2" size="18"></i> Faturamento, custos, lucro e contas a receber</span><span class="benefit-point"><i data-lucide="check-circle-2" size="18"></i> Responsáveis e produtividade por processo</span></div>
-            </div>
-
-            <div class="role-visual" id="roleVisual" aria-label="Exemplo de visão do dono do escritório">
-              <header class="role-visual-header"><strong id="roleVisualTitle">Visão administrativa</strong><span id="roleVisualCaption">Hoje · Todos os responsáveis</span></header>
-              <div class="role-visual-body" id="roleVisualBody">
-                <div class="role-insight"><span>OS que pedem atenção</span><strong>10</strong><p>6 documentos, 4 pagamentos</p><div class="role-queue"><i class="active"></i><i class="active"></i><i class="active"></i><i></i><i></i></div></div>
-                <div class="role-insight"><span>Lucro bruto do mês</span><strong>R$ 16,4 mil</strong><p>Resultado calculado a partir das OS</p><div class="role-queue"><i class="active"></i><i class="active"></i><i class="active"></i><i class="active"></i><i></i></div></div>
-                <div class="role-insight wide"><span>Operação por responsável</span><strong>28 OS abertas</strong><p>Ana 12 · Rafael 9 · Camila 7</p></div>
-              </div>
-            </div>
+          <div class="module-route-grid">
+            <article class="module-route reveal">
+              <span class="module-route-icon"><i data-lucide="clipboard-list" aria-hidden="true"></i></span>
+              <div><h3>Ordens</h3><p>Veja o próximo passo, o responsável e o prazo de cada processo.</p></div>
+              <a href="/ordem-de-servico-para-despachante">Conhecer ordens de serviço <i data-lucide="arrow-right" size="16" aria-hidden="true"></i></a>
+            </article>
+            <article class="module-route reveal">
+              <span class="module-route-icon"><i data-lucide="users" aria-hidden="true"></i></span>
+              <div><h3>Clientes</h3><p>Recupere veículos, atendimentos e anexos antes de abrir uma nova OS.</p></div>
+              <a href="/sistema-para-despachante#productModuleClientes">Ver clientes no fluxo <i data-lucide="arrow-right" size="16" aria-hidden="true"></i></a>
+            </article>
+            <article class="module-route reveal">
+              <span class="module-route-icon"><i data-lucide="folder-check" aria-hidden="true"></i></span>
+              <div><h3>Documentos</h3><p>Enxergue o que foi recebido, validado ou ainda bloqueia o serviço.</p></div>
+              <a href="/gestao-de-documentos">Conhecer gestão de documentos <i data-lucide="arrow-right" size="16" aria-hidden="true"></i></a>
+            </article>
+            <article class="module-route reveal">
+              <span class="module-route-icon"><i data-lucide="wallet-cards" aria-hidden="true"></i></span>
+              <div><h3>Financeiro</h3><p>Relacione cobrança, custo, pagamento e saldo à OS que gerou o valor.</p></div>
+              <a href="/controle-financeiro-para-despachante">Conhecer controle financeiro <i data-lucide="arrow-right" size="16" aria-hidden="true"></i></a>
+            </article>
+            <article class="module-route reveal">
+              <span class="module-route-icon"><i data-lucide="user-round-check" aria-hidden="true"></i></span>
+              <div><h3>Equipe</h3><p>Distribua pendências e limite o acesso conforme a responsabilidade.</p></div>
+              <a href="/sistema-para-despachante#productModuleEquipe">Ver equipe no fluxo <i data-lucide="arrow-right" size="16" aria-hidden="true"></i></a>
+            </article>
           </div>
           <div class="section-cta reveal">
-            <div class="section-cta-copy">
-              <strong>Veja a visão certa para cada pessoa da sua equipe.</strong>
-              <span>A demonstração considera os perfis, responsabilidades e restrições do seu escritório.</span>
+            <div class="section-cta-copy"><strong>Quer entender a plataforma inteira?</strong><span>Veja como cadastro, processo, documentos, equipe e financeiro compartilham o mesmo contexto.</span></div>
+            <div class="module-route-actions">
+              <a class="button button-outline" href="/sistema-para-despachante">Abrir visão geral <i data-lucide="layout-dashboard" size="17" aria-hidden="true"></i></a>
+              <a class="button button-primary" data-cta="rotas-home" href="/contato">Agendar demonstração <i data-lucide="arrow-right" size="17" aria-hidden="true"></i></a>
             </div>
-            <a class="button button-outline" data-cta="perfis" href="/contato">
-              Conversar sobre minha equipe
-              <i data-lucide="users" size="17" aria-hidden="true"></i>
-            </a>
           </div>
         </div>
       </section>
 
-      <section class="section section-paper" aria-labelledby="recursosTitle">
-        <div class="container">
-          <div class="section-heading narrow reveal">
-            <div><p class="eyebrow">Recursos que sustentam a rotina</p><h2 id="recursosTitle">Tudo conectado à ordem de serviço.</h2></div>
+      <section class="proof" aria-labelledby="proofTitle">
+        <div class="container proof-layout">
+          <div class="proof-copy reveal">
+            <p class="eyebrow">Uma linha de trabalho</p>
+            <h2 id="proofTitle">A informação entra uma vez e acompanha o processo.</h2>
+            <p>O cadastro do cliente abre caminho para a OS. A OS reúne execução, documentos, responsáveis e valores. O histórico continua disponível depois da entrega.</p>
+            <a class="button button-outline" data-cta="fluxo-home" href="/contato">Levar meu fluxo para a demonstração <i data-lucide="arrow-right" size="17" aria-hidden="true"></i></a>
           </div>
-          <div class="feature-lines">
-            <article class="feature-line reveal"><span class="feature-icon"><i data-lucide="search"></i></span><h3>Busca rápida</h3><p>Encontre processos por OS, cliente, telefone, placa, Renavam ou serviço sem abrir várias telas e pastas.</p></article>
-            <article class="feature-line reveal"><span class="feature-icon"><i data-lucide="bell-ring"></i></span><h3>Lembretes internos</h3><p>Defina data e motivo para retornar uma OS e receba alertas dentro do sistema quando chegar a hora de agir.</p></article>
-            <article class="feature-line reveal"><span class="feature-icon"><i data-lucide="message-circle"></i></span><h3>WhatsApp com contexto</h3><p>Abra uma mensagem preparada com status, pendências e informações permitidas pelo perfil do usuário.</p></article>
-            <article class="feature-line reveal"><span class="feature-icon"><i data-lucide="wrench"></i></span><h3>Catálogo de serviços</h3><p>Padronize valor, custo, prazo, lembretes e campos específicos para cada tipo de serviço do escritório.</p></article>
-            <article class="feature-line reveal"><span class="feature-icon"><i data-lucide="files"></i></span><h3>Anexos organizados</h3><p>Relacione arquivos a clientes, veículos, OS e financeiro, mantendo origem e histórico de cada documento.</p></article>
-            <article class="feature-line reveal"><span class="feature-icon"><i data-lucide="sliders-horizontal"></i></span><h3>Status personalizados</h3><p>Adapte nomes e etapas à linguagem do seu escritório sem perder a consistência dos relatórios e filtros.</p></article>
-          </div>
+          <ol class="proof-flow reveal" aria-label="Fluxo resumido da plataforma">
+            <li><span>01</span><div><strong>Cliente e veículo</strong><p>Cadastro pronto para iniciar e retomar atendimentos.</p></div></li>
+            <li><span>02</span><div><strong>Ordem de serviço</strong><p>Status, documentos e responsabilidade no mesmo processo.</p></div></li>
+            <li><span>03</span><div><strong>Entrega e resultado</strong><p>Pagamento, custo e memória preservados no fechamento.</p></div></li>
+          </ol>
         </div>
       </section>
 
-      <section class="section section-dark" id="seguranca" aria-labelledby="segurancaTitle">
+      <section class="security-summary" id="seguranca" aria-labelledby="segurancaTitle">
         <div class="container security-layout">
           <div class="security-copy reveal">
             <p class="eyebrow">Confiança operacional</p>
@@ -768,21 +511,7 @@
         </div>
       </section>
 
-      <section class="section" aria-labelledby="seoTitle">
-        <div class="container seo-layout">
-          <div class="seo-title reveal"><p class="eyebrow">Gestão especializada</p><h2 id="seoTitle">Sistema para despachante veicular que acompanha a operação real.</h2></div>
-          <article class="seo-article reveal">
-            <p>O DespachoCerto é um software para despachante criado para centralizar o trabalho que normalmente fica dividido entre planilhas, conversas de WhatsApp, pastas e memória da equipe. A ordem de serviço funciona como o centro da operação e conecta cliente, veículo, serviço, documentos, responsável, status, pagamentos, custos e histórico.</p>
-            <p>Na gestão de ordens de serviço para despachantes, cadastrar não basta. É preciso saber o próximo passo, identificar rapidamente uma pendência documental, acompanhar prazo e manter o atendimento informado. Por isso, o sistema reúne filtros operacionais, lembretes internos, checklist e linha do tempo em uma mesma ficha.</p>
-            <p>O banco de clientes guarda mais do que nome e telefone. Ele concentra veículos vinculados, serviços realizados, anexos, observações e saldo em aberto de acordo com a permissão. Isso reduz buscas repetidas e preserva o relacionamento mesmo quando outra pessoa assume o atendimento.</p>
-            <p>No controle financeiro para despachante, valor de venda, custo, recebimento e lançamentos gerais são tratados separadamente. O objetivo é permitir que o gestor enxergue faturamento, contas a receber, lucro bruto e margem por serviço sem reconstruir o mês em outra planilha.</p>
-            <p>O acesso por perfis ajuda a proteger informações sensíveis. A equipe operacional pode conduzir OS e documentos, enquanto o financeiro controla pagamentos e custos, e o administrador gerencia usuários, serviços, configurações e integrações da empresa.</p>
-            <p>Desenvolvido pela Elev Studio, o DespachoCerto foi pensado como uma plataforma em nuvem para escritórios que querem crescer com processo, histórico e clareza, mantendo a rotina simples para quem trabalha todos os dias no atendimento e na execução.</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="section section-paper" id="duvidas" aria-labelledby="faqTitle">
+      <section class="faq" id="duvidas" aria-labelledby="faqTitle">
         <div class="container">
           <div class="section-heading reveal">
             <div><p class="eyebrow">Perguntas frequentes</p><h2 id="faqTitle">Antes de levar o escritório para o DespachoCerto.</h2></div>
@@ -800,7 +529,7 @@
         </div>
       </section>
 
-      <section class="final-section" aria-labelledby="contatoTitle">
+      <section class="final-cta" aria-labelledby="contatoTitle">
         <div class="container final-layout">
           <div class="final-copy reveal">
             <p class="eyebrow eyebrow-on-dark">Próximo passo</p>

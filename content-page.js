@@ -47,3 +47,43 @@ document.querySelectorAll("[data-cta]:not([data-site-header-cta])").forEach((lin
     window.DespachoCertoAnalytics?.trackCta(link.dataset.cta, link.getAttribute("href"));
   });
 });
+
+function nextProductModuleIndex(event, currentIndex, itemCount) {
+  if (event.key === "Home") return 0;
+  if (event.key === "End") return itemCount - 1;
+  if (["ArrowDown", "ArrowRight"].includes(event.key)) return (currentIndex + 1) % itemCount;
+  if (["ArrowUp", "ArrowLeft"].includes(event.key)) return (currentIndex - 1 + itemCount) % itemCount;
+  return null;
+}
+
+document.querySelectorAll(".product-map").forEach((map) => {
+  const modules = [...map.querySelectorAll("[data-product-module]")];
+  const panels = [...map.querySelectorAll("[data-product-panel]")];
+  if (!modules.length || !panels.length) return;
+
+  function activateProductModule(name, focus = false) {
+    modules.forEach((module) => {
+      const active = module.dataset.productModule === name;
+      module.setAttribute("aria-selected", String(active));
+      module.tabIndex = active ? 0 : -1;
+      if (active && focus) module.focus();
+    });
+    panels.forEach((panel) => {
+      panel.hidden = panel.dataset.productPanel !== name;
+    });
+  }
+
+  modules.forEach((module, index) => {
+    module.addEventListener("click", () => activateProductModule(module.dataset.productModule));
+    module.addEventListener("keydown", (event) => {
+      const nextIndex = nextProductModuleIndex(event, index, modules.length);
+      if (nextIndex === null) return;
+      event.preventDefault();
+      activateProductModule(modules[nextIndex].dataset.productModule, true);
+    });
+  });
+
+  const hashTarget = modules.find((module) => `#${module.id}` === window.location.hash);
+  const selected = hashTarget || modules.find((module) => module.getAttribute("aria-selected") === "true") || modules[0];
+  activateProductModule(selected.dataset.productModule);
+});

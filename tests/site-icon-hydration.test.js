@@ -17,11 +17,11 @@ test('hydrates critical icons without scanning the entire page', () => {
   assert.match(siteScript, /document\.getElementById\("privacyPreferencesDialog"\)/);
 });
 
-test('defers offscreen icons and scopes dynamic updates', () => {
+test('defers offscreen icons without retaining removed home panels', () => {
   assert.match(siteScript, /new IntersectionObserver/);
   assert.match(siteScript, /observeDeferredIcons\(document\)/);
   assert.doesNotMatch(siteScript, /hydrateIcons\(menuButton\)/);
-  assert.match(siteScript, /hydrateIcons\(benefitPanel\)/);
+  assert.doesNotMatch(siteScript, /benefitPanel/);
 });
 
 test('ships only the icon definitions used by the site', () => {
