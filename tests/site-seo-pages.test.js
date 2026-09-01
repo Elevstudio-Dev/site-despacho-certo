@@ -80,3 +80,13 @@ test('uses the readable brand lockup on dark content-page surfaces', () => {
     assert.equal((html.match(/content-brand-mark/g) || []).length, 2, `Expected two readable brand lockups for ${slug}`);
   });
 });
+
+test('keeps related destinations distinct on the about page', () => {
+  const about = readPage('sobre');
+  const relatedGrid = about.match(/<div class="related-grid">([\s\S]*?)<\/div><\/div><\/section>/)?.[1];
+  assert.ok(relatedGrid, 'Expected the related navigation on sobre');
+
+  const destinations = [...relatedGrid.matchAll(/class="related-link" href="([^"]+)"/g)]
+    .map((match) => match[1]);
+  assert.equal(destinations.length, new Set(destinations).size);
+});
