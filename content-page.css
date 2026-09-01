@@ -221,7 +221,9 @@ button { cursor: pointer; }
 
 .content-footer { padding: 54px 0 24px; color: #d7e6ef; background: #061f34; }
 .footer-grid { display: grid; grid-template-columns: 1.3fr repeat(3, .7fr); gap: 46px; }
+.footer-grid > * { min-width: 0; }
 .footer-brand-link { margin-bottom: 14px; }
+.footer-brand img { width: 210px; max-width: 100%; height: auto; }
 .footer-brand p { max-width: 380px; color: #9eb7c6; font-size: 13px; }
 .footer-column strong { display: block; margin-bottom: 12px; color: var(--white); font-size: 13px; }
 .footer-column a, .footer-link-button { display: block; margin: 8px 0; padding: 0; color: #aac0ce; background: none; border: 0; font-size: 13px; text-decoration: none; text-align: left; }

@@ -1,5 +1,7 @@
 const assert = require('node:assert/strict');
+const { spawnSync } = require('node:child_process');
 const fs = require('node:fs');
+const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 const createSiteNavigation = require('../site-navigation.js');
@@ -21,6 +23,8 @@ const pages = [
   'termos.html',
   'obrigado.html',
 ];
+const generatedPages = pages.slice(1, 10);
+const shellStyles = fs.readFileSync(path.join(root, 'site-shell.css'), 'utf8');
 
 test('publishes the same global information architecture on every page', () => {
   for (const page of pages) {
@@ -56,6 +60,50 @@ test('publishes the same global information architecture on every page', () => {
     assert.ok(shellStylesheet > pageStylesheet, `${page}: shell CSS must load after page CSS`);
     assert.ok(analyticsScript < navigationScript, `${page}: analytics must load before navigation`);
     assert.ok(pageScript === -1 || navigationScript < pageScript, `${page}: navigation must load before page script`);
+  }
+});
+
+test('marks the active mobile group with visible text and a distinct treatment', () => {
+  const productPage = fs.readFileSync(path.join(root, 'sistema-para-despachante.html'), 'utf8');
+  const contentPage = fs.readFileSync(path.join(root, 'sobre.html'), 'utf8');
+
+  assert.match(
+    productPage,
+    /id="mobileProductMenuButton"[^>]*data-active="true"[^>]*>Produto<span class="site-navigation__active-group-label">Atual<\/span>/,
+  );
+  assert.match(
+    contentPage,
+    /id="mobileContentMenuButton"[^>]*data-active="true"[^>]*>Conteúdo<span class="site-navigation__active-group-label">Atual<\/span>/,
+  );
+  assert.match(shellStyles, /\.site-navigation__toggle\[data-active="true"\]/);
+  assert.match(shellStyles, /\.site-navigation__active-group-label\s*\{[^}]*border:/s);
+});
+
+function normalizeShell(html) {
+  const shell = html.match(/<header class="site-navigation"[\s\S]*?<\/header>/)?.[0];
+  assert.ok(shell, 'Expected a site navigation shell');
+  return shell.replace(/\s+/g, ' ').trim();
+}
+
+test('keeps generated navigation shells synchronized with published pages', (context) => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'dispatchocerto-navigation-'));
+  context.after(() => fs.rmSync(temporaryRoot, { recursive: true, force: true }));
+  const temporaryScripts = path.join(temporaryRoot, 'scripts');
+  fs.mkdirSync(temporaryScripts);
+  for (const file of ['generate-seo-pages.cjs', 'seo-pages-data.cjs']) {
+    fs.copyFileSync(path.join(root, 'scripts', file), path.join(temporaryScripts, file));
+  }
+
+  const generation = spawnSync(process.execPath, [path.join(temporaryScripts, 'generate-seo-pages.cjs')], {
+    cwd: temporaryRoot,
+    encoding: 'utf8',
+  });
+  assert.equal(generation.status, 0, generation.stderr || generation.stdout);
+
+  for (const page of generatedPages) {
+    const generated = fs.readFileSync(path.join(temporaryRoot, page), 'utf8');
+    const published = fs.readFileSync(path.join(root, page), 'utf8');
+    assert.equal(normalizeShell(generated), normalizeShell(published), page);
   }
 });
 
@@ -113,6 +161,16 @@ function createHarness() {
   const productMenu = new FakeElement('productMenu');
   const contentMenu = new FakeElement('contentMenu');
   const mobileMenu = new FakeElement('siteMobileMenu');
+  const mobileProductButton = new FakeElement('mobileProductMenuButton', {
+    'aria-controls': 'mobileProductMenu',
+    'aria-expanded': 'false',
+  });
+  const mobileContentButton = new FakeElement('mobileContentMenuButton', {
+    'aria-controls': 'mobileContentMenu',
+    'aria-expanded': 'false',
+  });
+  const mobileProductMenu = new FakeElement('mobileProductMenu');
+  const mobileContentMenu = new FakeElement('mobileContentMenu');
   const cta = new FakeElement('headerCta', { href: '/contato' });
   cta.dataset.siteHeaderCta = 'header-test';
 
@@ -123,8 +181,13 @@ function createHarness() {
     [productMenu.id, productMenu],
     [contentMenu.id, contentMenu],
     [mobileMenu.id, mobileMenu],
+    [mobileProductButton.id, mobileProductButton],
+    [mobileContentButton.id, mobileContentButton],
+    [mobileProductMenu.id, mobileProductMenu],
+    [mobileContentMenu.id, mobileContentMenu],
   ]);
   const documentListeners = new Map();
+  const targetListeners = new Map();
   const navigation = {
     querySelectorAll(selector) {
       if (selector === '[data-site-header-cta]') return [cta];
@@ -135,7 +198,7 @@ function createHarness() {
   const document = {
     querySelector: (selector) => selector === '.site-navigation' ? navigation : null,
     querySelectorAll: (selector) => selector === '[data-menu-button]'
-      ? [productButton, contentButton]
+      ? [productButton, contentButton, mobileProductButton, mobileContentButton]
       : [],
     getElementById: (id) => elements.get(id) || null,
     addEventListener(type, listener) {
@@ -149,11 +212,18 @@ function createHarness() {
   };
   const analyticsCalls = [];
   const target = {
-    innerWidth: 800,
+    innerWidth: 1280,
     DespachoCertoAnalytics: {
       trackCta: (...args) => analyticsCalls.push(args),
     },
-    addEventListener() {},
+    addEventListener(type, listener) {
+      const listeners = targetListeners.get(type) || [];
+      listeners.push(listener);
+      targetListeners.set(type, listeners);
+    },
+    dispatch(type) {
+      (targetListeners.get(type) || []).forEach((listener) => listener());
+    },
   };
 
   return {
@@ -163,7 +233,11 @@ function createHarness() {
     cta,
     document,
     mobileButton,
+    mobileContentButton,
+    mobileContentMenu,
     mobileMenu,
+    mobileProductButton,
+    mobileProductMenu,
     productButton,
     productMenu,
     target,
@@ -183,6 +257,21 @@ test('keeps only one dropdown expanded at a time', () => {
   assert.equal(harness.productMenu.hidden, true);
   assert.equal(harness.contentButton.getAttribute('aria-expanded'), 'true');
   assert.equal(harness.contentMenu.hidden, false);
+});
+
+test('keeps only one mobile group expanded at a time', () => {
+  const harness = createHarness();
+  createSiteNavigation(harness.target, harness.document).initialize();
+
+  harness.mobileProductButton.dispatch('click');
+  assert.equal(harness.mobileProductButton.getAttribute('aria-expanded'), 'true');
+  assert.equal(harness.mobileProductMenu.hidden, false);
+
+  harness.mobileContentButton.dispatch('click');
+  assert.equal(harness.mobileProductButton.getAttribute('aria-expanded'), 'false');
+  assert.equal(harness.mobileProductMenu.hidden, true);
+  assert.equal(harness.mobileContentButton.getAttribute('aria-expanded'), 'true');
+  assert.equal(harness.mobileContentMenu.hidden, false);
 });
 
 test('closes open navigation with Escape and restores trigger focus', () => {
@@ -210,6 +299,21 @@ test('does not move focus when Escape is pressed with navigation closed', () => 
   assert.equal(harness.productButton.focused, false);
 });
 
+test('restores focus to the visible main button when Escape closes the mobile panel', () => {
+  const harness = createHarness();
+  harness.target.innerWidth = 360;
+  createSiteNavigation(harness.target, harness.document).initialize();
+  harness.mobileButton.dispatch('click');
+  harness.mobileProductButton.dispatch('click');
+
+  harness.document.dispatch('keydown', { key: 'Escape' });
+
+  assert.equal(harness.mobileMenu.hidden, true);
+  assert.equal(harness.mobileProductMenu.hidden, true);
+  assert.equal(harness.mobileButton.focused, true);
+  assert.equal(harness.mobileProductButton.focused, false);
+});
+
 test('keeps mobile hidden state and aria-expanded in sync', () => {
   const harness = createHarness();
   createSiteNavigation(harness.target, harness.document).initialize();
@@ -222,6 +326,50 @@ test('keeps mobile hidden state and aria-expanded in sync', () => {
   harness.mobileButton.dispatch('click');
   assert.equal(harness.mobileButton.getAttribute('aria-expanded'), 'false');
   assert.equal(harness.mobileMenu.hidden, true);
+});
+
+test('resets every menu when crossing from desktop to mobile', () => {
+  const harness = createHarness();
+  createSiteNavigation(harness.target, harness.document).initialize();
+  harness.productButton.dispatch('click');
+
+  harness.target.innerWidth = 360;
+  harness.target.dispatch('resize');
+
+  for (const button of [
+    harness.productButton,
+    harness.contentButton,
+    harness.mobileProductButton,
+    harness.mobileContentButton,
+    harness.mobileButton,
+  ]) {
+    assert.equal(button.getAttribute('aria-expanded'), 'false');
+  }
+  for (const panel of [
+    harness.productMenu,
+    harness.contentMenu,
+    harness.mobileProductMenu,
+    harness.mobileContentMenu,
+    harness.mobileMenu,
+  ]) {
+    assert.equal(panel.hidden, true);
+  }
+});
+
+test('resets every menu when crossing from mobile to desktop', () => {
+  const harness = createHarness();
+  harness.target.innerWidth = 360;
+  createSiteNavigation(harness.target, harness.document).initialize();
+  harness.mobileButton.dispatch('click');
+  harness.mobileContentButton.dispatch('click');
+
+  harness.target.innerWidth = 1280;
+  harness.target.dispatch('resize');
+
+  assert.equal(harness.mobileButton.getAttribute('aria-expanded'), 'false');
+  assert.equal(harness.mobileMenu.hidden, true);
+  assert.equal(harness.mobileContentButton.getAttribute('aria-expanded'), 'false');
+  assert.equal(harness.mobileContentMenu.hidden, true);
 });
 
 test('tracks the header CTA through the shared analytics interface', () => {

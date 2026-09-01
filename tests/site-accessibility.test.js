@@ -6,6 +6,7 @@ const test = require('node:test');
 const projectRoot = path.resolve(__dirname, '..');
 const index = fs.readFileSync(path.join(projectRoot, 'index.html'), 'utf8');
 const homeStyles = fs.readFileSync(path.join(projectRoot, 'site.css'), 'utf8');
+const contentStyles = fs.readFileSync(path.join(projectRoot, 'content-page.css'), 'utf8');
 const legalStyles = fs.readFileSync(path.join(projectRoot, 'legal.css'), 'utf8');
 
 function luminance(hex) {
@@ -46,4 +47,9 @@ test('keeps secondary text above WCAG AA contrast on light surfaces', () => {
 test('keeps red status text above WCAG AA contrast', () => {
   const red = cssVariable(homeStyles, 'red');
   assert.ok(contrast(red, '#fcecec') >= 4.5);
+});
+
+test('keeps content footer media inside narrow grid tracks', () => {
+  assert.match(contentStyles, /\.footer-grid\s*>\s*\*\s*\{[^}]*min-width:\s*0/s);
+  assert.match(contentStyles, /\.footer-brand img\s*\{[^}]*max-width:\s*100%[^}]*height:\s*auto/s);
 });

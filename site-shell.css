@@ -201,6 +201,28 @@
   cursor: pointer;
 }
 
+.site-navigation__toggle[data-active="true"] {
+  color: var(--site-shell-blue);
+  background: var(--site-shell-paper);
+  box-shadow: inset 3px 0 0 var(--site-shell-cyan);
+}
+
+.site-navigation__active-group-label {
+  margin-left: auto;
+  padding: 2px 6px;
+  color: var(--site-shell-navy);
+  background: var(--site-shell-white);
+  border: 1px solid var(--site-shell-line);
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.site-navigation__toggle .site-navigation__chevron {
+  margin-left: 12px;
+}
+
 .site-navigation__mobile-button::before,
 .site-navigation__mobile-button::after,
 .site-navigation__mobile-icon {

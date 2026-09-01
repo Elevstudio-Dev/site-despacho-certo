@@ -76,16 +76,16 @@ function renderHeader(page) {
       </div>
       <nav class="site-navigation__mobile" id="siteMobileMenu" aria-label="Navegação móvel" hidden>
         <a class="site-navigation__link" href="/">Início</a>
-        <section class="site-navigation__mobile-section">
-          <button class="site-navigation__toggle" id="mobileProductMenuButton" type="button" aria-expanded="false" aria-controls="mobileProductMenu" data-menu-button${productActive ? ' data-active="true"' : ''}>Produto<span class="site-navigation__chevron" aria-hidden="true"></span></button>
+        <div class="site-navigation__mobile-section">
+          <button class="site-navigation__toggle" id="mobileProductMenuButton" type="button" aria-expanded="false" aria-controls="mobileProductMenu" data-menu-button${productActive ? ' data-active="true"' : ''}>Produto${productActive ? '<span class="site-navigation__active-group-label">Atual</span>' : ''}<span class="site-navigation__chevron" aria-hidden="true"></span></button>
           <div class="site-navigation__mobile-panel" id="mobileProductMenu" hidden><a href="/sistema-para-despachante"${current('sistema-para-despachante')}>Visão geral</a><a href="/ordem-de-servico-para-despachante"${current('ordem-de-servico-para-despachante')}>Ordens de serviço</a><a href="/controle-financeiro-para-despachante"${current('controle-financeiro-para-despachante')}>Financeiro</a><a href="/gestao-de-documentos"${current('gestao-de-documentos')}>Documentos</a><a href="/integracoes"${current('integracoes')}>Integrações</a></div>
-        </section>
+        </div>
         <a class="site-navigation__link" href="/seguranca"${current('seguranca')}>Segurança</a>
         <a class="site-navigation__link" href="/precos"${current('precos')}>Preços</a>
-        <section class="site-navigation__mobile-section">
-          <button class="site-navigation__toggle" id="mobileContentMenuButton" type="button" aria-expanded="false" aria-controls="mobileContentMenu" data-menu-button${contentActive ? ' data-active="true"' : ''}>Conteúdo<span class="site-navigation__chevron" aria-hidden="true"></span></button>
+        <div class="site-navigation__mobile-section">
+          <button class="site-navigation__toggle" id="mobileContentMenuButton" type="button" aria-expanded="false" aria-controls="mobileContentMenu" data-menu-button${contentActive ? ' data-active="true"' : ''}>Conteúdo${contentActive ? '<span class="site-navigation__active-group-label">Atual</span>' : ''}<span class="site-navigation__chevron" aria-hidden="true"></span></button>
           <div class="site-navigation__mobile-panel" id="mobileContentMenu" hidden><a href="/sobre"${current('sobre')}>Sobre o DespachoCerto</a><a href="/blog">Blog</a></div>
-        </section>
+        </div>
         <a class="site-navigation__cta" data-cta="header-mobile-${page.slug}" data-site-header-cta="header-mobile-${page.slug}" href="/contato"${current('contato')}>Agendar demonstração</a>
       </nav>
     </header>`;

@@ -11,6 +11,7 @@
   const mobileMenu = document.getElementById("siteMobileMenu");
   let initialized = false;
   let lastOpenedButton = null;
+  let desktopLayout = target.innerWidth > 1020;
 
   function closeDropdowns(exceptId = "") {
     menuButtons.forEach((button) => {
@@ -70,7 +71,9 @@
 
     document.addEventListener("keydown", (event) => {
       if (event.key !== "Escape" || !isNavigationOpen()) return;
-      const focusTarget = lastOpenedButton;
+      const focusTarget = mobileButton?.getAttribute("aria-expanded") === "true"
+        ? mobileButton
+        : lastOpenedButton;
       closeAll();
       focusTarget?.focus();
     });
@@ -80,7 +83,10 @@
     });
 
     target.addEventListener?.("resize", () => {
-      if (target.innerWidth > 1020) closeAll();
+      const nextDesktopLayout = target.innerWidth > 1020;
+      if (nextDesktopLayout === desktopLayout) return;
+      desktopLayout = nextDesktopLayout;
+      closeAll();
     });
   }
 
