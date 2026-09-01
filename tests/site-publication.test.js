@@ -54,3 +54,34 @@ test('keeps the withdrawn case out of generator sources and generated output', (
     fs.rmSync(tempRoot, { recursive: true, force: true });
   }
 });
+
+test('keeps contact conversion intact when SEO pages are regenerated', () => {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'despachocerto-contact-generation-'));
+  const tempScripts = path.join(tempRoot, 'scripts');
+  fs.mkdirSync(tempScripts);
+
+  for (const name of ['generate-seo-pages.cjs', 'seo-pages-data.cjs']) {
+    fs.copyFileSync(path.join(root, 'scripts', name), path.join(tempScripts, name));
+  }
+
+  try {
+    childProcess.execFileSync(process.execPath, [path.join(tempScripts, 'generate-seo-pages.cjs')], {
+      cwd: tempRoot,
+      stdio: 'pipe',
+    });
+
+    const contact = fs.readFileSync(path.join(tempRoot, 'contato.html'), 'utf8');
+    const generatorSources = ['generate-seo-pages.cjs', 'seo-pages-data.cjs']
+      .map((name) => fs.readFileSync(path.join(tempScripts, name), 'utf8'))
+      .join('\n');
+
+    assert.match(contact, /id="leadForm"[^>]+action="\/api\/lead"[^>]+data-clarity-mask="true"/);
+    assert.match(contact, /id="turnstileWidget"/);
+    assert.match(contact, /src="\/lead-form\.js"/);
+    assert.match(contact, /Mostre uma OS real\. Veja como ela fica no DespachoCerto\./);
+    assert.doesNotMatch(contact, /\/#contato|formulário da página inicial/i);
+    assert.doesNotMatch(generatorSources, /\/#contato|formulário da página inicial/i);
+  } finally {
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  }
+});

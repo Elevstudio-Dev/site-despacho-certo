@@ -109,6 +109,39 @@ function renderVisual(visual) {
   </div>`;
 }
 
+function renderLeadForm() {
+  return `<form class="lead-form" id="leadForm" action="/api/lead" method="post" data-clarity-mask="true">
+            <header><h2>Prepare sua demonstração</h2><p>Conte um pouco sobre o escritório para prepararmos uma conversa útil.</p></header>
+            <div class="form-grid">
+              <label class="form-field">Seu nome<input name="name" type="text" autocomplete="name" placeholder="Como podemos chamar você?" required /></label>
+              <label class="form-field">E-mail<input name="email" type="email" autocomplete="email" placeholder="voce@escritorio.com.br" required /></label>
+              <label class="form-field">WhatsApp<input name="phone" type="tel" autocomplete="tel" placeholder="(00) 00000-0000" required /></label>
+              <label class="form-field">Nome do escritório<input name="company" type="text" autocomplete="organization" placeholder="Empresa ou escritório" required /></label>
+              <label class="form-field">Volume mensal de OS<select name="volume" required><option value="">Selecione</option><option>Até 50 OS</option><option>De 51 a 150 OS</option><option>De 151 a 300 OS</option><option>Mais de 300 OS</option></select></label>
+              <label class="form-field full">Principal dificuldade hoje<textarea name="challenge" placeholder="Ex.: documentos, status, cobrança, financeiro ou equipe"></textarea></label>
+              <div class="form-honeypot" aria-hidden="true"><label>Não preencha este campo<input name="website" type="text" autocomplete="off" tabindex="-1" /></label></div>
+              <div class="turnstile-field"><div id="turnstileWidget"></div><p class="turnstile-status" id="turnstileStatus" aria-live="polite">Preparando verificação de segurança...</p></div>
+              <p class="form-feedback" id="formFeedback" role="status" aria-live="polite" tabindex="-1"></p>
+              <button class="button button-primary" id="leadSubmit" type="submit"><span id="leadSubmitLabel">Preparar minha demonstração</span> <i data-lucide="arrow-right" size="17" aria-hidden="true"></i></button>
+              <p class="form-note">Ao enviar, você concorda em receber contato da equipe DespachoCerto sobre a demonstração solicitada. Consulte nossa <a href="/privacidade">Política de Privacidade</a>.</p>
+            </div>
+          </form>`;
+}
+
+function renderHero(page) {
+  if (page.slug === 'contato') {
+    return `<div class="container hero-layout">
+          <div class="hero-copy"><p class="eyebrow">${escapeHtml(page.eyebrow)}</p><h1>${escapeHtml(page.h1)}</h1><p>${escapeHtml(page.intro)}</p><ul class="contact-outcomes">${page.outcomes.map(([title, text]) => `<li><strong>${escapeHtml(title)}</strong><span>${escapeHtml(text)}</span></li>`).join('')}</ul></div>
+          ${renderLeadForm()}
+        </div>`;
+  }
+
+  return `<div class="container hero-layout">
+          <div class="hero-copy"><p class="eyebrow">${escapeHtml(page.eyebrow)}</p><h1>${escapeHtml(page.h1)}</h1><p>${escapeHtml(page.intro)}</p><div class="hero-actions"><a class="button button-primary" data-cta="hero-${page.slug}" href="${page.ctaHref || '/contato'}">${escapeHtml(page.ctaLabel)} <i data-lucide="arrow-right" size="17" aria-hidden="true"></i></a><a class="button button-secondary" href="/sistema-para-despachante">Conhecer o sistema</a></div><div class="hero-note"><span><i data-lucide="check-circle-2" size="15" aria-hidden="true"></i> Demonstração orientada à rotina</span><span><i data-lucide="check-circle-2" size="15" aria-hidden="true"></i> Sem compromisso</span></div></div>
+          ${renderVisual(page.visual)}
+        </div>`;
+}
+
 function renderFooter() {
   return `<footer class="content-footer">
     <div class="container footer-grid">
@@ -154,10 +187,7 @@ function renderPage(page) {
         <ol><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a itemprop="item" href="/"><span itemprop="name">Início</span></a><meta itemprop="position" content="1" /></li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><span itemprop="name">${escapeHtml(page.eyebrow)}</span><meta itemprop="position" content="2" /></li></ol>
       </div>
       <section class="content-hero">
-        <div class="container hero-layout">
-          <div class="hero-copy"><p class="eyebrow">${escapeHtml(page.eyebrow)}</p><h1>${escapeHtml(page.h1)}</h1><p>${escapeHtml(page.intro)}</p><div class="hero-actions"><a class="button button-primary" data-cta="hero-${page.slug}" href="${page.ctaHref || '/contato'}">${escapeHtml(page.ctaLabel)} <i data-lucide="arrow-right" size="17" aria-hidden="true"></i></a><a class="button button-secondary" href="/sistema-para-despachante">Conhecer o sistema</a></div><div class="hero-note"><span><i data-lucide="check-circle-2" size="15" aria-hidden="true"></i> Demonstração orientada à rotina</span><span><i data-lucide="check-circle-2" size="15" aria-hidden="true"></i> Sem compromisso</span></div></div>
-          ${renderVisual(page.visual)}
-        </div>
+        ${renderHero(page)}
       </section>
       <section class="trust-strip" aria-label="Princípios desta solução"><div class="container trust-row">${page.trust.map(([title, text]) => `<div class="trust-item"><strong>${escapeHtml(title)}</strong><span>${escapeHtml(text)}</span></div>`).join('')}</div></section>
       <section class="content-section"><div class="container"><div class="section-heading"><h2>${escapeHtml(page.sectionTitle)}</h2><p>${escapeHtml(page.sectionLead)}</p></div><div class="feature-grid">${page.features.map(([title, text], index) => `<article class="feature-item"><span class="feature-number">${String(index + 1).padStart(2, '0')}</span><h3>${escapeHtml(title)}</h3><p>${escapeHtml(text)}</p></article>`).join('')}</div></div></section>
@@ -173,6 +203,7 @@ function renderPage(page) {
     <script src="/site-analytics.js" defer></script>
     <script src="/site-navigation.js" defer></script>
     <script src="/content-page.js" defer></script>
+    ${page.slug === 'contato' ? '<script src="/lead-form.js" defer></script>' : ''}
   </body>
 </html>\n`;
 }
