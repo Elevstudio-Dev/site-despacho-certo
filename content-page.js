@@ -38,31 +38,11 @@ function hydrateIcons(root = document) {
 
 hydrateIcons();
 
-const menuButton = document.getElementById("contentMenuButton");
-const mobileMenu = document.getElementById("contentMobileMenu");
-
-function setMenu(open) {
-  mobileMenu.hidden = !open;
-  menuButton.setAttribute("aria-expanded", String(open));
-  menuButton.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
-  menuButton.innerHTML = `<i data-lucide="${open ? "x" : "menu"}" aria-hidden="true"></i>`;
-  hydrateIcons(menuButton);
-}
-
-menuButton?.addEventListener("click", () => setMenu(mobileMenu.hidden));
-mobileMenu?.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => setMenu(false)));
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && mobileMenu && !mobileMenu.hidden) {
-    setMenu(false);
-    menuButton.focus();
-  }
-});
-
 document.querySelectorAll("[data-current-year]").forEach((element) => {
   element.textContent = String(new Date().getFullYear());
 });
 
-document.querySelectorAll("[data-cta]").forEach((link) => {
+document.querySelectorAll("[data-cta]:not([data-site-header-cta])").forEach((link) => {
   link.addEventListener("click", () => {
     window.DespachoCertoAnalytics?.trackCta(link.dataset.cta, link.getAttribute("href"));
   });

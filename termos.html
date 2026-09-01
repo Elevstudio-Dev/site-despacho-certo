@@ -13,17 +13,53 @@
     <link rel="canonical" href="https://despachocerto.com.br/termos" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="legal.css" />
+    <link rel="stylesheet" href="/site-shell.css" />
   </head>
   <body>
     <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
 
-    <header class="site-header">
-      <div class="container header-inner">
-        <a class="brand" href="/" aria-label="DespachoCerto - página inicial">
-          <img src="despachocerto-logo-horizontal.png" alt="DespachoCerto" width="540" height="142" />
-        </a>
-        <a class="back-link" href="/"><span aria-hidden="true">←</span><span>Voltar para o site</span></a>
+    <header class="site-navigation" aria-label="Cabeçalho principal">
+      <div class="site-navigation__inner">
+        <a class="site-navigation__brand" href="/" aria-label="DespachoCerto - página inicial"><img src="/despachocerto-logo-horizontal.png" alt="DespachoCerto" width="540" height="142" /></a>
+        <nav class="site-navigation__desktop" aria-label="Navegação principal">
+          <a class="site-navigation__link" href="/">Início</a>
+          <div class="site-navigation__group">
+            <button class="site-navigation__menu-button" id="productMenuButton" type="button" aria-expanded="false" aria-controls="productMenu" data-menu-button>Produto<span class="site-navigation__chevron" aria-hidden="true"></span></button>
+            <div class="site-navigation__panel" id="productMenu" hidden>
+              <a href="/sistema-para-despachante">Visão geral</a>
+              <a href="/ordem-de-servico-para-despachante">Ordens de serviço</a>
+              <a href="/controle-financeiro-para-despachante">Financeiro</a>
+              <a href="/gestao-de-documentos">Documentos</a>
+              <a href="/integracoes">Integrações</a>
+            </div>
+          </div>
+          <a class="site-navigation__link" href="/seguranca">Segurança</a>
+          <a class="site-navigation__link" href="/precos">Preços</a>
+          <div class="site-navigation__group">
+            <button class="site-navigation__menu-button" id="contentMenuButton" type="button" aria-expanded="false" aria-controls="contentMenu" data-menu-button>Conteúdo<span class="site-navigation__chevron" aria-hidden="true"></span></button>
+            <div class="site-navigation__panel" id="contentMenu" hidden>
+              <a href="/sobre">Sobre o DespachoCerto</a>
+              <a href="/blog">Blog</a>
+            </div>
+          </div>
+          <a class="site-navigation__cta" data-cta="header-termos" data-site-header-cta="header-termos" href="/contato">Agendar demonstração</a>
+        </nav>
+        <button class="site-navigation__mobile-button" id="siteMenuButton" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="siteMobileMenu"><span class="site-navigation__mobile-icon" aria-hidden="true"></span></button>
       </div>
+      <nav class="site-navigation__mobile" id="siteMobileMenu" aria-label="Navegação móvel" hidden>
+        <a class="site-navigation__link" href="/">Início</a>
+        <div class="site-navigation__mobile-section">
+          <button class="site-navigation__toggle" id="mobileProductMenuButton" type="button" aria-expanded="false" aria-controls="mobileProductMenu" data-menu-button>Produto<span class="site-navigation__chevron" aria-hidden="true"></span></button>
+          <div class="site-navigation__mobile-panel" id="mobileProductMenu" hidden><a href="/sistema-para-despachante">Visão geral</a><a href="/ordem-de-servico-para-despachante">Ordens de serviço</a><a href="/controle-financeiro-para-despachante">Financeiro</a><a href="/gestao-de-documentos">Documentos</a><a href="/integracoes">Integrações</a></div>
+        </div>
+        <a class="site-navigation__link" href="/seguranca">Segurança</a>
+        <a class="site-navigation__link" href="/precos">Preços</a>
+        <div class="site-navigation__mobile-section">
+          <button class="site-navigation__toggle" id="mobileContentMenuButton" type="button" aria-expanded="false" aria-controls="mobileContentMenu" data-menu-button>Conteúdo<span class="site-navigation__chevron" aria-hidden="true"></span></button>
+          <div class="site-navigation__mobile-panel" id="mobileContentMenu" hidden><a href="/sobre">Sobre o DespachoCerto</a><a href="/blog">Blog</a></div>
+        </div>
+        <a class="site-navigation__cta" data-cta="header-mobile-termos" data-site-header-cta="header-mobile-termos" href="/contato">Agendar demonstração</a>
+      </nav>
     </header>
 
     <main id="conteudo">
@@ -154,6 +190,8 @@
     </dialog>
 
     <script src="site-preferences.js"></script>
+    <script src="/site-analytics.js"></script>
+    <script src="/site-navigation.js" defer></script>
     <script src="legal.js"></script>
   </body>
 </html>

@@ -68,7 +68,7 @@ function observeDeferredIcons(root) {
 }
 
 [
-  document.querySelector(".site-header"),
+  document.querySelector(".site-navigation"),
   document.querySelector(".hero"),
   document.getElementById("privacyChoicePanel"),
   document.getElementById("privacyPreferencesDialog"),
@@ -76,49 +76,10 @@ function observeDeferredIcons(root) {
 observeDeferredIcons(document);
 
 const siteAnalytics = window.DespachoCertoAnalytics;
-document.querySelectorAll("[data-cta]").forEach((link) => {
+document.querySelectorAll("[data-cta]:not([data-site-header-cta])").forEach((link) => {
   link.addEventListener("click", () => {
     siteAnalytics?.trackCta(link.dataset.cta, link.getAttribute("href"));
   });
-});
-
-const menuButton = document.getElementById("menuButton");
-const mobileMenu = document.getElementById("mobileMenu");
-
-function closeMenu() {
-  mobileMenu.classList.remove("open");
-  mobileMenu.setAttribute("aria-hidden", "true");
-  mobileMenu.setAttribute("inert", "");
-  menuButton.setAttribute("aria-expanded", "false");
-  menuButton.setAttribute("aria-label", "Abrir menu");
-  document.body.classList.remove("menu-open");
-  menuButton.innerHTML = '<i data-lucide="menu" aria-hidden="true"></i>';
-  hydrateIcons(menuButton);
-}
-
-menuButton.addEventListener("click", () => {
-  const willOpen = !mobileMenu.classList.contains("open");
-  mobileMenu.classList.toggle("open", willOpen);
-  mobileMenu.setAttribute("aria-hidden", String(!willOpen));
-  mobileMenu.toggleAttribute("inert", !willOpen);
-  menuButton.setAttribute("aria-expanded", String(willOpen));
-  menuButton.setAttribute("aria-label", willOpen ? "Fechar menu" : "Abrir menu");
-  document.body.classList.toggle("menu-open", willOpen);
-  menuButton.innerHTML = willOpen
-    ? '<i data-lucide="x" aria-hidden="true"></i>'
-    : '<i data-lucide="menu" aria-hidden="true"></i>';
-  hydrateIcons(menuButton);
-  if (willOpen) hydrateIcons(mobileMenu);
-});
-
-mobileMenu.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeMenu));
-document.addEventListener("keydown", (event) => {
-  if (event.key !== "Escape" || !mobileMenu.classList.contains("open")) return;
-  closeMenu();
-  menuButton.focus();
-});
-window.addEventListener("resize", () => {
-  if (window.innerWidth > 960 && mobileMenu.classList.contains("open")) closeMenu();
 });
 
 const revealObserver = new IntersectionObserver(

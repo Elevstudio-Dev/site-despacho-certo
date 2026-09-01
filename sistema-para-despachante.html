@@ -18,24 +18,53 @@
     <meta property="og:image" content="https://despachocerto.com.br/despachocerto-og.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="stylesheet" href="/content-page.css" />
+    <link rel="stylesheet" href="/site-shell.css" />
   </head>
   <body>
     <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
     
-    <header class="content-header">
-      <div class="container header-row">
-        <a class="content-brand" href="/" aria-label="DespachoCerto - página inicial"><span class="content-brand-mark" aria-hidden="true"></span><strong>DespachoCerto</strong></a>
-        <nav class="content-nav" aria-label="Navegação principal">
-          <a href="/sistema-para-despachante" aria-current="page">Sistema</a>
-          <a href="/precos">Preços</a>
-          <a href="/seguranca">Segurança</a>
-          <a href="/sobre">Sobre</a>
-          <a href="/blog">Blog</a>
-          <a class="header-cta" data-cta="header-sistema-para-despachante" href="/contato">Agendar demonstração <i data-lucide="arrow-right" size="15" aria-hidden="true"></i></a>
+    <header class="site-navigation" aria-label="Cabeçalho principal">
+      <div class="site-navigation__inner">
+        <a class="site-navigation__brand" href="/" aria-label="DespachoCerto - página inicial"><img src="/despachocerto-logo-horizontal.png" alt="DespachoCerto" width="540" height="142" /></a>
+        <nav class="site-navigation__desktop" aria-label="Navegação principal">
+          <a class="site-navigation__link" href="/">Início</a>
+          <div class="site-navigation__group">
+            <button class="site-navigation__menu-button" id="productMenuButton" type="button" aria-expanded="false" aria-controls="productMenu" data-menu-button data-active="true">Produto<span class="site-navigation__chevron" aria-hidden="true"></span></button>
+            <div class="site-navigation__panel" id="productMenu" hidden>
+              <a href="/sistema-para-despachante" aria-current="page">Visão geral</a>
+              <a href="/ordem-de-servico-para-despachante">Ordens de serviço</a>
+              <a href="/controle-financeiro-para-despachante">Financeiro</a>
+              <a href="/gestao-de-documentos">Documentos</a>
+              <a href="/integracoes">Integrações</a>
+            </div>
+          </div>
+          <a class="site-navigation__link" href="/seguranca">Segurança</a>
+          <a class="site-navigation__link" href="/precos">Preços</a>
+          <div class="site-navigation__group">
+            <button class="site-navigation__menu-button" id="contentMenuButton" type="button" aria-expanded="false" aria-controls="contentMenu" data-menu-button>Conteúdo<span class="site-navigation__chevron" aria-hidden="true"></span></button>
+            <div class="site-navigation__panel" id="contentMenu" hidden>
+              <a href="/sobre">Sobre o DespachoCerto</a>
+              <a href="/blog">Blog</a>
+            </div>
+          </div>
+          <a class="site-navigation__cta" data-cta="header-sistema-para-despachante" data-site-header-cta="header-sistema-para-despachante" href="/contato">Agendar demonstração</a>
         </nav>
-        <button class="menu-button" id="contentMenuButton" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="contentMobileMenu"><i data-lucide="menu" aria-hidden="true"></i></button>
+        <button class="site-navigation__mobile-button" id="siteMenuButton" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="siteMobileMenu"><span class="site-navigation__mobile-icon" aria-hidden="true"></span></button>
       </div>
-      <nav class="mobile-menu" id="contentMobileMenu" aria-label="Navegação móvel" hidden><a href="/sistema-para-despachante">Sistema</a><a href="/precos">Preços</a><a href="/seguranca">Segurança</a><a href="/sobre">Sobre</a><a href="/blog">Blog</a><a href="/contato">Agendar demonstração</a></nav>
+      <nav class="site-navigation__mobile" id="siteMobileMenu" aria-label="Navegação móvel" hidden>
+        <a class="site-navigation__link" href="/">Início</a>
+        <div class="site-navigation__mobile-section">
+          <button class="site-navigation__toggle" id="mobileProductMenuButton" type="button" aria-expanded="false" aria-controls="mobileProductMenu" data-menu-button data-active="true">Produto<span class="site-navigation__chevron" aria-hidden="true"></span></button>
+          <div class="site-navigation__mobile-panel" id="mobileProductMenu" hidden><a href="/sistema-para-despachante" aria-current="page">Visão geral</a><a href="/ordem-de-servico-para-despachante">Ordens de serviço</a><a href="/controle-financeiro-para-despachante">Financeiro</a><a href="/gestao-de-documentos">Documentos</a><a href="/integracoes">Integrações</a></div>
+        </div>
+        <a class="site-navigation__link" href="/seguranca">Segurança</a>
+        <a class="site-navigation__link" href="/precos">Preços</a>
+        <div class="site-navigation__mobile-section">
+          <button class="site-navigation__toggle" id="mobileContentMenuButton" type="button" aria-expanded="false" aria-controls="mobileContentMenu" data-menu-button>Conteúdo<span class="site-navigation__chevron" aria-hidden="true"></span></button>
+          <div class="site-navigation__mobile-panel" id="mobileContentMenu" hidden><a href="/sobre">Sobre o DespachoCerto</a><a href="/blog">Blog</a></div>
+        </div>
+        <a class="site-navigation__cta" data-cta="header-mobile-sistema-para-despachante" data-site-header-cta="header-mobile-sistema-para-despachante" href="/contato">Agendar demonstração</a>
+      </nav>
     </header>
     <main id="conteudo">
       <div class="container breadcrumbs" aria-label="Navegação estrutural" itemscope itemtype="https://schema.org/BreadcrumbList">
@@ -97,6 +126,7 @@
     <script src="/site-icon-data.js" defer></script>
     <script src="/site-preferences.js" defer></script>
     <script src="/site-analytics.js" defer></script>
+    <script src="/site-navigation.js" defer></script>
     <script src="/content-page.js" defer></script>
   </body>
 </html>

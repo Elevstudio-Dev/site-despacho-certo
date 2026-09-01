@@ -74,10 +74,11 @@ test('keeps the Inter typeface on content pages', () => {
   assert.doesNotMatch(contentPageStyles, /body\s*,[^{}]*\{[^}]*font:\s*inherit/s);
 });
 
-test('uses the readable brand lockup on dark content-page surfaces', () => {
+test('uses the official brand in the light header and a readable mark in the dark footer', () => {
   pages.forEach((slug) => {
     const html = readPage(slug);
-    assert.equal((html.match(/content-brand-mark/g) || []).length, 2, `Expected two readable brand lockups for ${slug}`);
+    assert.match(html, /class="site-navigation__brand"[^>]*>[\s\S]*?despachocerto-logo-horizontal\.png/);
+    assert.equal((html.match(/content-brand-mark/g) || []).length, 1, `Expected a readable footer lockup for ${slug}`);
   });
 });
 

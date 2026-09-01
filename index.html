@@ -193,56 +193,55 @@
     </script>
 
     <link rel="stylesheet" href="site.css" />
+    <link rel="stylesheet" href="/site-shell.css" />
   </head>
 
   <body>
     <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
 
-    <header class="site-header" aria-label="Cabeçalho principal">
-      <div class="header-inner">
-        <a class="brand" href="#inicio" aria-label="DespachoCerto, início">
-          <span class="brand-mark" aria-hidden="true"></span>
-          <span class="brand-copy">
-            <strong>DespachoCerto</strong>
-            <small>Uma solução Elev Studio</small>
-          </span>
-        </a>
-
-        <nav class="desktop-nav" aria-label="Navegação principal">
-          <a href="/sistema-para-despachante">Sistema</a>
-          <a href="#como-funciona">Como funciona</a>
-          <a href="/precos">Preços</a>
-          <a href="/seguranca">Segurança</a>
-          <a href="/sobre">Sobre</a>
-          <a href="/blog">Blog</a>
-          <a class="nav-cta" data-cta="cabecalho" href="/contato">
-            Agendar demonstração
-            <i data-lucide="arrow-up-right" aria-hidden="true"></i>
-          </a>
+    <header class="site-navigation" aria-label="Cabeçalho principal">
+      <div class="site-navigation__inner">
+        <a class="site-navigation__brand" href="/" aria-label="DespachoCerto - página inicial"><img src="/despachocerto-logo-horizontal.png" alt="DespachoCerto" width="540" height="142" /></a>
+        <nav class="site-navigation__desktop" aria-label="Navegação principal">
+          <a class="site-navigation__link" href="/" aria-current="page">Início</a>
+          <div class="site-navigation__group">
+            <button class="site-navigation__menu-button" id="productMenuButton" type="button" aria-expanded="false" aria-controls="productMenu" data-menu-button>Produto<span class="site-navigation__chevron" aria-hidden="true"></span></button>
+            <div class="site-navigation__panel" id="productMenu" hidden>
+              <a href="/sistema-para-despachante">Visão geral</a>
+              <a href="/ordem-de-servico-para-despachante">Ordens de serviço</a>
+              <a href="/controle-financeiro-para-despachante">Financeiro</a>
+              <a href="/gestao-de-documentos">Documentos</a>
+              <a href="/integracoes">Integrações</a>
+            </div>
+          </div>
+          <a class="site-navigation__link" href="/seguranca">Segurança</a>
+          <a class="site-navigation__link" href="/precos">Preços</a>
+          <div class="site-navigation__group">
+            <button class="site-navigation__menu-button" id="contentMenuButton" type="button" aria-expanded="false" aria-controls="contentMenu" data-menu-button>Conteúdo<span class="site-navigation__chevron" aria-hidden="true"></span></button>
+            <div class="site-navigation__panel" id="contentMenu" hidden>
+              <a href="/sobre">Sobre o DespachoCerto</a>
+              <a href="/blog">Blog</a>
+            </div>
+          </div>
+          <a class="site-navigation__cta" data-cta="header-home" data-site-header-cta="header-home" href="/contato">Agendar demonstração</a>
         </nav>
-
-        <button
-          class="menu-button"
-          id="menuButton"
-          type="button"
-          aria-label="Abrir menu"
-          aria-controls="mobileMenu"
-          aria-expanded="false"
-        >
-          <i data-lucide="menu" aria-hidden="true"></i>
-        </button>
+        <button class="site-navigation__mobile-button" id="siteMenuButton" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="siteMobileMenu"><span class="site-navigation__mobile-icon" aria-hidden="true"></span></button>
       </div>
+      <nav class="site-navigation__mobile" id="siteMobileMenu" aria-label="Navegação móvel" hidden>
+        <a class="site-navigation__link" href="/" aria-current="page">Início</a>
+        <div class="site-navigation__mobile-section">
+          <button class="site-navigation__toggle" id="mobileProductMenuButton" type="button" aria-expanded="false" aria-controls="mobileProductMenu" data-menu-button>Produto<span class="site-navigation__chevron" aria-hidden="true"></span></button>
+          <div class="site-navigation__mobile-panel" id="mobileProductMenu" hidden><a href="/sistema-para-despachante">Visão geral</a><a href="/ordem-de-servico-para-despachante">Ordens de serviço</a><a href="/controle-financeiro-para-despachante">Financeiro</a><a href="/gestao-de-documentos">Documentos</a><a href="/integracoes">Integrações</a></div>
+        </div>
+        <a class="site-navigation__link" href="/seguranca">Segurança</a>
+        <a class="site-navigation__link" href="/precos">Preços</a>
+        <div class="site-navigation__mobile-section">
+          <button class="site-navigation__toggle" id="mobileContentMenuButton" type="button" aria-expanded="false" aria-controls="mobileContentMenu" data-menu-button>Conteúdo<span class="site-navigation__chevron" aria-hidden="true"></span></button>
+          <div class="site-navigation__mobile-panel" id="mobileContentMenu" hidden><a href="/sobre">Sobre o DespachoCerto</a><a href="/blog">Blog</a></div>
+        </div>
+        <a class="site-navigation__cta" data-cta="header-mobile-home" data-site-header-cta="header-mobile-home" href="/contato">Agendar demonstração</a>
+      </nav>
     </header>
-
-    <nav class="mobile-menu" id="mobileMenu" aria-label="Navegação para celular" aria-hidden="true" inert>
-      <a href="/sistema-para-despachante">Sistema <i data-lucide="arrow-right" aria-hidden="true"></i></a>
-      <a href="#como-funciona">Como funciona <i data-lucide="arrow-right" aria-hidden="true"></i></a>
-      <a href="/precos">Preços <i data-lucide="arrow-right" aria-hidden="true"></i></a>
-      <a href="/seguranca">Segurança <i data-lucide="arrow-right" aria-hidden="true"></i></a>
-      <a href="/sobre">Sobre <i data-lucide="arrow-right" aria-hidden="true"></i></a>
-      <a href="/blog">Blog <i data-lucide="arrow-right" aria-hidden="true"></i></a>
-      <a class="button" data-cta="menu-mobile" href="/contato">Agendar demonstração</a>
-    </nav>
 
     <main id="conteudo">
       <section class="hero" id="inicio" aria-labelledby="heroTitle">
@@ -893,6 +892,7 @@
     <script src="site-icon-data.js" defer></script>
     <script src="site-preferences.js" defer></script>
     <script src="site-analytics.js" defer></script>
+    <script src="/site-navigation.js" defer></script>
     <script src="site.js" defer></script>
   </body>
 </html>

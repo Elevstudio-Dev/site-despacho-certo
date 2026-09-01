@@ -11,7 +11,7 @@ const iconDataPath = path.join(projectRoot, 'site-icon-data.js');
 test('hydrates critical icons without scanning the entire page', () => {
   assert.doesNotMatch(siteScript, /lucide\.createIcons/);
   assert.match(siteScript, /function hydrateIcons\(root\)/);
-  assert.match(siteScript, /document\.querySelector\("\.site-header"\)/);
+  assert.match(siteScript, /document\.querySelector\("\.site-navigation"\)/);
   assert.match(siteScript, /document\.querySelector\("\.hero"\)/);
   assert.match(siteScript, /document\.getElementById\("privacyChoicePanel"\)/);
   assert.match(siteScript, /document\.getElementById\("privacyPreferencesDialog"\)/);
@@ -20,7 +20,7 @@ test('hydrates critical icons without scanning the entire page', () => {
 test('defers offscreen icons and scopes dynamic updates', () => {
   assert.match(siteScript, /new IntersectionObserver/);
   assert.match(siteScript, /observeDeferredIcons\(document\)/);
-  assert.match(siteScript, /hydrateIcons\(menuButton\)/);
+  assert.doesNotMatch(siteScript, /hydrateIcons\(menuButton\)/);
   assert.match(siteScript, /hydrateIcons\(benefitPanel\)/);
 });
 

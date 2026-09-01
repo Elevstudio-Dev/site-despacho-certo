@@ -33,7 +33,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' https://www.googletagmanager.com https://www.clarity.ms https://challenges.cloudflare.com 'sha256-WDD0/BDRZmZrhDMnJm+fHfAyxeRYsc7CInIETUg/T4Q='; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://c.bing.com https://challenges.cloudflare.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com https://*.clarity.ms https://c.bing.com; style-src 'self'; font-src 'self'; frame-src https://challenges.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+          "value": "default-src 'self'; script-src 'self' https://www.googletagmanager.com https://www.clarity.ms https://challenges.cloudflare.com 'sha256-P+S3//80niYlzelPuqIjxncDs/BTHqH6jjEaNqxmauo='; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://c.bing.com https://challenges.cloudflare.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com https://*.clarity.ms https://c.bing.com; style-src 'self'; font-src 'self'; frame-src https://challenges.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
         },
         {
           "key": "X-Frame-Options",

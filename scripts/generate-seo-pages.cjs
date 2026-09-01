@@ -34,21 +34,60 @@ function renderPrivacy() {
 }
 
 function renderHeader(page) {
+  const productSlugs = new Set([
+    'sistema-para-despachante',
+    'ordem-de-servico-para-despachante',
+    'controle-financeiro-para-despachante',
+    'gestao-de-documentos',
+    'integracoes',
+  ]);
+  const current = (slug) => page.slug === slug ? ' aria-current="page"' : '';
+  const productActive = productSlugs.has(page.slug);
+  const contentActive = page.slug === 'sobre';
+
   return `
-    <header class="content-header">
-      <div class="container header-row">
-        <a class="content-brand" href="/" aria-label="DespachoCerto - página inicial"><img src="/despachocerto-logo-horizontal.png" alt="DespachoCerto" width="540" height="142" /></a>
-        <nav class="content-nav" aria-label="Navegação principal">
-          <a href="/sistema-para-despachante"${page.slug === 'sistema-para-despachante' ? ' aria-current="page"' : ''}>Sistema</a>
-          <a href="/precos"${page.slug === 'precos' ? ' aria-current="page"' : ''}>Preços</a>
-          <a href="/seguranca"${page.slug === 'seguranca' ? ' aria-current="page"' : ''}>Segurança</a>
-          <a href="/sobre"${page.slug === 'sobre' ? ' aria-current="page"' : ''}>Sobre</a>
-          <a href="/blog">Blog</a>
-          <a class="header-cta" data-cta="header-${page.slug}" href="/contato">Agendar demonstração <i data-lucide="arrow-right" size="15" aria-hidden="true"></i></a>
+    <header class="site-navigation" aria-label="Cabeçalho principal">
+      <div class="site-navigation__inner">
+        <a class="site-navigation__brand" href="/" aria-label="DespachoCerto - página inicial"><img src="/despachocerto-logo-horizontal.png" alt="DespachoCerto" width="540" height="142" /></a>
+        <nav class="site-navigation__desktop" aria-label="Navegação principal">
+          <a class="site-navigation__link" href="/">Início</a>
+          <div class="site-navigation__group">
+            <button class="site-navigation__menu-button" id="productMenuButton" type="button" aria-expanded="false" aria-controls="productMenu" data-menu-button${productActive ? ' data-active="true"' : ''}>Produto<span class="site-navigation__chevron" aria-hidden="true"></span></button>
+            <div class="site-navigation__panel" id="productMenu" hidden>
+              <a href="/sistema-para-despachante"${current('sistema-para-despachante')}>Visão geral</a>
+              <a href="/ordem-de-servico-para-despachante"${current('ordem-de-servico-para-despachante')}>Ordens de serviço</a>
+              <a href="/controle-financeiro-para-despachante"${current('controle-financeiro-para-despachante')}>Financeiro</a>
+              <a href="/gestao-de-documentos"${current('gestao-de-documentos')}>Documentos</a>
+              <a href="/integracoes"${current('integracoes')}>Integrações</a>
+            </div>
+          </div>
+          <a class="site-navigation__link" href="/seguranca"${current('seguranca')}>Segurança</a>
+          <a class="site-navigation__link" href="/precos"${current('precos')}>Preços</a>
+          <div class="site-navigation__group">
+            <button class="site-navigation__menu-button" id="contentMenuButton" type="button" aria-expanded="false" aria-controls="contentMenu" data-menu-button${contentActive ? ' data-active="true"' : ''}>Conteúdo<span class="site-navigation__chevron" aria-hidden="true"></span></button>
+            <div class="site-navigation__panel" id="contentMenu" hidden>
+              <a href="/sobre"${current('sobre')}>Sobre o DespachoCerto</a>
+              <a href="/blog">Blog</a>
+            </div>
+          </div>
+          <a class="site-navigation__cta" data-cta="header-${page.slug}" data-site-header-cta="header-${page.slug}" href="/contato"${current('contato')}>Agendar demonstração</a>
         </nav>
-        <button class="menu-button" id="contentMenuButton" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="contentMobileMenu"><i data-lucide="menu" aria-hidden="true"></i></button>
+        <button class="site-navigation__mobile-button" id="siteMenuButton" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="siteMobileMenu"><span class="site-navigation__mobile-icon" aria-hidden="true"></span></button>
       </div>
-      <nav class="mobile-menu" id="contentMobileMenu" aria-label="Navegação móvel" hidden><a href="/sistema-para-despachante">Sistema</a><a href="/precos">Preços</a><a href="/seguranca">Segurança</a><a href="/sobre">Sobre</a><a href="/blog">Blog</a><a href="/contato">Agendar demonstração</a></nav>
+      <nav class="site-navigation__mobile" id="siteMobileMenu" aria-label="Navegação móvel" hidden>
+        <a class="site-navigation__link" href="/">Início</a>
+        <section class="site-navigation__mobile-section">
+          <button class="site-navigation__toggle" id="mobileProductMenuButton" type="button" aria-expanded="false" aria-controls="mobileProductMenu" data-menu-button${productActive ? ' data-active="true"' : ''}>Produto<span class="site-navigation__chevron" aria-hidden="true"></span></button>
+          <div class="site-navigation__mobile-panel" id="mobileProductMenu" hidden><a href="/sistema-para-despachante"${current('sistema-para-despachante')}>Visão geral</a><a href="/ordem-de-servico-para-despachante"${current('ordem-de-servico-para-despachante')}>Ordens de serviço</a><a href="/controle-financeiro-para-despachante"${current('controle-financeiro-para-despachante')}>Financeiro</a><a href="/gestao-de-documentos"${current('gestao-de-documentos')}>Documentos</a><a href="/integracoes"${current('integracoes')}>Integrações</a></div>
+        </section>
+        <a class="site-navigation__link" href="/seguranca"${current('seguranca')}>Segurança</a>
+        <a class="site-navigation__link" href="/precos"${current('precos')}>Preços</a>
+        <section class="site-navigation__mobile-section">
+          <button class="site-navigation__toggle" id="mobileContentMenuButton" type="button" aria-expanded="false" aria-controls="mobileContentMenu" data-menu-button${contentActive ? ' data-active="true"' : ''}>Conteúdo<span class="site-navigation__chevron" aria-hidden="true"></span></button>
+          <div class="site-navigation__mobile-panel" id="mobileContentMenu" hidden><a href="/sobre"${current('sobre')}>Sobre o DespachoCerto</a><a href="/blog">Blog</a></div>
+        </section>
+        <a class="site-navigation__cta" data-cta="header-mobile-${page.slug}" data-site-header-cta="header-mobile-${page.slug}" href="/contato"${current('contato')}>Agendar demonstração</a>
+      </nav>
     </header>`;
 }
 
@@ -73,7 +112,7 @@ function renderVisual(visual) {
 function renderFooter() {
   return `<footer class="content-footer">
     <div class="container footer-grid">
-      <div class="footer-brand"><img src="/despachocerto-logo-horizontal.png" alt="DespachoCerto" width="540" height="142" /><p>Gestão de ordens de serviço, clientes, documentos, financeiro e equipe para despachantes veiculares.</p></div>
+      <div class="footer-brand"><a class="content-brand footer-brand-link" href="/" aria-label="DespachoCerto - página inicial"><span class="content-brand-mark" aria-hidden="true"></span><strong>DespachoCerto</strong></a><p>Gestão de ordens de serviço, clientes, documentos, financeiro e equipe para despachantes veiculares.</p></div>
       <div class="footer-column"><strong>Produto</strong><a href="/sistema-para-despachante">Sistema</a><a href="/ordem-de-servico-para-despachante">Ordens de serviço</a><a href="/controle-financeiro-para-despachante">Financeiro</a><a href="/gestao-de-documentos">Documentos</a></div>
       <div class="footer-column"><strong>Empresa</strong><a href="/sobre">Sobre</a><a href="/seguranca">Segurança</a><a href="/precos">Preços</a><a href="/contato">Contato</a><a href="https://elevstudio.com.br/" target="_blank" rel="noopener noreferrer">Elev Studio</a></div>
       <div class="footer-column"><strong>Legal</strong><a href="/privacidade">Privacidade</a><a href="/cookies">Cookies</a><a href="/termos">Termos</a><button class="footer-link-button" id="privacySettings" type="button">Preferências de cookies</button></div>
@@ -105,6 +144,7 @@ function renderPage(page) {
     <meta property="og:image" content="https://despachocerto.com.br/despachocerto-og.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="stylesheet" href="/content-page.css" />
+    <link rel="stylesheet" href="/site-shell.css" />
   </head>
   <body>
     <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
@@ -131,6 +171,7 @@ function renderPage(page) {
     <script src="/site-icon-data.js" defer></script>
     <script src="/site-preferences.js" defer></script>
     <script src="/site-analytics.js" defer></script>
+    <script src="/site-navigation.js" defer></script>
     <script src="/content-page.js" defer></script>
   </body>
 </html>\n`;
