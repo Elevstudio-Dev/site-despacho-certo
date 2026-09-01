@@ -84,10 +84,11 @@ test('uses the official brand in the light header and a readable mark in the dar
 
 test('keeps related destinations distinct on the about page', () => {
   const about = readPage('sobre');
-  const relatedGrid = about.match(/<div class="related-grid">([\s\S]*?)<\/div><\/div><\/section>/)?.[1];
-  assert.ok(relatedGrid, 'Expected the related navigation on sobre');
+  const relatedNavigation = about.match(/<nav class="journey-links"[\s\S]*?<\/nav>/)?.[0];
+  assert.ok(relatedNavigation, 'Expected the contextual navigation on sobre');
 
-  const destinations = [...relatedGrid.matchAll(/class="related-link" href="([^"]+)"/g)]
+  const destinations = [...relatedNavigation.matchAll(/href="([^"]+)"/g)]
     .map((match) => match[1]);
+  assert.ok(destinations.length >= 2);
   assert.equal(destinations.length, new Set(destinations).size);
 });

@@ -259,6 +259,19 @@ test('gives documents, integrations and security unique evidence', () => {
   assert.notEqual(normalizeBody(integrations), normalizeBody(security));
 });
 
+test('separates commercial clarity from company story', () => {
+  const pricing = read('precos.html');
+  const about = read('sobre.html');
+
+  assert.match(pricing, /class="proposal-builder"/);
+  assert.match(pricing, /Usuários|Armazenamento|Migração|Implantação|Integrações/);
+  assert.match(pricing, /não calcula um preço automático/i);
+  assert.match(about, /class="story-rail"/);
+  assert.match(about, /Elev Studio/);
+  assert.doesNotMatch(about, /Ohana/i);
+  assert.notEqual(normalizeBody(pricing), normalizeBody(about));
+});
+
 test('selects an OS event by click and updates the stable detail region', () => {
   const harness = createOsTimelineHarness();
   const detailRegion = harness.detail;
