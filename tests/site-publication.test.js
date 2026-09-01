@@ -85,3 +85,42 @@ test('keeps contact conversion intact when SEO pages are regenerated', () => {
     fs.rmSync(tempRoot, { recursive: true, force: true });
   }
 });
+
+test('preserves specialized acquisition pages when the generator is rerun in the project', () => {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'despachocerto-specialized-generation-'));
+  const tempScripts = path.join(tempRoot, 'scripts');
+  fs.mkdirSync(tempScripts);
+
+  const signatures = {
+    'sistema-para-despachante': 'product-map',
+    'ordem-de-servico-para-despachante': 'os-timeline',
+    'controle-financeiro-para-despachante': 'finance-ledger',
+    'gestao-de-documentos': 'document-desk',
+    integracoes: 'integration-matrix',
+    seguranca: 'trust-layers',
+    precos: 'proposal-builder',
+    sobre: 'story-rail',
+    contato: 'leadForm',
+  };
+
+  for (const name of ['generate-seo-pages.cjs', 'seo-pages-data.cjs']) {
+    fs.copyFileSync(path.join(root, 'scripts', name), path.join(tempScripts, name));
+  }
+  Object.keys(signatures).forEach((slug) => {
+    fs.copyFileSync(path.join(root, `${slug}.html`), path.join(tempRoot, `${slug}.html`));
+  });
+
+  try {
+    childProcess.execFileSync(process.execPath, [path.join(tempScripts, 'generate-seo-pages.cjs')], {
+      cwd: tempRoot,
+      stdio: 'pipe',
+    });
+
+    Object.entries(signatures).forEach(([slug, signature]) => {
+      const html = fs.readFileSync(path.join(tempRoot, `${slug}.html`), 'utf8');
+      assert.match(html, new RegExp(signature), `${slug} lost ${signature}`);
+    });
+  } finally {
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  }
+});

@@ -18,6 +18,16 @@ const pages = [
   'contato',
 ];
 
+const conversionCtas = {
+  'ordem-de-servico-para-despachante': 'os-demo',
+  'controle-financeiro-para-despachante': 'finance-close-demo',
+  'gestao-de-documentos': 'document-checklist-demo',
+  integracoes: 'integration-review',
+  seguranca: 'security-conversation',
+  precos: 'proposal-request',
+  contato: 'contact-submit',
+};
+
 function readPage(slug) {
   return fs.readFileSync(path.join(projectRoot, `${slug}.html`), 'utf8');
 }
@@ -91,4 +101,28 @@ test('keeps related destinations distinct on the about page', () => {
     .map((match) => match[1]);
   assert.ok(destinations.length >= 2);
   assert.equal(destinations.length, new Set(destinations).size);
+});
+
+test('uses page-specific conversion language and stable analytics identifiers', () => {
+  const primaryLabels = [];
+
+  Object.entries(conversionCtas).forEach(([slug, ctaId]) => {
+    const html = readPage(slug);
+    assert.match(html, new RegExp(`data-cta="${ctaId}"`), `Missing ${ctaId} on ${slug}`);
+
+    const primary = html.match(/<a\b[^>]*class="[^"]*button-primary[^"]*"[^>]*>[\s\S]*?<\/a>/)?.[0]
+      || html.match(/<button\b[^>]*class="[^"]*button-primary[^"]*"[^>]*>[\s\S]*?<\/button>/)?.[0];
+    assert.ok(primary, `Missing primary conversion control on ${slug}`);
+    primaryLabels.push(primary.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim());
+  });
+
+  assert.ok(new Set(primaryLabels).size / primaryLabels.length >= 0.75);
+});
+
+test('removes generic exploration copy from focused acquisition pages', () => {
+  pages.forEach((slug) => {
+    const html = readPage(slug);
+    assert.doesNotMatch(html, /Continue explorando o DespachoCerto/i, slug);
+    assert.doesNotMatch(html, /transforme sua gestão|solução completa|otimize sua rotina/i, slug);
+  });
 });

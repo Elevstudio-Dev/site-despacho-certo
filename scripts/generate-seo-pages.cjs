@@ -4,6 +4,17 @@ const pages = require('./seo-pages-data.cjs');
 
 const projectRoot = path.resolve(__dirname, '..');
 const pageBySlug = new Map(pages.map((page) => [page.slug, page]));
+const specializedPages = new Set([
+  'sistema-para-despachante',
+  'ordem-de-servico-para-despachante',
+  'controle-financeiro-para-despachante',
+  'gestao-de-documentos',
+  'integracoes',
+  'seguranca',
+  'precos',
+  'sobre',
+  'contato',
+]);
 
 function escapeHtml(value) {
   return String(value)
@@ -120,7 +131,7 @@ function renderLeadForm() {
               <label class="form-field">Volume mensal de OS<select name="volume" required><option value="">Selecione</option><option>Até 50 OS</option><option>De 51 a 150 OS</option><option>De 151 a 300 OS</option><option>Mais de 300 OS</option></select></label>
               <label class="form-field full">Principal dificuldade hoje<textarea name="challenge" placeholder="Ex.: documentos, status, cobrança, financeiro ou equipe"></textarea></label>
               <div class="form-honeypot" aria-hidden="true"><label>Não preencha este campo<input name="website" type="text" autocomplete="off" tabindex="-1" /></label></div>
-              <div class="turnstile-field"><div id="turnstileWidget"></div><p class="turnstile-status" id="turnstileStatus" aria-live="polite">Preparando verificação de segurança...</p></div>
+              <div class="turnstile-field"><div id="turnstileWidget"></div><p class="turnstile-status" id="turnstileStatus" aria-live="polite">Preparando verificação de segurança…</p></div>
               <p class="form-feedback" id="formFeedback" role="status" aria-live="polite" tabindex="-1"></p>
               <button class="button button-primary" id="leadSubmit" type="submit"><span id="leadSubmitLabel">Preparar minha demonstração</span> <i data-lucide="arrow-right" size="17" aria-hidden="true"></i></button>
               <p class="form-note">Ao enviar, você concorda em receber contato da equipe DespachoCerto sobre a demonstração solicitada. Consulte nossa <a href="/privacidade">Política de Privacidade</a>.</p>
@@ -193,7 +204,7 @@ function renderPage(page) {
       <section class="content-section"><div class="container"><div class="section-heading"><h2>${escapeHtml(page.sectionTitle)}</h2><p>${escapeHtml(page.sectionLead)}</p></div><div class="feature-grid">${page.features.map(([title, text], index) => `<article class="feature-item"><span class="feature-number">${String(index + 1).padStart(2, '0')}</span><h3>${escapeHtml(title)}</h3><p>${escapeHtml(text)}</p></article>`).join('')}</div></div></section>
       <section class="content-section alt"><div class="container split-section"><div class="split-copy"><p class="eyebrow">Como funciona</p><h2>${escapeHtml(page.splitTitle)}</h2><p>${escapeHtml(page.splitIntro)}</p><ul class="check-list">${page.checks.map((item) => `<li><i data-lucide="check-circle-2" size="19" aria-hidden="true"></i><span>${escapeHtml(item)}</span></li>`).join('')}</ul></div><div class="process-list">${page.process.map(([title, text], index) => `<div class="process-step"><span>${String(index + 1).padStart(2, '0')}</span><div><h3>${escapeHtml(title)}</h3><p>${escapeHtml(text)}</p></div></div>`).join('')}</div></div></section>
       <section class="content-section detail-band"><div class="container detail-layout"><div><p class="eyebrow eyebrow-on-dark">Em detalhes</p><h2>${escapeHtml(page.bandTitle)}</h2><p>${escapeHtml(page.bandText)}</p></div><div class="detail-points">${page.bandPoints.map(([title, text]) => `<div class="detail-point"><strong>${escapeHtml(title)}</strong><span>${escapeHtml(text)}</span></div>`).join('')}</div></div></section>
-      <section class="content-section"><div class="container"><div class="section-heading"><h2>Continue explorando o DespachoCerto.</h2><p>Veja como os principais módulos e decisões do produto se conectam na rotina do escritório.</p></div><div class="related-grid">${related.map((item) => `<a class="related-link" href="/${item.slug}"><span>DespachoCerto</span><strong>${escapeHtml(item.eyebrow)}</strong><p>${escapeHtml(item.description)}</p><i data-lucide="arrow-right" size="18" aria-hidden="true"></i></a>`).join('')}</div></div></section>
+      <section class="content-section"><div class="container"><div class="section-heading"><h2>Escolha o próximo assunto da sua avaliação.</h2><p>Cada página aprofunda uma decisão específica sobre operação, implantação ou confiança.</p></div><div class="related-grid">${related.map((item) => `<a class="related-link" href="/${item.slug}"><span>DespachoCerto</span><strong>${escapeHtml(item.eyebrow)}</strong><p>${escapeHtml(item.description)}</p><i data-lucide="arrow-right" size="18" aria-hidden="true"></i></a>`).join('')}</div></div></section>
       <section class="content-cta"><div class="container cta-layout"><div><h2>${escapeHtml(page.ctaTitle)}</h2><p>${escapeHtml(page.ctaText)}</p></div><a class="button button-primary" data-cta="final-${page.slug}" href="${page.ctaHref || '/contato'}">${escapeHtml(page.ctaLabel)} <i data-lucide="arrow-right" size="17" aria-hidden="true"></i></a></div></section>
     </main>
     ${renderFooter()}
@@ -210,6 +221,7 @@ function renderPage(page) {
 
 pages.forEach((page) => {
   const target = path.join(projectRoot, `${page.slug}.html`);
+  if (specializedPages.has(page.slug) && fs.existsSync(target)) return;
   fs.mkdirSync(path.dirname(target), { recursive: true });
   fs.writeFileSync(target, renderPage(page));
 });

@@ -63,7 +63,7 @@
             setTurnstileStatus("Não foi possível concluir a verificação. Tente novamente.");
           },
         });
-        setTurnstileStatus("Verificação de segurança em andamento...");
+        setTurnstileStatus("Verificação de segurança em andamento…");
       })
       .catch(() => {
         turnstileLoadPromise = null;
@@ -103,7 +103,7 @@
       formFeedback.textContent = "";
       formFeedback.setAttribute("role", "status");
       leadSubmit.disabled = true;
-      leadSubmitLabel.textContent = "Enviando solicitação...";
+      leadSubmitLabel.textContent = "Enviando solicitação…";
       leadForm.setAttribute("aria-busy", "true");
 
       try {
